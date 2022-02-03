@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 internal class Solver
 {
-	private static readonly string _unaryOperators = "+-$!";
+	private static readonly string _unaryOperators = "+-$!@";
 
 	private readonly Dictionary<string, double> _variables = new()
 	{
@@ -57,6 +57,8 @@ internal class Solver
 		["abs"] = args => Math.Abs(args[0]),
 		["log"] = args => Math.Log(args[0], args[1]),
 	};
+
+	private readonly Dictionary<string, INode> _macros = new();
 
 	public double Solve(string s)
 	{
@@ -122,6 +124,11 @@ internal class Solver
 				{
 					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("$"));
 					else availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+					break;
+				}
+				case TokenType.Macro:
+				{
+					availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
 					break;
 				}
 			}
@@ -294,7 +301,21 @@ internal class Solver
 		return x;
 	}
 
-	
+	public INode GetMacro(string s)
+	{
+		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0));
+
+		return _macros[s];
+	}
+
+	public INode SetMacro(string s, INode x)
+	{
+		if (_macros.ContainsKey(s)) _macros[s] = x;
+		else _macros.Add(s, x);
+
+		return x;
+	}
+
 	public Func<List<double>, double> GetFunction(string s) => _functions[s];
 
 	

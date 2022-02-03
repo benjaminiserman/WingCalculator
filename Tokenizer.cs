@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 internal static class Tokenizer
 {
-	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/@;";
+	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;";
 	private static readonly string _operatorSecondCharacters = "<>=&|/*";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
@@ -96,6 +96,7 @@ internal static class Tokenizer
 		TokenType.CloseParen => false,
 		TokenType.Comma => false,
 		TokenType.Variable => char.IsLetter(c),
+		TokenType.Macro => char.IsLetter(c),
 
 		_ => throw new NotImplementedException($"tokenType: {tokenType}, c: {c}, sb: {sb}")
 	};
@@ -110,6 +111,7 @@ internal static class Tokenizer
 		else if (_closeParenCharacters.Contains(c)) return TokenType.CloseParen;
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
+		else if (c == '@') return TokenType.Macro;
 		else throw new NotImplementedException();
 	}
 }
@@ -118,5 +120,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro
 }

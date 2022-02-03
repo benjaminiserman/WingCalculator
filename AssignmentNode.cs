@@ -11,6 +11,7 @@ internal record AssignmentNode(IAssignable A, INode B) : INode
 	{
 		A.Assign(B);
 
-		return ((INode)A).Solve(); // probably shouldn't double-dip
+		if (A is MacroNode macro) return 1;
+		else return ((INode)A).Solve(); // probably shouldn't double-dip
 	}
 }

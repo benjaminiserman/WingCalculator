@@ -6,7 +6,8 @@ using System.Text;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:";
-	private static readonly string _operatorSecondCharacters = "<>=&|/*";
+	public static readonly string _unaryOperators = "+-$!@";
+	//private static readonly string _operatorSecondCharacters = "<>=&|/*";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";
@@ -104,8 +105,7 @@ internal static class Tokenizer
 		TokenType.Number when char.IsDigit(c) || ".Ee".Contains(c) => true,
 		TokenType.Number when "+-".Contains(c) => "Ee".Contains(sb[^1]),
 		TokenType.Number => false,
-		TokenType.Operator when sb.Length == 1 => _operatorSecondCharacters.Contains(c),
-		TokenType.Operator when sb.Length == 2 => false,
+		TokenType.Operator => _operatorCharacters.Contains(c) && !_unaryOperators.Contains(c),
 		TokenType.Function => char.IsLetter(c),
 		TokenType.Hex => char.IsDigit(c) || _hexCharacters.Contains(c),
 		TokenType.OpenParen => false,

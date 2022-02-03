@@ -5,8 +5,6 @@ using System.Linq;
 
 public class Solver
 {
-	private static readonly string _unaryOperators = "+-$!@";
-
 	private readonly Dictionary<string, double> _variables = new()
 	{
 		["PI"] = Math.PI,
@@ -181,7 +179,7 @@ public class Solver
 			{
 				INode numberNode = availableNodes[i];
 
-				if (_unaryOperators.Contains(signNode.Text))
+				if (Tokenizer._unaryOperators.Contains(signNode.Text))
 				{
 					availableNodes.RemoveAt(i - 1);
 					switch (signNode.Text)

@@ -87,6 +87,7 @@ internal static class Tokenizer
 	{
 		TokenType.Number when char.IsDigit(c) || ".Ee".Contains(c) => true,
 		TokenType.Number when "+-".Contains(c) => "Ee".Contains(sb[^1]),
+		TokenType.Number => false,
 		TokenType.Operator when sb.Length == 1 => _operatorSecondCharacters.Contains(c),
 		TokenType.Operator when sb.Length == 2 => false,
 		TokenType.Function => char.IsLetter(c),
@@ -96,7 +97,7 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Variable => char.IsLetter(c),
 
-		_ => throw new NotImplementedException()
+		_ => throw new NotImplementedException($"tokenType: {tokenType}, c: {c}, sb: {sb}")
 	};
 
 	private static TokenType GetTokenType(char c)

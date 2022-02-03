@@ -184,12 +184,31 @@ internal class Solver
 		List<INode> nodes = new();
 		int next = 0;
 
+		int level = 1;
 		for (int i = 0; i < tokens.Length; i++)
 		{
-			if (tokens[i].TokenType == TokenType.Comma)
+			switch (tokens[i].TokenType)
 			{
-				nodes.Add(CreateTree(tokens[next..i]));
-				next = i + 1;
+				case TokenType.OpenParen:
+				{
+					level++;
+					break;
+				}
+				case TokenType.CloseParen:
+				{
+					level--;
+					break;
+				}
+				case TokenType.Comma:
+				{
+					if (level == 1)
+					{
+						nodes.Add(CreateTree(tokens[next..i]));
+						next = i + 1;
+					}
+
+					break;
+				}
 			}
 		}
 
@@ -200,8 +219,8 @@ internal class Solver
 
 	private int FindClosing(int start, Span<Token> tokens)
 	{
-		int level = 1;
-		for (int i = start + 1; i < tokens.Length; i++)
+		int level = 0;
+		for (int i = start; i < tokens.Length; i++)
 		{
 			switch (tokens[i].TokenType)
 			{
@@ -225,7 +244,12 @@ internal class Solver
 			}
 		}
 
-		throw new Exception("Parentheses do not match!");
+		foreach (Token token in tokens)
+		{
+			Console.WriteLine(token);
+		}
+
+		throw new Exception($"Parentheses do not match! (level: {level})");
 	}
 
 	private readonly Dictionary<char, char> _matches = new() { ['('] = ')', ['['] = ']', ['{'] = '}' };

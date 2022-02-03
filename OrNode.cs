@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WingCalculator;
+﻿using WingCalculator;
 
 internal record OrNode(INode A, INode B) : INode
 {

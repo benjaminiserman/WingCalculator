@@ -1,4 +1,4 @@
-﻿namespace Calculator;
+﻿namespace WingCalculator;
 
 partial class Form1
 {

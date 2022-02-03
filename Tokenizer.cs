@@ -1,4 +1,4 @@
-﻿namespace Calculator;
+﻿namespace WingCalculator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 internal static class Tokenizer
 {
-	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/";
-	private static readonly string _operatorSecondCharacters = "<>=&|/";
+	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/@;";
+	private static readonly string _operatorSecondCharacters = "<>=&|/*";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";

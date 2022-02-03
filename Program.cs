@@ -1,4 +1,4 @@
-namespace Calculator;
+namespace WingCalculator;
 using System.Runtime.InteropServices;
 
 internal static class Program

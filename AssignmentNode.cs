@@ -1,19 +1,16 @@
-﻿namespace Calculator;
+﻿namespace WingCalculator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal record AssignmentNode(VariableNode A, INode B) : INode
+internal record AssignmentNode(IAssignable A, INode B) : INode
 {
 	public double Solve()
 	{
-		double x = B.Solve();
-		A.Solver.SetVariable(A.Name, x);
+		A.Assign(B);
 
-		return x;
+		return ((INode)A).Solve(); // probably shouldn't double-dip
 	}
-
-	public static explicit operator VariableNode(AssignmentNode a) => a.A;
 }

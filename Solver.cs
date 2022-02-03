@@ -1,4 +1,4 @@
-﻿namespace Calculator;
+﻿namespace WingCalculator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 internal class Solver
 {
+	private static readonly string _unaryOperators = "+-$!";
+
 	private readonly Dictionary<string, double> _variables = new()
 	{
 		["PI"] = Math.PI,
@@ -35,6 +37,8 @@ internal class Solver
 		["INFINITY"] = double.PositiveInfinity,
 		["EPSILON"] = double.Epsilon,
 		["NAN"] = double.NaN,
+
+		["ANS"] = 0,
 	};
 
 	private readonly Dictionary<string, Func<List<double>, double>> _functions = new()
@@ -116,25 +120,46 @@ internal class Solver
 				}
 				case TokenType.Variable:
 				{
-					availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("$"));
+					else availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
 					break;
 				}
 			}
 		}
 
-		for (int i = 2; i < availableNodes.Count; i++)
+		for (int i = 1; i < availableNodes.Count; i++) // handle unary operators
 		{
-			if (availableNodes[i] is not PreOperatorNode 
+			if (availableNodes[i] is not PreOperatorNode
 				&& availableNodes[i - 1] is PreOperatorNode signNode 
-				&& availableNodes[i - 2] is PreOperatorNode numberNode)
+				&& (i == 1 || availableNodes[i - 2] is PreOperatorNode))
 			{
-				if (signNode.Text is "+" or "-")
+				INode numberNode = availableNodes[i];
+
+				if (_unaryOperators.Contains(signNode.Text))
 				{
 					availableNodes.RemoveAt(i - 1);
-					if (signNode.Text == "-")
+					switch (signNode.Text)
 					{
-						availableNodes.RemoveAt(i - 1);
-						availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
+						case "+":
+						{
+							break;
+						}
+						case "-":
+						{
+							availableNodes.RemoveAt(i - 1);
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
+							break;
+						}
+						case "$":
+						{
+							availableNodes.RemoveAt(i - 1);
+							availableNodes.Insert(i - 1, new PointerNode(numberNode, this));
+							break;
+						}
+						default:
+						{
+							throw new NotImplementedException($"{signNode.Text} is valid but not yet implemented.");
+						}
 					}
 
 					i--;
@@ -254,7 +279,12 @@ internal class Solver
 
 	private readonly Dictionary<char, char> _matches = new() { ['('] = ')', ['['] = ']', ['{'] = '}' };
 
-	public double GetVariable(string s) => _variables[s];
+	public double GetVariable(string s)
+	{
+		if (!_variables.ContainsKey(s)) _variables.Add(s, 0);
+
+		return _variables[s];
+	}
 
 	public double SetVariable(string s, double x)
 	{

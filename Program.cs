@@ -26,11 +26,11 @@ internal static class Program
 
 				/*Console.WriteLine(string.Join('\n', Tokenizer.Tokenize(s)));
 				Console.WriteLine();*/
-
+				
 				double ans = solver.Solve(s);
 				solver.SetVariable("ANS", ans);
 
-				Console.WriteLine($"Solution: {ans}");
+				Console.WriteLine($"> Solution: {ans}");
 			}
 			catch (Exception e)
 			{

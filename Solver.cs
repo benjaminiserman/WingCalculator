@@ -132,6 +132,8 @@ internal class Solver
 			}
 		}
 
+		if (availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
+
 		for (int i = 1; i < availableNodes.Count; i++) // handle unary operators
 		{
 			if (availableNodes[i] is not PreOperatorNode

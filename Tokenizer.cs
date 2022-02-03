@@ -5,7 +5,7 @@ using System.Text;
 
 internal static class Tokenizer
 {
-	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;";
+	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:";
 	private static readonly string _operatorSecondCharacters = "<>=&|/*";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";

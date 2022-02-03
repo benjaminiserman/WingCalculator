@@ -3,7 +3,7 @@ using System;
 
 internal class PreOperatorNode : INode
 {
-	public static readonly int MaxTier = 12;
+	public static readonly int MaxTier = 13;
 
 	public string Text { get; private set; }
 
@@ -57,7 +57,9 @@ internal class PreOperatorNode : INode
 		"|=" => 11,
 		"=" => 11,
 
-		";" => 12,
+		":" => 12,
+
+		";" => 13,
 
 		_ => throw new NotImplementedException()
 	};

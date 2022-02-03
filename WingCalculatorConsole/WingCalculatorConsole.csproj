@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\reposWingCalculator\WingCalculatorShared\WingCalculatorShared.csproj" />
+    <ProjectReference Include="..\WingCalculatorShared\WingCalculatorShared.csproj" />
   </ItemGroup>
 
 </Project>

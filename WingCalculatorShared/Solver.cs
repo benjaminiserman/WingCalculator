@@ -170,6 +170,12 @@ public class Solver
 							availableNodes.Insert(i - 1, new MacroPointerNode(numberNode, this));
 							break;
 						}
+						case "!":
+						{
+							availableNodes.RemoveAt(i - 1);
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0));
+							break;
+						}
 						default:
 						{
 							throw new NotImplementedException($"{signNode.Text} is valid but not yet implemented.");

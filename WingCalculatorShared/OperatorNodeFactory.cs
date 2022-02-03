@@ -5,6 +5,8 @@ internal static class OperatorNodeFactory
 {
 	public static INode CreateBinaryNode(INode a, PreOperatorNode op, INode b) => op.Text switch
 	{
+		"?" => new PromptNode((IAssignable)a, b),
+
 		"**" => new BinaryNode(a, b, (x, y) => Math.Pow(x, y)),
 
 		"*" => new BinaryNode(a, b, (x, y) => x * y),

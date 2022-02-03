@@ -1,12 +1,60 @@
 ﻿namespace WingCalculatorShared;
+using InputHandler;
 
-internal record PromptNode(INode A, INode B) : INode
+internal record PromptNode(IAssignable A, INode B) : INode
 {
 	public double Solve()
 	{
-		double a = A.Solve();
+		int mode = (int)B.Solve();
 
-		if (a != 0) return a;
-		else return B.Solve();
+		switch (mode)
+		{
+			case 0:
+			{
+				double x = Input.Get(double.Parse, getMessage: (_, _) => "Enter a double.");
+				A.Assign(new ConstantNode(x));
+				return x;
+			}
+			case 1:
+			{
+				if (A is PointerNode pointerNode)
+				{
+					int start = (int)pointerNode.Solve();
+
+					string s = Console.ReadLine();
+
+					for (int i = 0; i < s.Length; i++)
+					{
+
+						pointerNode.Solver.SetVariable((start + i).ToString(), s[i]);
+					}
+
+					pointerNode.Solver.SetVariable(s.Length.ToString(), 0); // add null terminator
+
+					return s.Length;
+				}
+				else throw new Exception("ASCII Prompt mode can only be assigned to a pointer node!");
+			}
+			case 2:
+			{
+				string bin = Input.GetCheck(s => !s.Any(c => !"01_".Contains(c)), getMessage: _ => "Enter a binary number. Allowed characters are 0, 1, and _.");
+
+				int x = 0;
+
+				foreach (char c in bin.Where(a => a != '_'))
+				{
+					x <<= 1;
+					x += c == '1' ? 1 : 0;
+				}
+				
+				A.Assign(new ConstantNode(x));
+
+				return x;
+			}
+			default:
+			{
+				throw new Exception($"Prompt mode #{mode} is not implemented.");
+			}
+		}
 	}
 }

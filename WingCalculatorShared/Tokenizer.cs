@@ -15,11 +15,28 @@ internal static class Tokenizer
 	{
 		List<Token> tokens = new();
 
+		bool quoted = false;
 		TokenType? currentType = null;
 		StringBuilder sb = new();
 		foreach (char c in s)
 		{
-			if (c == '_') continue;
+			if (c == '\"')
+			{
+				if (quoted)
+				{
+					PushCurrent();
+				}
+				else
+				{
+					PushCurrent();
+					currentType = TokenType.Quote;
+				}
+
+				quoted = !quoted;
+
+			}
+			else if (quoted) sb.Append(c);
+			else if (c == '_') continue;
 			else if (char.IsWhiteSpace(c))
 			{
 				PushCurrent();
@@ -96,6 +113,7 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Variable => char.IsLetter(c),
 		TokenType.Macro => char.IsLetter(c),
+		TokenType.Quote => false,
 
 		_ => throw new NotImplementedException($"tokenType: {tokenType}, c: {c}, sb: {sb}")
 	};
@@ -119,5 +137,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote
 }

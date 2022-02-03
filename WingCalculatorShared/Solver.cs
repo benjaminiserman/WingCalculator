@@ -70,6 +70,7 @@ public class Solver
 	private INode CreateTree(Span<Token> tokens)
 	{
 		List<INode> availableNodes = new();
+		bool isCoefficient = false;
 
 		for (int i = 0; i < tokens.Length; i++)
 		{
@@ -78,11 +79,13 @@ public class Solver
 				case TokenType.Number:
 				{
 					availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));
+					isCoefficient = true;
 					break;
 				}
 				case TokenType.Operator:
 				{
 					availableNodes.Add(new PreOperatorNode(tokens[i].Text));
+					isCoefficient = false;
 					break;
 				}
 				case TokenType.Function:
@@ -91,23 +94,42 @@ public class Solver
 
 					int end = FindClosing(i + 1, tokens);
 
-					availableNodes.Add(new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end])));
+					INode tree = new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end]));
 
+					if (isCoefficient)
+					{
+						INode coefficientNode = availableNodes[^1];
+						availableNodes.Remove(coefficientNode);
+						availableNodes.Add(OperatorNodeFactory.CreateBinaryNode(coefficientNode, new("*"), tree));
+					}
+					else availableNodes.Add(tree);
+					
 					i = end;
-
+					isCoefficient = false;
 					break;
 				}
 				case TokenType.Hex:
 				{
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16)));
+					isCoefficient = true;
 					break;
 				}
 				case TokenType.OpenParen: // $$$ add paren multiplication
 				{
 					int end = FindClosing(i, tokens);
 
-					availableNodes.Add(CreateTree(tokens[(i + 1)..end]));
+					INode tree = CreateTree(tokens[(i + 1)..end]);
+
+					if (isCoefficient)
+					{
+						INode coefficientNode = availableNodes[^1];
+						availableNodes.Remove(coefficientNode);
+						availableNodes.Add(OperatorNodeFactory.CreateBinaryNode(coefficientNode, new("*"), tree));
+					}
+					else availableNodes.Add(tree);
+
 					i = end;
+					isCoefficient = true;
 					break;
 				}
 				case TokenType.CloseParen:
@@ -122,12 +144,22 @@ public class Solver
 				{
 					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("$"));
 					else availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+
+					isCoefficient = false;
 					break;
 				}
 				case TokenType.Macro:
 				{
 					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("@"));
 					else availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
+
+					isCoefficient = false;
+					break;
+				}
+				case TokenType.Quote:
+				{
+					availableNodes.Add(new QuoteNode(tokens[i].Text));
+					isCoefficient = true;
 					break;
 				}
 			}

@@ -24,8 +24,8 @@ internal static class Program
 			{
 				string s = Console.ReadLine();
 
-				Console.WriteLine(string.Join('\n', Tokenizer.Tokenize(s)));
-				Console.WriteLine();
+				/*Console.WriteLine(string.Join('\n', Tokenizer.Tokenize(s)));
+				Console.WriteLine();*/
 
 				double ans = solver.Solve(s);
 				solver.SetVariable("ANS", ans);

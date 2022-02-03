@@ -36,9 +36,9 @@ internal static class OperatorNodeFactory
 
 		"|" => new BinaryNode(a, b, (x, y) => (int)x | (int)y),
 
-		"&&" => new BinaryNode(a, b, (x, y) => (x != 0) && (y != 0) ? 1 : 0),
+		"&&" => new AndNode(a, b),
 
-		"||" => new BinaryNode(a, b, (x, y) => (x != 0) || (y != 0) ? 1 : 0),
+		"||" => new OrNode(a, b),
 
 		"*=" => new AssignmentNode((IAssignable)a, CreateBinaryNode(a, new("*"), b)),
 

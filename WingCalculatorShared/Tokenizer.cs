@@ -19,7 +19,8 @@ internal static class Tokenizer
 		StringBuilder sb = new();
 		foreach (char c in s)
 		{
-			if (char.IsWhiteSpace(c))
+			if (c == '_') continue;
+			else if (char.IsWhiteSpace(c))
 			{
 				PushCurrent();
 			}

@@ -23,6 +23,11 @@ internal static class OperatorNodeFactory
 		"<=" => new BinaryNode(a, b, (x, y) => x <= y ? 1 : 0),
 		">=" => new BinaryNode(a, b, (x, y) => x >= y ? 1 : 0),
 
+		"<?" => new BinaryNode(a, b, (x, y) => x < y ? x : y),
+		">?" => new BinaryNode(a, b, (x, y) => x > y ? x : y),
+		"<=?" => new BinaryNode(a, b, (x, y) => x <= y ? x : y),
+		">=?" => new BinaryNode(a, b, (x, y) => x >= y ? x : y),
+
 		"==" => new BinaryNode(a, b, (x, y) => x == y ? 1 : 0),
 		"!=" => new BinaryNode(a, b, (x, y) => x != y ? 1 : 0),
 
@@ -35,6 +40,8 @@ internal static class OperatorNodeFactory
 		"&&" => new AndNode(a, b),
 
 		"||" => new OrNode(a, b),
+
+		"?:" => new ElvisNode(a, b),
 
 		"*=" => new AssignmentNode((IAssignable)a, CreateBinaryNode(a, new("*"), b)),
 
@@ -49,6 +56,7 @@ internal static class OperatorNodeFactory
 		"&=" => new BinaryNode(a, b, (x, y) => ((VariableNode)a).Solver.SetVariable(((VariableNode)a).Name, (int)x & (int)y)),
 		"^=" => new BinaryNode(a, b, (x, y) => ((VariableNode)a).Solver.SetVariable(((VariableNode)a).Name, (int)x ^ (int)y)),
 		"|=" => new BinaryNode(a, b, (x, y) => ((VariableNode)a).Solver.SetVariable(((VariableNode)a).Name, (int)x | (int)y)),
+		"?=" => new ElvisAssignmentNode((IAssignable)a, b),
 		"=" => new AssignmentNode((IAssignable)a, b),
 
 		":" => new BinaryNode(a, b, (x, y) =>

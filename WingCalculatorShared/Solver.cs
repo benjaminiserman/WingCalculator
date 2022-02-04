@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 public class Solver
 {
@@ -211,13 +212,14 @@ public class Solver
 				}
 				case TokenType.Quote:
 				{
-					availableNodes.Add(new QuoteNode(tokens[i].Text, this));
+					availableNodes.Add(new QuoteNode(Regex.Unescape(tokens[i].Text), this));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Char:
 				{
-					availableNodes.Add(new ConstantNode(tokens[i].Text[0]));
+					string unescaped = Regex.Unescape(tokens[i].Text);
+					availableNodes.Add(new ConstantNode(unescaped[0]));
 					isCoefficient = true;
 					break;
 				}

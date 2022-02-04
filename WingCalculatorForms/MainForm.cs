@@ -25,6 +25,7 @@ public partial class MainForm : Form
 		historyView.DrawMode = DrawMode.OwnerDrawVariable;
 		historyView.MeasureItem += historyView_MeasureItem;
 		historyView.DrawItem += historyView_DrawItem;
+		historyView.Items.Add("\n\n");
 
 		_solver.WriteLine = WriteLine;
 		_solver.Write = Write;
@@ -52,6 +53,7 @@ public partial class MainForm : Form
 	{
 		_solver = new();
 		historyView.Items.Clear();
+		historyView.Items.Add("\n\n");
 		omnibox.Clear();
 	}
 
@@ -133,7 +135,11 @@ public partial class MainForm : Form
 
 	private void Execute()
 	{
-		if (string.IsNullOrWhiteSpace(omnibox.Text)) return;
+		if (string.IsNullOrWhiteSpace(omnibox.Text))
+		{
+			if (historyView.Items.Count < 1 || string.IsNullOrWhiteSpace(historyView.Items[^2].ToString())) return;
+			else omnibox.Text = GetEntryText(historyView.Items[^2].ToString());
+		}
 
 		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
 

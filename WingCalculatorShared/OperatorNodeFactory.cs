@@ -63,17 +63,14 @@ internal static class OperatorNodeFactory
 
 		":" => new BinaryNode(a, b, (x, y) =>
 		{
-			solver.Write(y switch
-			{
-				-1 => "\n",
-				0 => x.ToString(),
-				1 => ((char)(int)x).ToString(),
-				2 => Convert.ToString((int)x, 2),
-				8 => Convert.ToString((int)x, 8),
-				16 => Convert.ToString((int)x, 16),
+			solver.Write(GetPrint(x, y));
 
-				_ => throw new NotImplementedException($"Format {y} is not implemented.")
-			});
+			return x;
+		}),
+
+		"::" => new BinaryNode(a, b, (x, y) =>
+		{
+			solver.WriteLine(GetPrint(x, y));
 
 			return x;
 		}),
@@ -82,4 +79,17 @@ internal static class OperatorNodeFactory
 
 		_ => throw new NotImplementedException()
 	};
+
+	private static string GetPrint(double x, double y) => y switch
+	{
+		-1 => "\n",
+		0 => x.ToString(),
+		1 => ((char)(int)x).ToString(),
+		2 => Convert.ToString((int)x, 2),
+		8 => Convert.ToString((int)x, 8),
+		16 => Convert.ToString((int)x, 16),
+
+		_ => throw new NotImplementedException($"Format {y} is not implemented.")
+	};
+
 }

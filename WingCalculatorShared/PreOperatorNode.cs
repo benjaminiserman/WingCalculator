@@ -68,6 +68,7 @@ internal class PreOperatorNode : INode
 		"=" => 13,
 
 		":" => 14,
+		"::" => 14,
 
 		";" => 15,
 

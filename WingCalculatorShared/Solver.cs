@@ -175,6 +175,8 @@ public class Solver
 			}
 		}
 
+		if (availableNodes[0] is PreOperatorNode firstNode && (firstNode.Text.Length >= 2 || !Tokenizer._unaryOperators.Contains(firstNode.Text[0]))) availableNodes.Insert(0, new VariableNode("ANS", this)); // add $ANS at when start with binary operator
+
 		if (availableNodes.Count > 0 && availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
 
 		for (int i = 1; i < availableNodes.Count; i++) // handle unary operators

@@ -11,7 +11,7 @@ internal record PromptNode(IAssignable A, INode B) : INode
 		{
 			case 0:
 			{
-				double x = Input.Get(double.Parse, getMessage: (_, _) => "Enter a double.");
+				double x = Input.Get(s => double.Parse(s.Replace("_", string.Empty)), getMessage: (_, _) => "Enter a double.");
 				A.Assign(new ConstantNode(x));
 				return x;
 			}
@@ -19,7 +19,7 @@ internal record PromptNode(IAssignable A, INode B) : INode
 			{
 				if (A is PointerNode pointerNode)
 				{
-					int start = (int)pointerNode.Solve();
+					int start = (int)pointerNode.Address;
 
 					string s = Console.ReadLine();
 

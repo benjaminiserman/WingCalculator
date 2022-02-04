@@ -174,7 +174,7 @@ public class Solver
 			}
 		}
 
-		if (availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
+		if (availableNodes.Count > 0 && availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
 
 		for (int i = 1; i < availableNodes.Count; i++) // handle unary operators
 		{

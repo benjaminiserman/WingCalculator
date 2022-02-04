@@ -215,6 +215,18 @@ public class Solver
 					isCoefficient = true;
 					break;
 				}
+				case TokenType.Char:
+				{
+					availableNodes.Add(new ConstantNode(tokens[i].Text[0]));
+					isCoefficient = true;
+					break;
+				}
+				case TokenType.Binary:
+				{
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2)));
+					isCoefficient = true;
+					break;
+				}
 			}
 		}
 

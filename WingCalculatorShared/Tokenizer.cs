@@ -15,12 +15,27 @@ internal static class Tokenizer
 	{
 		List<Token> tokens = new();
 
+		bool apostrophed = false;
 		bool quoted = false;
 		TokenType? currentType = null;
 		StringBuilder sb = new();
 		foreach (char c in s)
 		{
-			if (c == '\"')
+			if (c == '\'' && !quoted)
+			{
+				if (apostrophed)
+				{
+					PushCurrent();
+				}
+				else
+				{
+					PushCurrent();
+					currentType = TokenType.Char;
+				}
+
+				apostrophed = !apostrophed;
+			}
+			else if (c == '\"' && !apostrophed)
 			{
 				if (quoted)
 				{
@@ -35,7 +50,7 @@ internal static class Tokenizer
 				quoted = !quoted;
 
 			}
-			else if (quoted) sb.Append(c);
+			else if (quoted || apostrophed) sb.Append(c);
 			else if (c == '_') continue;
 			else if (char.IsWhiteSpace(c))
 			{
@@ -63,7 +78,11 @@ internal static class Tokenizer
 			}
 			else
 			{
-				if (Matches(gotType, c, sb))
+				if (gotType == TokenType.Number && sb.ToString() == "0" && (c is 'b' or 'x'))
+				{
+					currentType = c is 'b' ? TokenType.Binary : TokenType.Hex;
+				}
+				else if (Matches(gotType, c, sb))
 				{
 					sb.Append(c);
 				}
@@ -111,6 +130,8 @@ internal static class Tokenizer
 		TokenType.Variable => char.IsLetter(c),
 		TokenType.Macro => char.IsLetter(c),
 		TokenType.Quote => false,
+		TokenType.Char => false,
+		TokenType.Binary => c is '1' or '0',
 
 		_ => throw new NotImplementedException($"Unexpected character {c}! Current TokenType: {tokenType}")
 	};
@@ -134,5 +155,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary
 }

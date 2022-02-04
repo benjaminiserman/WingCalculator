@@ -1,8 +1,4 @@
 namespace WingCalculatorForms;
-
-using WingCalculatorShared;
-using System.Runtime.InteropServices;
-
 internal static class Program
 {
 	/// <summary>

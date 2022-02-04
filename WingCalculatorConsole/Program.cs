@@ -1,6 +1,4 @@
 ﻿using WingCalculatorShared;
-using System.Text;
-using InputHandler;
 
 Solver solver = new();
 

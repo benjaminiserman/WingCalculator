@@ -346,6 +346,7 @@ partial class MainForm
 			this.errorLabel.AutoSize = true;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
 			this.errorLabel.Location = new System.Drawing.Point(12, 439);
+			this.errorLabel.MaximumSize = new System.Drawing.Size(700, 0);
 			this.errorLabel.Name = "errorLabel";
 			this.errorLabel.Size = new System.Drawing.Size(0, 25);
 			this.errorLabel.TabIndex = 26;
@@ -354,7 +355,7 @@ partial class MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(693, 473);
+			this.ClientSize = new System.Drawing.Size(693, 502);
 			this.Controls.Add(this.errorLabel);
 			this.Controls.Add(this.historyView);
 			this.Controls.Add(this.log_button);
@@ -382,8 +383,11 @@ partial class MainForm
 			this.Controls.Add(this.pi_button);
 			this.Controls.Add(this.bin_button);
 			this.Controls.Add(this.omnibox);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "MainForm";
-			this.Text = "Form1";
+			this.Text = "WingCalculator";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

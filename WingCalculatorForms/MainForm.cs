@@ -2,6 +2,7 @@ namespace WingCalculatorForms;
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 using WingCalculatorShared;
 
@@ -12,6 +13,7 @@ public partial class MainForm : Form
 	private int _bufferOffset = 0;
 	private int _nextOffset = 0;
 	private bool _skipSelect = false;
+	private readonly StringBuilder _stdout = new();
 
 	public MainForm()
 	{
@@ -23,6 +25,11 @@ public partial class MainForm : Form
 		historyView.DrawMode = DrawMode.OwnerDrawVariable;
 		historyView.MeasureItem += historyView_MeasureItem;
 		historyView.DrawItem += historyView_DrawItem;
+
+		_solver.WriteLine = WriteLine;
+		_solver.Write = Write;
+		_solver.WriteError = WriteError;
+		_solver.ReadLine = ReadLine;
 	}
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -137,10 +144,9 @@ public partial class MainForm : Form
 			solveString = GetSolve(omnibox.Text);
 			errorLabel.Text = string.Empty;
 		}
-		catch (Exception e)
+		catch
 		{
 			SendKeys.Send("{BACKSPACE}");
-			errorLabel.Text = $"{e.GetType()}: {e.Message}";
 			omnibox.SelectionStart = omnibox.Text.Length;
 			return;
 		}
@@ -154,7 +160,6 @@ public partial class MainForm : Form
 		{
 			historyView.Items.Add(solveString);
 		}
-
 		
 		if ((string)historyView.Items[^1] != "\n\n") historyView.Items.Add("\n\n"); // add empty buffer entry
 
@@ -173,6 +178,7 @@ public partial class MainForm : Form
 		omnibox.Clear();
 	}
 
+	#region Recalculate
 	private void RecalculateEntries(int start)
 	{
 		for (int i = start; i < historyView.Items.Count; i++)
@@ -183,9 +189,18 @@ public partial class MainForm : Form
 
 	private void Recalculate(int i)
 	{
-		if (!string.IsNullOrWhiteSpace((string)historyView.Items[i])) historyView.Items[i] = GetSolve(GetEntryText(historyView.Items[i]));
+		try
+		{
+			if (!string.IsNullOrWhiteSpace((string)historyView.Items[i])) historyView.Items[i] = GetSolve(GetEntryText(historyView.Items[i]));
+		}
+		catch (Exception ex)
+		{
+			historyView.Items[i] = $"{historyView.Items[i]}\n{ex.GetType()}: {ex.Message}";
+		}
 	}
+	#endregion
 
+	#region HistoryViewDrawing
 	private void historyView_MeasureItem(object sender, MeasureItemEventArgs e) => e.ItemHeight = (int)e.Graphics.MeasureString(historyView.Items[e.Index].ToString(), historyView.Font, historyView.Width).Height;
 
 	private void historyView_DrawItem(object sender, DrawItemEventArgs e)
@@ -207,8 +222,37 @@ public partial class MainForm : Form
 			omnibox.Text = GetEntryText(historyView.SelectedItem);
 		}
 	}
+	#endregion
+
 #pragma warning restore IDE1006
 
 	private static string GetEntryText(object x) => x.ToString().Split('\n')[0];
-	private string GetSolve(string s) => $"{s}\n> Solution: {_solver.Solve(s)}";
+	private string GetSolve(string s)
+	{
+		try
+		{
+			double solve = _solver.Solve(s);
+
+			string _stdoutGot = _stdout.ToString();
+			_stdout.Clear();
+
+			return $"{s}\n{_stdoutGot}> Solution: {solve}";
+
+		}
+		catch (Exception ex)
+		{
+			_stdout.Clear();
+			errorLabel.Text = $"{ex.GetType()}: {ex.Message}";
+			throw;
+		}
+	}
+
+	#region IOHooks
+
+	private void WriteError(string s) => errorLabel.Text = s;
+	private void WriteLine(string s) => _stdout.AppendLine(s);
+	private void Write(string s) => _stdout.Append(s);
+	private static string ReadLine() => throw new PlatformNotSupportedException("Prompting is not available in the WinForms app.");
+
+	#endregion
 }

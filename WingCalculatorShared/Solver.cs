@@ -35,6 +35,7 @@ public class Solver
 		["EPSILON"] = double.Epsilon,
 		["NAN"] = double.NaN,
 
+		["N"] = -1,
 		["DEC"] = 0,
 		["ASCII"] = 1,
 		["BIN"] = 2,

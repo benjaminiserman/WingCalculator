@@ -384,6 +384,7 @@ partial class MainForm
 			this.Controls.Add(this.bin_button);
 			this.Controls.Add(this.omnibox);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "MainForm";

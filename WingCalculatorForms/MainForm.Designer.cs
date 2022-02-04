@@ -54,6 +54,7 @@ partial class MainForm
 			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
 			this.historyView = new System.Windows.Forms.ListBox();
+			this.errorLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// omnibox
@@ -340,11 +341,21 @@ partial class MainForm
 			this.historyView.TabIndex = 25;
 			this.historyView.SelectedIndexChanged += new System.EventHandler(this.historyView_SelectedIndexChanged);
 			// 
+			// errorLabel
+			// 
+			this.errorLabel.AutoSize = true;
+			this.errorLabel.ForeColor = System.Drawing.Color.Red;
+			this.errorLabel.Location = new System.Drawing.Point(12, 439);
+			this.errorLabel.Name = "errorLabel";
+			this.errorLabel.Size = new System.Drawing.Size(0, 25);
+			this.errorLabel.TabIndex = 26;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(693, 450);
+			this.ClientSize = new System.Drawing.Size(693, 473);
+			this.Controls.Add(this.errorLabel);
 			this.Controls.Add(this.historyView);
 			this.Controls.Add(this.log_button);
 			this.Controls.Add(this.ln_button);
@@ -406,4 +417,5 @@ partial class MainForm
 	private Button arcsin_button;
 	private Button pow_button;
 	private ListBox historyView;
+	private Label errorLabel;
 }

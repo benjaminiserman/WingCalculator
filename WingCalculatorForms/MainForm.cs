@@ -128,8 +128,22 @@ public partial class MainForm : Form
 	{
 		if (string.IsNullOrWhiteSpace(omnibox.Text)) return;
 
-		if (omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
-		string solveString = GetSolve(omnibox.Text);
+		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
+
+		string solveString;
+
+		try
+		{
+			solveString = GetSolve(omnibox.Text);
+			errorLabel.Text = string.Empty;
+		}
+		catch (Exception e)
+		{
+			SendKeys.Send("{BACKSPACE}");
+			errorLabel.Text = $"{e.GetType()}: {e.Message}";
+			omnibox.SelectionStart = omnibox.Text.Length;
+			return;
+		}
 
 		if (historyView.SelectedItem != null)
 		{

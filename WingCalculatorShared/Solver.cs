@@ -58,6 +58,7 @@ public class Solver
 		["arctan"] = args => Math.Atan(args[0]),
 		["abs"] = args => Math.Abs(args[0]),
 		["log"] = args => Math.Log(args[0], args[1]),
+		["ln"] = args => Math.Log(args[0]),
 	};
 
 	private readonly Dictionary<string, INode> _macros = new();

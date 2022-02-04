@@ -63,13 +63,17 @@ public class Solver
 
 	private readonly Dictionary<string, INode> _macros = new();
 
-	public double Solve(string s)
+	public double Solve(string s, bool setAns = true)
 	{
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
 		INode node = CreateTree(tokens);
 
-		return node.Solve();
+		double solve = node.Solve();
+
+		if (setAns) SetVariable("ANS", solve);
+
+		return solve;
 	}
 
 	private INode CreateTree(Span<Token> tokens)

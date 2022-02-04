@@ -219,6 +219,7 @@ public class Solver
 				case TokenType.Char:
 				{
 					string unescaped = Regex.Unescape(tokens[i].Text);
+					if (unescaped.Length > 1) throw new Exception($"Character '{tokens[i].Text}' could not be resolved: too many characters.");
 					availableNodes.Add(new ConstantNode(unescaped[0]));
 					isCoefficient = true;
 					break;

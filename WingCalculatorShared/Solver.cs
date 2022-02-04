@@ -254,7 +254,7 @@ public class Solver
 				{
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
-						var binaryNode = OperatorNodeFactory.CreateBinaryNode(availableNodes[i - 1], node, availableNodes[i + 1]);
+						var binaryNode = OperatorNodeFactory.CreateBinaryNode(availableNodes[i - 1], node, availableNodes[i + 1], this);
 
 						availableNodes.RemoveAt(i - 1);
 						availableNodes.RemoveAt(i - 1);

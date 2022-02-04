@@ -3,9 +3,9 @@ using System;
 
 internal static class OperatorNodeFactory
 {
-	public static INode CreateBinaryNode(INode a, PreOperatorNode op, INode b) => op.Text switch
+	public static INode CreateBinaryNode(INode a, PreOperatorNode op, INode b, Solver solver = null) => op.Text switch
 	{
-		"?" => new PromptNode((IAssignable)a, b),
+		"?" => new PromptNode((IAssignable)a, b, solver),
 
 		"**" => new BinaryNode(a, b, (x, y) => Math.Pow(x, y)),
 

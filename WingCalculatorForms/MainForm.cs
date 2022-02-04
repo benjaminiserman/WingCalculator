@@ -20,11 +20,14 @@ public partial class MainForm : Form
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(HandleKeyPress);
+		//PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewArrowKey);
 
 		historyView.DrawMode = DrawMode.OwnerDrawVariable;
 		historyView.MeasureItem += historyView_MeasureItem;
 		historyView.DrawItem += historyView_DrawItem;
 		historyView.Items.Add("\n\n");
+
+		omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewArrowKey);
 
 		_solver.WriteLine = WriteLine;
 		_solver.Write = Write;
@@ -97,6 +100,49 @@ public partial class MainForm : Form
 			omnibox.SelectionStart += _nextOffset;
 			_nextOffset = _bufferOffset;
 			_bufferOffset = 0;
+		}
+	}
+
+	private void PreviewArrowKey(object send, PreviewKeyDownEventArgs e)
+	{
+		errorLabel.Text = e.KeyCode.ToString();
+
+		switch (e.KeyCode)
+		{
+			case Keys.Up:
+			{
+				if (historyView.SelectedIndex == -1)
+				{
+					historyView.SelectedIndex = historyView.Items.Count - 1;
+				}
+				else if (historyView.SelectedIndex <= 0)
+				{
+					historyView.SelectedIndex = historyView.Items.Count - 1;
+				}
+				else
+				{
+					historyView.SelectedIndex--;
+				}
+
+				break;
+			}
+			case Keys.Down:
+			{
+				if (historyView.SelectedIndex == -1)
+				{
+					historyView.SelectedIndex = 0;
+				}
+				else if (historyView.SelectedIndex >= historyView.Items.Count - 1)
+				{
+					historyView.SelectedIndex = 0;
+				}
+				else
+				{
+					historyView.SelectedIndex++;
+				}
+
+				break;
+			}
 		}
 	}
 

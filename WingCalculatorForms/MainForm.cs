@@ -7,7 +7,7 @@ using WingCalculatorShared;
 
 public partial class MainForm : Form
 {
-	private Solver _solver = new();
+	private Solver _solver;
 
 	private int _bufferOffset = 0;
 	private int _nextOffset = 0;
@@ -28,10 +28,7 @@ public partial class MainForm : Form
 
 		omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewArrowKey);
 
-		_solver.WriteLine = WriteLine;
-		_solver.Write = Write;
-		_solver.WriteError = WriteError;
-		_solver.ReadLine = ReadLine;
+		ResetSolver();
 	}
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -52,7 +49,7 @@ public partial class MainForm : Form
 
 	private void ac_button_Click(object sender, EventArgs e)
 	{
-		_solver = new();
+		ResetSolver();
 		historyView.Items.Clear();
 		historyView.Items.Add("\n\n");
 		omnibox.Clear();
@@ -297,6 +294,16 @@ public partial class MainForm : Form
 #endif
 			throw;
 		}
+	}
+
+	private void ResetSolver()
+	{
+		_solver = new();
+
+		_solver.WriteLine = WriteLine;
+		_solver.Write = Write;
+		_solver.WriteError = WriteError;
+		_solver.ReadLine = ReadLine;
 	}
 
 	#region IOHooks

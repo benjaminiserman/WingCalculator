@@ -155,7 +155,7 @@ public class Solver
 					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("$"));
 					else availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
 
-					isCoefficient = false;
+					isCoefficient = true;
 					break;
 				}
 				case TokenType.Macro:

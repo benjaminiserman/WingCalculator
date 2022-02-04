@@ -63,11 +63,11 @@ internal static class OperatorNodeFactory
 
 		":" => new BinaryNode(a, b, (x, y) =>
 		{
-			Console.Write(y switch
+			solver.Write(y switch
 			{
-				-1 => '\n',
+				-1 => "\n",
 				0 => x.ToString(),
-				1 => (char)(int)x,
+				1 => ((char)(int)x).ToString(),
 				2 => Convert.ToString((int)x, 2),
 				8 => Convert.ToString((int)x, 8),
 				16 => Convert.ToString((int)x, 16),

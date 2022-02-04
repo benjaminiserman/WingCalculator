@@ -197,10 +197,18 @@ public class Solver
 						availableNodes.Add(new PreOperatorNode("*"));
 					}
 
-					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("$"));
-					else availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+					if (tokens[i].Text.Length == 1)
+					{
+						availableNodes.Add(new PreOperatorNode("$"));
+						isCoefficient = false;
+					}
+					else
+					{
+						availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+						isCoefficient = true;
+					}
 
-					isCoefficient = true;
+					
 					break;
 				}
 				case TokenType.Macro:

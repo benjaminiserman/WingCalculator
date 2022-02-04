@@ -52,6 +52,7 @@ internal class PreOperatorNode : INode
 
 		"?:" => 12,
 
+		"**=" => 13,
 		"*=" => 13,
 		"/=" => 13,
 		"%=" => 13,

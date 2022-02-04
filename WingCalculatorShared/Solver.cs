@@ -63,6 +63,11 @@ public class Solver
 
 	private readonly Dictionary<string, INode> _macros = new();
 
+	public Action<string> WriteLine { get; set; } = Console.WriteLine;
+	public Action<string> WriteError { get; set; } = Console.WriteLine;
+	public Action<string> Write { get; set; } = Console.Write;
+	public Func<string> ReadLine { get; set; } = Console.ReadLine;
+
 	public double Solve(string s, bool setAns = true)
 	{
 		var tokens = Tokenizer.Tokenize(s).ToArray();
@@ -172,7 +177,7 @@ public class Solver
 				}
 				case TokenType.Quote:
 				{
-					availableNodes.Add(new QuoteNode(tokens[i].Text));
+					availableNodes.Add(new QuoteNode(tokens[i].Text, this));
 					isCoefficient = true;
 					break;
 				}
@@ -265,8 +270,6 @@ public class Solver
 
 		if (availableNodes.Count > 1)
 		{
-			Console.WriteLine("Erroring:");
-			foreach (var node in availableNodes) Console.WriteLine(node);
 			throw new Exception("Tree could not be made!");
 		}
 		else return availableNodes.First();
@@ -335,11 +338,6 @@ public class Solver
 					break;
 				}
 			}
-		}
-
-		foreach (Token token in tokens)
-		{
-			Console.WriteLine(token);
 		}
 
 		throw new Exception($"Parentheses do not match! (level: {level})");

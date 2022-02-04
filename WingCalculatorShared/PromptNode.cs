@@ -1,7 +1,7 @@
 ﻿namespace WingCalculatorShared;
 using InputHandler;
 
-internal record PromptNode(IAssignable A, INode B) : INode
+internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode
 {
 	public double Solve()
 	{
@@ -11,7 +11,7 @@ internal record PromptNode(IAssignable A, INode B) : INode
 		{
 			case 0:
 			{
-				double x = Input.Get(s => double.Parse(s.Replace("_", string.Empty)), getMessage: (_, _) => "Enter a double.");
+				double x = Input.Get(s => double.Parse(s.Replace("_", string.Empty)), Solver.ReadLine, Solver.WriteError, (_, _) => "Enter a double.");
 				A.Assign(new ConstantNode(x));
 				return x;
 			}
@@ -21,11 +21,10 @@ internal record PromptNode(IAssignable A, INode B) : INode
 				{
 					int start = (int)pointerNode.Address;
 
-					string s = Console.ReadLine();
+					string s = Solver.ReadLine();
 
 					for (int i = 0; i < s.Length; i++)
 					{
-
 						pointerNode.Solver.SetVariable((start + i).ToString(), s[i]);
 					}
 
@@ -37,7 +36,7 @@ internal record PromptNode(IAssignable A, INode B) : INode
 			}
 			case 2:
 			{
-				string bin = Input.GetCheck(s => !s.Any(c => !"01_".Contains(c)), getMessage: _ => "Enter a binary number. Allowed characters are 0, 1, and _.");
+				string bin = Input.GetCheck(s => !s.Any(c => !"01_".Contains(c)), Solver.ReadLine, Solver.WriteError, getMessage: _ => "Enter a binary number. Allowed characters are 0, 1, and _.");
 
 				int x = 0;
 

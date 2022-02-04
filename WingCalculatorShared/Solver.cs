@@ -229,9 +229,15 @@ public class Solver
 							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0));
 							break;
 						}
+						case "~":
+						{
+							availableNodes.RemoveAt(i - 1);
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x));
+							break;
+						}
 						default:
 						{
-							throw new NotImplementedException($"{signNode.Text} is valid but not yet implemented.");
+							throw new NotImplementedException($"{signNode.Text} is a valid unary operator but is not yet implemented.");
 						}
 					}
 

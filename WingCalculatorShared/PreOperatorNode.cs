@@ -9,7 +9,7 @@ internal class PreOperatorNode : INode
 
 	public PreOperatorNode(string s) => Text = s;
 
-	public double Solve() => throw new NotImplementedException();
+	public double Solve() => throw new NotImplementedException("Syntax error. PreOperatorNode survived to Solve phase.");
 
 	public int Tier => Text switch
 	{
@@ -71,6 +71,6 @@ internal class PreOperatorNode : INode
 
 		";" => 15,
 
-		_ => throw new NotImplementedException()
+		_ => throw new NotImplementedException($"Operator {Text} is not implemented.")
 	};
 }

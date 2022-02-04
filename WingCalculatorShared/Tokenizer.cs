@@ -6,7 +6,7 @@ using System.Text;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:?";
-	public static readonly string _unaryOperators = "+-$!@";
+	public static readonly string _unaryOperators = "+-$!@~";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";
@@ -74,8 +74,6 @@ internal static class Tokenizer
 					sb.Append(c);
 					currentType = GetTokenType(c);
 				}
-
-				// throw new Exception($"{new Token(currentType.Value, sb.ToString())} cannot be followed by {c}.");
 			}
 		}
 
@@ -114,12 +112,12 @@ internal static class Tokenizer
 		TokenType.Macro => char.IsLetter(c),
 		TokenType.Quote => false,
 
-		_ => throw new NotImplementedException($"tokenType: {tokenType}, c: {c}, sb: {sb}")
+		_ => throw new NotImplementedException($"Unexpected character {c}! Current TokenType: {tokenType}")
 	};
 
 	private static TokenType GetTokenType(char c)
 	{
-		if (char.IsDigit(c) || ".".Contains(c)) return TokenType.Number; // maybe add exponents?
+		if (char.IsDigit(c) || ".".Contains(c)) return TokenType.Number;
 		else if (_operatorCharacters.Contains(c)) return TokenType.Operator;
 		else if (char.IsLetter(c)) return TokenType.Function;
 		else if (c == '#') return TokenType.Hex;
@@ -128,7 +126,7 @@ internal static class Tokenizer
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
 		else if (c == '@') return TokenType.Macro;
-		else throw new NotImplementedException();
+		else throw new NotImplementedException($"Token could not be constructed from character {c}!");
 	}
 }
 

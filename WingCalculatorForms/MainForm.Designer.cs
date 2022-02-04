@@ -1,6 +1,6 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorForms;
 
-partial class Form1
+partial class MainForm
 {
 	/// <summary>
 	///  Required designer variable.
@@ -33,7 +33,7 @@ partial class Form1
 			this.pi_button = new System.Windows.Forms.Button();
 			this.clr_button = new System.Windows.Forms.Button();
 			this.exe_button = new System.Windows.Forms.Button();
-			this.frac_button = new System.Windows.Forms.Button();
+			this.ac_button = new System.Windows.Forms.Button();
 			this.ans_button = new System.Windows.Forms.Button();
 			this.tau_button = new System.Windows.Forms.Button();
 			this.hex_button = new System.Windows.Forms.Button();
@@ -41,19 +41,19 @@ partial class Form1
 			this.sqrt_button = new System.Windows.Forms.Button();
 			this.e_button = new System.Windows.Forms.Button();
 			this.dec_button = new System.Windows.Forms.Button();
-			this.rad_button = new System.Windows.Forms.Button();
+			this.txt_button = new System.Windows.Forms.Button();
 			this.arctan_button = new System.Windows.Forms.Button();
 			this.arccos_button = new System.Windows.Forms.Button();
 			this.pow_button = new System.Windows.Forms.Button();
 			this.tan_button = new System.Windows.Forms.Button();
 			this.cos_button = new System.Windows.Forms.Button();
 			this.sin_button = new System.Windows.Forms.Button();
-			this.logab_button = new System.Windows.Forms.Button();
+			this.log_button = new System.Windows.Forms.Button();
 			this.ln_button = new System.Windows.Forms.Button();
-			this.log10_button = new System.Windows.Forms.Button();
-			this.log2_button = new System.Windows.Forms.Button();
+			this.mac_button = new System.Windows.Forms.Button();
+			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
-			this.historyView = new System.Windows.Forms.ListView();
+			this.historyView = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// omnibox
@@ -109,16 +109,16 @@ partial class Form1
 			this.exe_button.UseVisualStyleBackColor = true;
 			this.exe_button.Click += new System.EventHandler(this.exe_button_Click);
 			// 
-			// frac_button
+			// ac_button
 			// 
-			this.frac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.frac_button.Location = new System.Drawing.Point(600, 316);
-			this.frac_button.Name = "frac_button";
-			this.frac_button.Size = new System.Drawing.Size(83, 58);
-			this.frac_button.TabIndex = 8;
-			this.frac_button.Text = "FRAC";
-			this.frac_button.UseVisualStyleBackColor = true;
-			this.frac_button.Click += new System.EventHandler(this.frac_button_Click);
+			this.ac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ac_button.Location = new System.Drawing.Point(600, 316);
+			this.ac_button.Name = "ac_button";
+			this.ac_button.Size = new System.Drawing.Size(83, 58);
+			this.ac_button.TabIndex = 8;
+			this.ac_button.Text = "AC";
+			this.ac_button.UseVisualStyleBackColor = true;
+			this.ac_button.Click += new System.EventHandler(this.ac_button_Click);
 			// 
 			// ans_button
 			// 
@@ -129,7 +129,7 @@ partial class Form1
 			this.ans_button.TabIndex = 7;
 			this.ans_button.Text = "ANS";
 			this.ans_button.UseVisualStyleBackColor = true;
-			this.ans_button.Click += new System.EventHandler(this.phi_button_Click);
+			this.ans_button.Click += new System.EventHandler(this.ans_button_Click);
 			// 
 			// tau_button
 			// 
@@ -197,21 +197,21 @@ partial class Form1
 			this.dec_button.UseVisualStyleBackColor = true;
 			this.dec_button.Click += new System.EventHandler(this.dec_button_Click);
 			// 
-			// rad_button
+			// txt_button
 			// 
-			this.rad_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.rad_button.Location = new System.Drawing.Point(600, 188);
-			this.rad_button.Name = "rad_button";
-			this.rad_button.Size = new System.Drawing.Size(83, 58);
-			this.rad_button.TabIndex = 16;
-			this.rad_button.Text = "rad";
-			this.rad_button.UseVisualStyleBackColor = true;
-			this.rad_button.Click += new System.EventHandler(this.rad_button_Click);
+			this.txt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.txt_button.Location = new System.Drawing.Point(333, 188);
+			this.txt_button.Name = "txt_button";
+			this.txt_button.Size = new System.Drawing.Size(83, 58);
+			this.txt_button.TabIndex = 16;
+			this.txt_button.Text = "TXT";
+			this.txt_button.UseVisualStyleBackColor = true;
+			this.txt_button.Click += new System.EventHandler(this.txt_button_Click);
 			// 
 			// arctan_button
 			// 
 			this.arctan_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arctan_button.Location = new System.Drawing.Point(511, 188);
+			this.arctan_button.Location = new System.Drawing.Point(600, 188);
 			this.arctan_button.Name = "arctan_button";
 			this.arctan_button.Size = new System.Drawing.Size(83, 58);
 			this.arctan_button.TabIndex = 15;
@@ -222,7 +222,7 @@ partial class Form1
 			// arccos_button
 			// 
 			this.arccos_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arccos_button.Location = new System.Drawing.Point(422, 188);
+			this.arccos_button.Location = new System.Drawing.Point(511, 188);
 			this.arccos_button.Name = "arccos_button";
 			this.arccos_button.Size = new System.Drawing.Size(83, 58);
 			this.arccos_button.TabIndex = 14;
@@ -274,16 +274,16 @@ partial class Form1
 			this.sin_button.UseVisualStyleBackColor = true;
 			this.sin_button.Click += new System.EventHandler(this.sin_button_Click);
 			// 
-			// logab_button
+			// log_button
 			// 
-			this.logab_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.logab_button.Location = new System.Drawing.Point(600, 60);
-			this.logab_button.Name = "logab_button";
-			this.logab_button.Size = new System.Drawing.Size(83, 58);
-			this.logab_button.TabIndex = 24;
-			this.logab_button.Text = "logab";
-			this.logab_button.UseVisualStyleBackColor = true;
-			this.logab_button.Click += new System.EventHandler(this.logab_button_Click);
+			this.log_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.log_button.Location = new System.Drawing.Point(600, 60);
+			this.log_button.Name = "log_button";
+			this.log_button.Size = new System.Drawing.Size(83, 58);
+			this.log_button.TabIndex = 24;
+			this.log_button.Text = "log";
+			this.log_button.UseVisualStyleBackColor = true;
+			this.log_button.Click += new System.EventHandler(this.log_button_Click);
 			// 
 			// ln_button
 			// 
@@ -296,32 +296,32 @@ partial class Form1
 			this.ln_button.UseVisualStyleBackColor = true;
 			this.ln_button.Click += new System.EventHandler(this.ln_button_Click);
 			// 
-			// log10_button
+			// mac_button
 			// 
-			this.log10_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.log10_button.Location = new System.Drawing.Point(422, 60);
-			this.log10_button.Name = "log10_button";
-			this.log10_button.Size = new System.Drawing.Size(83, 58);
-			this.log10_button.TabIndex = 22;
-			this.log10_button.Text = "log10";
-			this.log10_button.UseVisualStyleBackColor = true;
-			this.log10_button.Click += new System.EventHandler(this.log10_button_Click);
+			this.mac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.mac_button.Location = new System.Drawing.Point(422, 60);
+			this.mac_button.Name = "mac_button";
+			this.mac_button.Size = new System.Drawing.Size(83, 58);
+			this.mac_button.TabIndex = 22;
+			this.mac_button.Text = "MAC";
+			this.mac_button.UseVisualStyleBackColor = true;
+			this.mac_button.Click += new System.EventHandler(this.mac_button_Click);
 			// 
-			// log2_button
+			// var_button
 			// 
-			this.log2_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.log2_button.Location = new System.Drawing.Point(333, 60);
-			this.log2_button.Name = "log2_button";
-			this.log2_button.Size = new System.Drawing.Size(83, 58);
-			this.log2_button.TabIndex = 21;
-			this.log2_button.Text = "log2";
-			this.log2_button.UseVisualStyleBackColor = true;
-			this.log2_button.Click += new System.EventHandler(this.log2_button_Click);
+			this.var_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.var_button.Location = new System.Drawing.Point(333, 60);
+			this.var_button.Name = "var_button";
+			this.var_button.Size = new System.Drawing.Size(83, 58);
+			this.var_button.TabIndex = 21;
+			this.var_button.Text = "VAR";
+			this.var_button.UseVisualStyleBackColor = true;
+			this.var_button.Click += new System.EventHandler(this.var_button_Click);
 			// 
 			// arcsin_button
 			// 
 			this.arcsin_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arcsin_button.Location = new System.Drawing.Point(333, 188);
+			this.arcsin_button.Location = new System.Drawing.Point(422, 188);
 			this.arcsin_button.Name = "arcsin_button";
 			this.arcsin_button.Size = new System.Drawing.Size(83, 58);
 			this.arcsin_button.TabIndex = 13;
@@ -331,27 +331,30 @@ partial class Form1
 			// 
 			// historyView
 			// 
+			this.historyView.FormattingEnabled = true;
+			this.historyView.HorizontalScrollbar = true;
+			this.historyView.ItemHeight = 25;
 			this.historyView.Location = new System.Drawing.Point(12, 9);
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(315, 429);
 			this.historyView.TabIndex = 25;
-			this.historyView.UseCompatibleStateImageBehavior = false;
+			this.historyView.SelectedIndexChanged += new System.EventHandler(this.historyView_SelectedIndexChanged);
 			// 
-			// Form1
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(693, 450);
 			this.Controls.Add(this.historyView);
-			this.Controls.Add(this.logab_button);
+			this.Controls.Add(this.log_button);
 			this.Controls.Add(this.ln_button);
-			this.Controls.Add(this.log10_button);
-			this.Controls.Add(this.log2_button);
+			this.Controls.Add(this.mac_button);
+			this.Controls.Add(this.var_button);
 			this.Controls.Add(this.pow_button);
 			this.Controls.Add(this.tan_button);
 			this.Controls.Add(this.cos_button);
 			this.Controls.Add(this.sin_button);
-			this.Controls.Add(this.rad_button);
+			this.Controls.Add(this.txt_button);
 			this.Controls.Add(this.arctan_button);
 			this.Controls.Add(this.arccos_button);
 			this.Controls.Add(this.arcsin_button);
@@ -359,7 +362,7 @@ partial class Form1
 			this.Controls.Add(this.sqrt_button);
 			this.Controls.Add(this.e_button);
 			this.Controls.Add(this.dec_button);
-			this.Controls.Add(this.frac_button);
+			this.Controls.Add(this.ac_button);
 			this.Controls.Add(this.ans_button);
 			this.Controls.Add(this.tau_button);
 			this.Controls.Add(this.hex_button);
@@ -368,7 +371,7 @@ partial class Form1
 			this.Controls.Add(this.pi_button);
 			this.Controls.Add(this.bin_button);
 			this.Controls.Add(this.omnibox);
-			this.Name = "Form1";
+			this.Name = "MainForm";
 			this.Text = "Form1";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -382,7 +385,7 @@ partial class Form1
 	private Button pi_button;
 	private Button clr_button;
 	private Button exe_button;
-	private Button frac_button;
+	private Button ac_button;
 	private Button ans_button;
 	private Button tau_button;
 	private Button hex_button;
@@ -390,17 +393,17 @@ partial class Form1
 	private Button sqrt_button;
 	private Button e_button;
 	private Button dec_button;
-	private Button rad_button;
+	private Button txt_button;
 	private Button arctan_button;
 	private Button arccos_button;
 	private Button tan_button;
 	private Button cos_button;
 	private Button sin_button;
-	private Button logab_button;
+	private Button log_button;
 	private Button ln_button;
-	private Button log10_button;
-	private Button log2_button;
+	private Button mac_button;
+	private Button var_button;
 	private Button arcsin_button;
-	private ListView historyView;
 	private Button pow_button;
+	private ListBox historyView;
 }

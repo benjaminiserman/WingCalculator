@@ -20,7 +20,6 @@ public partial class MainForm : Form
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(HandleKeyPress);
-		//PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewArrowKey);
 
 		historyView.DrawMode = DrawMode.OwnerDrawVariable;
 		historyView.MeasureItem += historyView_MeasureItem;
@@ -105,8 +104,6 @@ public partial class MainForm : Form
 
 	private void PreviewArrowKey(object send, PreviewKeyDownEventArgs e)
 	{
-		errorLabel.Text = e.KeyCode.ToString();
-
 		switch (e.KeyCode)
 		{
 			case Keys.Up:
@@ -294,6 +291,10 @@ public partial class MainForm : Form
 		{
 			_stdout.Clear();
 			errorLabel.Text = $"{ex.GetType()}: {ex.Message}";
+
+#if DEBUG
+			errorLabel.Text = $"{errorLabel.Text} @ {ex.TargetSite}";
+#endif
 			throw;
 		}
 	}

@@ -46,17 +46,51 @@ public class Solver
 	private readonly Dictionary<string, Func<List<double>, double>> _functions = new()
 	{
 		["pow"] = args => Math.Pow(args[0], args[1]),
+		["exp"] = args => Math.Exp(args[0]),
 		["sqrt"] = args => Math.Sqrt(args[0]),
 		["cbrt"] = args => Math.Cbrt(args[0]),
+
 		["ceil"] = args => Math.Ceiling(args[0]),
 		["floor"] = args => Math.Floor(args[0]),
+		["round"] = args => Math.Round(args[0], args.Count > 1 ? (int)args[1] : 0, (MidpointRounding)(args.Count > 2 ? (int)args[2] : 0)),
+		["trunc"] = args => (int)args[0],
+
 		["sin"] = args => Math.Sin(args[0]),
 		["cos"] = args => Math.Cos(args[0]),
 		["tan"] = args => Math.Tan(args[0]),
-		["arcsin"] = args => Math.Asin(args[0]),
-		["arccos"] = args => Math.Acos(args[0]),
-		["arctan"] = args => Math.Atan(args[0]),
+		["asin"] = args => Math.Asin(args[0]),
+		["acos"] = args => Math.Acos(args[0]),
+		["atan"] = args => args.Count > 1 ? Math.Atan2(args[0], args[1]) : Math.Atan(args[0]),
+		["sinh"] = args => Math.Sinh(args[0]),
+		["cosh"] = args => Math.Cosh(args[0]),
+		["tanh"] = args => Math.Tanh(args[0]),
+		["arcsinh"] = args => Math.Asinh(args[0]),
+		["arccosh"] = args => Math.Acosh(args[0]),
+		["arctanh"] = args => Math.Atanh(args[0]),
+
 		["abs"] = args => Math.Abs(args[0]),
+		["clamp"] = args => Math.Clamp(args[0], args[1], args[2]),
+		["sign"] = args => Math.Sign(args[0]),
+		["cpsign"] = args => Math.CopySign(args[0], args[1]),
+
+		["bitinc"] = args => Math.BitIncrement(args[0]),
+		["bitdec"] = args => Math.BitDecrement(args[0]),
+
+		["max"] = args => args.Max(),
+		["min"] = args => args.Min(),
+		["sum"] = args => args.Sum(),
+		["product"] = args => args.Aggregate((x, y) => x * y),
+		["mean"] = args => args.Average(),
+		["median"] = args =>
+		{
+			args.Sort();
+
+			return args.Count % 2 == 0
+				? args.GetRange(args.Count / 2 - 1, 2).Average()
+				: args[args.Count / 2];
+		},
+		["mode"] = args => args.GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key,
+
 		["log"] = args => Math.Log(args[0], args[1]),
 		["ln"] = args => Math.Log(args[0]),
 	};

@@ -68,11 +68,11 @@ public partial class MainForm : Form
 
 	private void txt_button_Click(object sender, EventArgs e) => SendKeys.Send("1:");
 
-	private void arcsin_button_Click(object sender, EventArgs e) => SendKeys.Send("narcsi");
+	private void arcsin_button_Click(object sender, EventArgs e) => SendKeys.Send("nasi");
 
-	private void arccos_button_Click(object sender, EventArgs e) => SendKeys.Send("sarcco");
+	private void arccos_button_Click(object sender, EventArgs e) => SendKeys.Send("saco");
 
-	private void arctan_button_Click(object sender, EventArgs e) => SendKeys.Send("narcta");
+	private void arctan_button_Click(object sender, EventArgs e) => SendKeys.Send("nata");
 
 	private void sin_button_Click(object sender, EventArgs e) => SendKeys.Send("nsi");
 

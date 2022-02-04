@@ -98,7 +98,10 @@ internal static class Tokenizer
 
 		PushCurrent();
 
-		return tokens;
+		if (quoted) throw new Exception("Quote is missing end quote!");
+		if (apostrophed) throw new Exception("Character is missing end quote!");
+
+			return tokens;
 
 		void PushCurrent()
 		{

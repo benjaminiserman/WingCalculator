@@ -2,10 +2,9 @@ namespace WingCalculatorForms;
 
 using System;
 using System.Text;
-using System.Reflection;
 using System.Windows.Forms;
-using WingCalculatorShared;
 using WingCalculatorForms.Properties;
+using WingCalculatorShared;
 
 public partial class MainForm : Form
 {

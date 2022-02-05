@@ -213,23 +213,23 @@ partial class MainForm
 			// 
 			// arctan_button
 			// 
-			this.arctan_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.arctan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.arctan_button.Location = new System.Drawing.Point(600, 188);
 			this.arctan_button.Name = "arctan_button";
 			this.arctan_button.Size = new System.Drawing.Size(83, 58);
 			this.arctan_button.TabIndex = 15;
-			this.arctan_button.Text = "arctan";
+			this.arctan_button.Text = "atan";
 			this.arctan_button.UseVisualStyleBackColor = true;
 			this.arctan_button.Click += new System.EventHandler(this.arctan_button_Click);
 			// 
 			// arccos_button
 			// 
-			this.arccos_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.arccos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.arccos_button.Location = new System.Drawing.Point(511, 188);
 			this.arccos_button.Name = "arccos_button";
 			this.arccos_button.Size = new System.Drawing.Size(83, 58);
 			this.arccos_button.TabIndex = 14;
-			this.arccos_button.Text = "arccos";
+			this.arccos_button.Text = "acos";
 			this.arccos_button.UseVisualStyleBackColor = true;
 			this.arccos_button.Click += new System.EventHandler(this.arccos_button_Click);
 			// 
@@ -323,12 +323,12 @@ partial class MainForm
 			// 
 			// arcsin_button
 			// 
-			this.arcsin_button.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.arcsin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.arcsin_button.Location = new System.Drawing.Point(422, 188);
 			this.arcsin_button.Name = "arcsin_button";
 			this.arcsin_button.Size = new System.Drawing.Size(83, 58);
 			this.arcsin_button.TabIndex = 13;
-			this.arcsin_button.Text = "arcsin";
+			this.arcsin_button.Text = "asin";
 			this.arcsin_button.UseVisualStyleBackColor = true;
 			this.arcsin_button.Click += new System.EventHandler(this.arcsin_button_Click);
 			// 

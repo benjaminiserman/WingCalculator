@@ -37,7 +37,7 @@ public class Solver
 
 		["N"] = -1,
 		["DEC"] = 0,
-		["ASCII"] = 1,
+		["TXT"] = 1,
 		["BIN"] = 2,
 		["OCT"] = 8,
 		["HEX"] = 16,

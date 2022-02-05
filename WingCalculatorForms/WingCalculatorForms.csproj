@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="light-bulb.png" />
+    <None Remove="night-mode.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="light-bulb.png" />
+    <EmbeddedResource Include="night-mode.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WingCalculatorShared\WingCalculatorShared.csproj" />
   </ItemGroup>
 
@@ -16,6 +26,18 @@
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

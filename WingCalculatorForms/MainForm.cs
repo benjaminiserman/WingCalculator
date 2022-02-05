@@ -16,6 +16,7 @@ public partial class MainForm : Form
 	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
 	private bool _darkMode = false;
+	private static readonly string _emptyEntry = "\n\n";
 
 	public MainForm()
 	{
@@ -27,9 +28,10 @@ public partial class MainForm : Form
 		historyView.DrawMode = DrawMode.OwnerDrawVariable;
 		historyView.MeasureItem += historyView_MeasureItem;
 		historyView.DrawItem += historyView_DrawItem;
-		historyView.Items.Add("\n\n");
+		historyView.Items.Add(_emptyEntry);
+		historyView.PreviewKeyDown += new PreviewKeyDownEventHandler(HandleDeleteKey);
 
-		omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewArrowKey);
+		omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewControlKeys);
 
 		ResetSolver();
 	}
@@ -54,7 +56,7 @@ public partial class MainForm : Form
 	{
 		ResetSolver();
 		historyView.Items.Clear();
-		historyView.Items.Add("\n\n");
+		historyView.Items.Add(_emptyEntry);
 		omnibox.Clear();
 	}
 
@@ -122,7 +124,7 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void PreviewArrowKey(object send, PreviewKeyDownEventArgs e)
+	private void PreviewControlKeys(object send, PreviewKeyDownEventArgs e)
 	{
 		switch (e.KeyCode)
 		{
@@ -160,6 +162,15 @@ public partial class MainForm : Form
 
 				break;
 			}
+			case Keys.Delete:
+			{
+				if (e.Alt)
+				{
+					HandleDeleteKey(send, e);
+				}
+
+				break;
+			}
 		}
 	}
 
@@ -187,6 +198,19 @@ public partial class MainForm : Form
 		if (e.KeyChar == '(') SendParen(')');
 		if (e.KeyChar == '[') SendParen(']');
 		if (e.KeyChar == '{') SendParen('}');
+	}
+
+	private void HandleDeleteKey(object sender, PreviewKeyDownEventArgs e)
+	{
+		if (e.KeyCode == Keys.Delete)
+		{
+			if (historyView.SelectedItem is not null && (string)historyView.SelectedItem != _emptyEntry)
+			{
+				int index = historyView.SelectedIndex;
+				historyView.Items.Remove(historyView.SelectedItem);
+				historyView.SelectedIndex = index;
+			}
+		}
 	}
 
 	private void SendParen(char c)
@@ -229,11 +253,11 @@ public partial class MainForm : Form
 			historyView.Items.Add(solveString);
 		}
 		
-		if ((string)historyView.Items[^1] != "\n\n") historyView.Items.Add("\n\n"); // add empty buffer entry
+		if ((string)historyView.Items[^1] != _emptyEntry) historyView.Items.Add(_emptyEntry); // add empty buffer entry
 
 		for (int i = 0; i < historyView.Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{
-			if ((string)historyView.Items[i] == "\n\n")
+			if ((string)historyView.Items[i] == _emptyEntry)
 			{
 				historyView.Items.RemoveAt(i);
 				i--;

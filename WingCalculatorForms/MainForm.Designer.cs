@@ -28,6 +28,7 @@ partial class MainForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.omnibox = new System.Windows.Forms.TextBox();
 			this.bin_button = new System.Windows.Forms.Button();
 			this.pi_button = new System.Windows.Forms.Button();
@@ -397,6 +398,7 @@ partial class MainForm
 			this.Controls.Add(this.bin_button);
 			this.Controls.Add(this.omnibox);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;

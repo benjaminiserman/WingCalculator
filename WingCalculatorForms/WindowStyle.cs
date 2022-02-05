@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle)
+internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont)
 {
 	public static readonly Color DarkBase = Hex("#121212");
 
@@ -19,7 +19,8 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		ErrorColor: Color.IndianRed,
 		InfoColor: Color.LightSkyBlue,
 		ButtonStyle: FlatStyle.Popup,
-		MenuButtonStyle: FlatStyle.Flat
+		MenuButtonStyle: FlatStyle.Flat,
+		TextFont: new FontFamily("Consolas")
 	);
 
 	public static readonly WindowStyle LightMode = new
@@ -31,7 +32,8 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		ErrorColor: Color.Red,
 		InfoColor: Color.DarkBlue,
 		ButtonStyle: FlatStyle.Standard,
-		MenuButtonStyle: FlatStyle.Standard
+		MenuButtonStyle: FlatStyle.Standard,
+		TextFont: new FontFamily("Segoe UI")
 	);
 
 	public static List<string> MenuNames { get; } = new() { "darkModeButton" };
@@ -56,11 +58,14 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 				c.BackColor = InnerBaseColor;
 			}
 
+			c.Font = new(TextFont, c.Font.Size);
+
 			if (c.Name == "errorLabel") c.ForeColor = ErrorColor;
 			else c.ForeColor = TextColor;
 		}
 
 		form.BackColor = BaseColor;
+		//form.Font = new(TextFont, form.Font.Size);
 	}
 
 	private static Color Hex(string s) => ColorTranslator.FromHtml(s);

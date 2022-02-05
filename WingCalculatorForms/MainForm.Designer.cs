@@ -357,7 +357,7 @@ partial class MainForm
 			// 
 			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
 			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.darkModeButton.Location = new System.Drawing.Point(617, 444);
+			this.darkModeButton.Location = new System.Drawing.Point(617, 443);
 			this.darkModeButton.Name = "darkModeButton";
 			this.darkModeButton.Size = new System.Drawing.Size(50, 50);
 			this.darkModeButton.TabIndex = 27;

@@ -30,6 +30,7 @@ public partial class MainForm : Form
 		historyView.DrawItem += historyView_DrawItem;
 		historyView.Items.Add(_emptyEntry);
 		historyView.PreviewKeyDown += new PreviewKeyDownEventHandler(HandleDeleteKey);
+		historyView.SelectedIndexChanged += (_, _) => SendToFarRight();
 
 		omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewControlKeys);
 
@@ -211,6 +212,11 @@ public partial class MainForm : Form
 				historyView.SelectedIndex = index;
 			}
 		}
+	}
+
+	private void SendToFarRight()
+	{
+		if (omnibox.Text.Length > 0) omnibox.SelectionStart = omnibox.Text.Length;
 	}
 
 	private void SendParen(char c)

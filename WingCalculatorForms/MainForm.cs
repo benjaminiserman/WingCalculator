@@ -165,7 +165,11 @@ public partial class MainForm : Form
 			}
 			case Keys.Delete:
 			{
-				if (e.Alt)
+				if (e.Control)
+				{
+					ac_button_Click(send, e);
+				}
+				else if (e.Alt)
 				{
 					HandleDeleteKey(send, e);
 				}

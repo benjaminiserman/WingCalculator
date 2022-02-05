@@ -38,19 +38,19 @@ public partial class MainForm : Form
 
 #pragma warning disable IDE1006 // Naming Styles
 	#region CalculatorButtons
-	private void bin_button_Click(object sender, EventArgs e) => SendKeys.Send("2:");
+	private void bin_button_Click(object sender, EventArgs e) => SendString(":2");
 
-	private void pi_button_Click(object sender, EventArgs e) => SendKeys.Send("I$P");
+	private void pi_button_Click(object sender, EventArgs e) => SendString("$PI");
 
 	private void clr_button_Click(object sender, EventArgs e) => omnibox.Clear();
 
 	private void exe_button_Click(object sender, EventArgs e) => Execute();
 
-	private void hex_button_Click(object sender, EventArgs e) => SendKeys.Send("6:1");
+	private void hex_button_Click(object sender, EventArgs e) => SendString(":16");
 
-	private void tau_button_Click(object sender, EventArgs e) => SendKeys.Send("U$TA");
+	private void tau_button_Click(object sender, EventArgs e) => SendString("$TAY");
 
-	private void ans_button_Click(object sender, EventArgs e) => SendKeys.Send("S$AN");
+	private void ans_button_Click(object sender, EventArgs e) => SendString("$ANS");
 
 	private void ac_button_Click(object sender, EventArgs e)
 	{
@@ -60,37 +60,37 @@ public partial class MainForm : Form
 		omnibox.Clear();
 	}
 
-	private void dec_button_Click(object sender, EventArgs e) => SendKeys.Send("0:");
+	private void dec_button_Click(object sender, EventArgs e) => SendString(":0");
 
-	private void e_button_Click(object sender, EventArgs e) => SendKeys.Send("E$");
+	private void e_button_Click(object sender, EventArgs e) => SendString("$E");
 
-	private void sqrt_button_Click(object sender, EventArgs e) => SendKeys.Send("tsqr");
+	private void sqrt_button_Click(object sender, EventArgs e) => SendString("sqrt");
 
-	private void cbrt_button_Click(object sender, EventArgs e) => SendKeys.Send("tcbr");
+	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt");
 
-	private void txt_button_Click(object sender, EventArgs e) => SendKeys.Send("1:");
+	private void txt_button_Click(object sender, EventArgs e) => SendString(":1");
 
-	private void arcsin_button_Click(object sender, EventArgs e) => SendKeys.Send("nasi");
+	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin");
 
-	private void arccos_button_Click(object sender, EventArgs e) => SendKeys.Send("saco");
+	private void arccos_button_Click(object sender, EventArgs e) => SendString("acos");
 
-	private void arctan_button_Click(object sender, EventArgs e) => SendKeys.Send("nata");
+	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan");
 
-	private void sin_button_Click(object sender, EventArgs e) => SendKeys.Send("nsi");
+	private void sin_button_Click(object sender, EventArgs e) => SendString("sis");
 
-	private void cos_button_Click(object sender, EventArgs e) => SendKeys.Send("sco");
+	private void cos_button_Click(object sender, EventArgs e) => SendString("cos");
 
-	private void tan_button_Click(object sender, EventArgs e) => SendKeys.Send("nta");
+	private void tan_button_Click(object sender, EventArgs e) => SendString("tan");
 
-	private void pow_button_Click(object sender, EventArgs e) => SendKeys.Send("wpo");
+	private void pow_button_Click(object sender, EventArgs e) => SendString("pow");
 
-	private void var_button_Click(object sender, EventArgs e) => SendKeys.Send("$");
+	private void var_button_Click(object sender, EventArgs e) => SendString("$");
 
-	private void mac_button_Click(object sender, EventArgs e) => SendKeys.Send("@");
+	private void mac_button_Click(object sender, EventArgs e) => SendString("@");
 
-	private void ln_button_Click(object sender, EventArgs e) => SendKeys.Send("nl");
+	private void ln_button_Click(object sender, EventArgs e) => SendString("ln");
 
-	private void log_button_Click(object sender, EventArgs e) => SendKeys.Send("glo");
+	private void log_button_Click(object sender, EventArgs e) => SendString("log");
 
 	#endregion
 
@@ -342,6 +342,8 @@ public partial class MainForm : Form
 			throw;
 		}
 	}
+
+	private void SendString(string s) => SendKeys.Send(s[^1] + s[..^1]);
 
 	private void ResetSolver()
 	{

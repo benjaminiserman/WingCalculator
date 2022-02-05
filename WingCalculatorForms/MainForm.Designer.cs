@@ -55,6 +55,7 @@ partial class MainForm
 			this.arcsin_button = new System.Windows.Forms.Button();
 			this.historyView = new System.Windows.Forms.ListBox();
 			this.errorLabel = new System.Windows.Forms.Label();
+			this.darkModeButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// omnibox
@@ -346,16 +347,28 @@ partial class MainForm
 			this.errorLabel.AutoSize = true;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
 			this.errorLabel.Location = new System.Drawing.Point(12, 439);
-			this.errorLabel.MaximumSize = new System.Drawing.Size(700, 0);
+			this.errorLabel.MaximumSize = new System.Drawing.Size(500, 0);
 			this.errorLabel.Name = "errorLabel";
 			this.errorLabel.Size = new System.Drawing.Size(0, 25);
 			this.errorLabel.TabIndex = 26;
+			// 
+			// darkModeButton
+			// 
+			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
+			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.darkModeButton.Location = new System.Drawing.Point(617, 444);
+			this.darkModeButton.Name = "darkModeButton";
+			this.darkModeButton.Size = new System.Drawing.Size(50, 50);
+			this.darkModeButton.TabIndex = 27;
+			this.darkModeButton.UseVisualStyleBackColor = true;
+			this.darkModeButton.Click += new System.EventHandler(this.darkModeButton_Click);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(693, 502);
+			this.Controls.Add(this.darkModeButton);
 			this.Controls.Add(this.errorLabel);
 			this.Controls.Add(this.historyView);
 			this.Controls.Add(this.log_button);
@@ -423,4 +436,5 @@ partial class MainForm
 	private Button pow_button;
 	private ListBox historyView;
 	private Label errorLabel;
+	private Button darkModeButton;
 }

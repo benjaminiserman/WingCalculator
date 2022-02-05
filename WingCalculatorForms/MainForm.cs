@@ -2,8 +2,10 @@ namespace WingCalculatorForms;
 
 using System;
 using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 using WingCalculatorShared;
+using WingCalculatorForms.Properties;
 
 public partial class MainForm : Form
 {
@@ -13,6 +15,7 @@ public partial class MainForm : Form
 	private int _nextOffset = 0;
 	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
+	private bool _darkMode = false;
 
 	public MainForm()
 	{
@@ -32,7 +35,7 @@ public partial class MainForm : Form
 	}
 
 #pragma warning disable IDE1006 // Naming Styles
-	#region Buttons
+	#region CalculatorButtons
 	private void bin_button_Click(object sender, EventArgs e) => SendKeys.Send("2:");
 
 	private void pi_button_Click(object sender, EventArgs e) => SendKeys.Send("I$P");
@@ -86,6 +89,26 @@ public partial class MainForm : Form
 	private void ln_button_Click(object sender, EventArgs e) => SendKeys.Send("nl");
 
 	private void log_button_Click(object sender, EventArgs e) => SendKeys.Send("glo");
+
+	#endregion
+
+	#region MenuButtons
+
+	private void darkModeButton_Click(object sender, EventArgs e)
+	{
+		_darkMode = !_darkMode;
+
+		if (_darkMode)
+		{
+			WindowStyle.DarkMode.Apply(Controls, this);
+			darkModeButton.BackgroundImage = Resources.light_bulb;
+		}
+		else
+		{
+			WindowStyle.LightMode.Apply(Controls, this);
+			darkModeButton.BackgroundImage = Resources.night_mode;
+		}
+	}
 
 	#endregion
 

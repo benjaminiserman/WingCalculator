@@ -42,6 +42,8 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 	{
 		foreach (Control c in collection)
 		{
+			c.Font = new(TextFont, c.Font.Size);
+
 			if (c is Button b)
 			{
 				c.BackColor = ButtonBackgroundColor;
@@ -53,19 +55,18 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			{
 				c.BackColor = InnerBaseColor;
 			}
-			else if (c is ListBox)
+			else if (c is ListBox lb)
 			{
 				c.BackColor = InnerBaseColor;
-			}
 
-			c.Font = new(TextFont, c.Font.Size);
+				if (lb is HistoryView hv) hv.RefreshEntries();
+			}
 
 			if (c.Name == "errorLabel") c.ForeColor = ErrorColor;
 			else c.ForeColor = TextColor;
 		}
 
 		form.BackColor = BaseColor;
-		//form.Font = new(TextFont, form.Font.Size);
 	}
 
 	private static Color Hex(string s) => ColorTranslator.FromHtml(s);

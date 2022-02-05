@@ -54,7 +54,7 @@ partial class MainForm
 			this.mac_button = new System.Windows.Forms.Button();
 			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
-			this.historyView = new System.Windows.Forms.ListBox();
+			this.historyView = new HistoryView();
 			this.errorLabel = new System.Windows.Forms.Label();
 			this.darkModeButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
@@ -436,7 +436,7 @@ partial class MainForm
 	private Button var_button;
 	private Button arcsin_button;
 	private Button pow_button;
-	private ListBox historyView;
+	private HistoryView historyView;
 	private Label errorLabel;
 	private Button darkModeButton;
 }

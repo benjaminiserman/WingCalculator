@@ -16,7 +16,7 @@ public partial class MainForm : Form
 	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
 	private bool _darkMode = false;
-	private static readonly string _emptyEntry = "\n\n";
+	public static readonly string emptyEntry = "\n\n";
 
 	public MainForm()
 	{
@@ -25,10 +25,6 @@ public partial class MainForm : Form
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(HandleKeyPress);
 
-		historyView.DrawMode = DrawMode.OwnerDrawVariable;
-		historyView.MeasureItem += historyView_MeasureItem;
-		historyView.DrawItem += historyView_DrawItem;
-		historyView.Items.Add(_emptyEntry);
 		historyView.PreviewKeyDown += new PreviewKeyDownEventHandler(HandleDeleteKey);
 		historyView.SelectedIndexChanged += (_, _) => SendToFarRight();
 
@@ -57,7 +53,7 @@ public partial class MainForm : Form
 	{
 		ResetSolver();
 		historyView.Items.Clear();
-		historyView.Items.Add(_emptyEntry);
+		historyView.Items.Add(emptyEntry);
 		omnibox.Clear();
 	}
 
@@ -209,7 +205,7 @@ public partial class MainForm : Form
 	{
 		if (e.KeyCode == Keys.Delete)
 		{
-			if (historyView.SelectedItem is not null && (string)historyView.SelectedItem != _emptyEntry)
+			if (historyView.SelectedItem is not null && (string)historyView.SelectedItem != emptyEntry)
 			{
 				int index = historyView.SelectedIndex;
 				historyView.Items.Remove(historyView.SelectedItem);
@@ -263,11 +259,11 @@ public partial class MainForm : Form
 			historyView.Items.Add(solveString);
 		}
 		
-		if ((string)historyView.Items[^1] != _emptyEntry) historyView.Items.Add(_emptyEntry); // add empty buffer entry
+		if ((string)historyView.Items[^1] != emptyEntry) historyView.Items.Add(emptyEntry); // add empty buffer entry
 
 		for (int i = 0; i < historyView.Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{
-			if ((string)historyView.Items[i] == _emptyEntry)
+			if ((string)historyView.Items[i] == emptyEntry)
 			{
 				historyView.Items.RemoveAt(i);
 				i--;
@@ -302,20 +298,6 @@ public partial class MainForm : Form
 	}
 	#endregion
 
-	#region HistoryViewDrawing
-	private void historyView_MeasureItem(object sender, MeasureItemEventArgs e) => e.ItemHeight = (int)e.Graphics.MeasureString(historyView.Items[e.Index].ToString(), historyView.Font, historyView.Width).Height;
-
-	private void historyView_DrawItem(object sender, DrawItemEventArgs e)
-	{
-		try
-		{
-			e.DrawBackground();
-			e.DrawFocusRectangle();
-			e.Graphics.DrawString(historyView.Items[e.Index].ToString(), e.Font, new SolidBrush(e.ForeColor), e.Bounds);
-		}
-		catch { }
-	}
-
 	private void historyView_SelectedIndexChanged(object sender, EventArgs e)
 	{
 		if (_skipSelect) _skipSelect = false;
@@ -324,7 +306,6 @@ public partial class MainForm : Form
 			omnibox.Text = GetEntryText(historyView.SelectedItem);
 		}
 	}
-	#endregion
 
 #pragma warning restore IDE1006
 

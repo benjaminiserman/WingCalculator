@@ -150,7 +150,7 @@ public class Solver
 					{
 						INode coefficientNode = availableNodes[^1];
 						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(OperatorNodeFactory.CreateBinaryNode(coefficientNode, new("*"), tree));
+						availableNodes.Add(Operators.CreateNode(coefficientNode, new("*"), tree));
 					}
 					else availableNodes.Add(tree);
 					
@@ -174,7 +174,7 @@ public class Solver
 					{
 						INode coefficientNode = availableNodes[^1];
 						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(OperatorNodeFactory.CreateBinaryNode(coefficientNode, new("*"), tree));
+						availableNodes.Add(Operators.CreateNode(coefficientNode, new("*"), tree));
 					}
 					else availableNodes.Add(tree);
 
@@ -318,7 +318,7 @@ public class Solver
 				{
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
-						var binaryNode = OperatorNodeFactory.CreateBinaryNode(availableNodes[i - 1], node, availableNodes[i + 1], this);
+						var binaryNode = Operators.CreateNode(availableNodes[i - 1], node, availableNodes[i + 1], this);
 
 						availableNodes.RemoveAt(i - 1);
 						availableNodes.RemoveAt(i - 1);

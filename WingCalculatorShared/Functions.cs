@@ -137,6 +137,23 @@ internal static class Functions
 			return count;
 		},
 		#endregion
+
+		["alloc"] = args =>
+		{
+			PointerNode pointer = (PointerNode)args[0];
+
+			Solver solver = pointer.Solver;
+			double address = pointer.Address;
+
+			solver.SetVariable(address.ToString(), args.Count - 1);
+
+			for (int i = 1; i < args.Count; i++)
+			{
+				solver.SetVariable((address + i).ToString(), args[i].Solve());
+			}
+
+			return address;
+		}
 	};
 
 	internal static Func<List<INode>, double> Get(string s) => _functions[s];

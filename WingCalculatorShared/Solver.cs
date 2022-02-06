@@ -246,7 +246,7 @@ public class Solver
 
 		if (availableNodes.Count > 0 && availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
 
-		for (int i = 1; i < availableNodes.Count; i++) // handle unary operators
+		for (int i = availableNodes.Count - 1; i >= 1; i--) // handle unary operators
 		{
 			if (availableNodes[i] is not PreOperatorNode
 				&& availableNodes[i - 1] is PreOperatorNode signNode 
@@ -298,8 +298,6 @@ public class Solver
 							throw new NotImplementedException($"{signNode.Text} is a valid unary operator but is not yet implemented.");
 						}
 					}
-
-					i--;
 				}
 				else throw new NotImplementedException($"{signNode.Text} is not a valid unary operator!");
 			}

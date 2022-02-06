@@ -338,14 +338,11 @@ partial class MainForm
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
-			this.historyView.Items.AddRange(new object[] {
-            "\n\n",
-            "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(12, 9);
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(315, 429);
 			this.historyView.TabIndex = 25;
-			this.historyView.SelectedIndexChanged += new System.EventHandler(this.historyView_SelectedIndexChanged);
+			this.historyView.SelectedIndexChanged += new System.EventHandler(this.HistoryViewIndexChanged);
 			// 
 			// errorLabel
 			// 

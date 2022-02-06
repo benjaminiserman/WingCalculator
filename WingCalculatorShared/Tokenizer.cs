@@ -101,7 +101,21 @@ internal static class Tokenizer
 		if (quoted) throw new Exception("Quote is missing end quote!");
 		if (apostrophed) throw new Exception("Character is missing end quote!");
 
-			return tokens;
+		int additiveUnaryCount = 0;
+		for (int i = 0; i < tokens.Count; i++)
+		{
+			if (tokens[i].TokenType == TokenType.Operator && tokens[i].Text is "+" or "-")
+			{
+				additiveUnaryCount++;
+				if (additiveUnaryCount > 2 || (additiveUnaryCount == 2 && i == 1)) // if 3 +/- are found in a row, or 2 +/- at start
+				{
+					throw new Exception($"Too many + or - signs found in a row!");
+				}
+			}
+			else additiveUnaryCount = 0;
+		}
+
+		return tokens;
 
 		void PushCurrent()
 		{

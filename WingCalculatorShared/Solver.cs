@@ -314,7 +314,30 @@ public class Solver
 			{
 				int tier = preOperatorNodes.Min(x => x.Tier);
 
-				for (int i = 0; i < availableNodes.Count; i++)
+				switch (Operators.GetTierAssociativity(tier))
+				{
+					case Operators.Associativity.Left:
+					{
+						for (int i = 0; i < availableNodes.Count; i++)
+						{
+							CheckAndCollapseNode(ref i, x => x--);
+						}
+
+						break;
+					}
+					case Operators.Associativity.Right:
+					{
+						for (int i = availableNodes.Count - 1; i >= 0; i--)
+						{
+							CheckAndCollapseNode(ref i, x => x++);
+						}
+
+						break;
+					}
+				}
+				
+
+				void CheckAndCollapseNode(ref int i, Func<int, int> increment)
 				{
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
@@ -326,7 +349,7 @@ public class Solver
 
 						availableNodes.Insert(i - 1, binaryNode);
 
-						i--;
+						i = increment(i);
 					}
 				}
 			}	

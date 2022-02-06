@@ -82,35 +82,15 @@ internal static class Operators
 		new("?=", (a, b, solver) => new ElvisAssignmentNode((IAssignable)a, b), _precedenceTiers["assignment"]),
 		new("=", (a, b, solver) => new AssignmentNode((IAssignable)a, b), _precedenceTiers["assignment"]),
 
-		new(":", (a, b, solver) => new BinaryNode(a, b, (x, y) =>
-		{
-			solver.Write(GetPrint(x, y));
+		new(":", (a, b, solver) => new PrintNode(a, b, solver, false), _precedenceTiers["print"]),
 
-			return x;
-		}), _precedenceTiers["print"]),
-
-		new("::", (a, b, solver) => new BinaryNode(a, b, (x, y) =>
-		{
-			solver.WriteLine(GetPrint(x, y));
-
-			return x;
-		}), _precedenceTiers["print"]),
+		new("::", (a, b, solver) => new PrintNode(a, b, solver, true), _precedenceTiers["print"]),
 
 		new(";", (a, b, solver) => new BinaryNode(a, b, (x, y) => y), _precedenceTiers["semicolon"]),
 
 	}.ToDictionary(x => x.Symbol, x => x);
 
-	private static string GetPrint(double x, double y) => y switch
-	{
-		-1 => "\n",
-		0 => x.ToString(),
-		1 => ((char)(int)x).ToString(),
-		2 => Convert.ToString((int)x, 2),
-		8 => Convert.ToString((int)x, 8),
-		16 => Convert.ToString((int)x, 16),
-
-		_ => throw new NotImplementedException($"Format {y} is not implemented.")
-	};
+	
 
 	public static INode CreateNode(INode a, PreOperatorNode op, INode b, Solver solver = null) => _operators[op.Text].Construct(a, b, solver);
 

@@ -194,9 +194,9 @@ public partial class MainForm : Form
 			Execute();
 		}
 
-		if (e.KeyChar == '(') SendParen(')');
+		/*if (e.KeyChar == '(') SendParen(')');
 		if (e.KeyChar == '[') SendParen(']');
-		if (e.KeyChar == '{') SendParen('}');
+		if (e.KeyChar == '{') SendParen('}');*/
 	}
 
 	private void HandleDeleteKey(object sender, PreviewKeyDownEventArgs e)
@@ -222,6 +222,7 @@ public partial class MainForm : Form
 		SendKeys.Send($"{{{c}}}");
 		_bufferOffset -= 1;
 	}
+	
 
 	private void Execute()
 	{

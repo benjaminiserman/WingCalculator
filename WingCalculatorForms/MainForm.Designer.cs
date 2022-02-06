@@ -54,7 +54,7 @@ partial class MainForm
 			this.mac_button = new System.Windows.Forms.Button();
 			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
-			this.historyView = new HistoryView();
+			this.historyView = new WingCalculatorForms.HistoryView();
 			this.errorLabel = new System.Windows.Forms.Label();
 			this.darkModeButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
@@ -334,9 +334,13 @@ partial class MainForm
 			// 
 			// historyView
 			// 
+			this.historyView.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
+			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
+            "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(12, 9);
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(315, 429);

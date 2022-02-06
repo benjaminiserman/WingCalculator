@@ -9,16 +9,24 @@ internal static class Functions
 {
 	private static readonly Dictionary<string, Func<List<INode>, double>> _functions = new()
 	{
+		#region Exponential
 		["pow"] = args => Math.Pow(args[0].Solve(), args[1].Solve()),
 		["exp"] = args => Math.Exp(args[0].Solve()),
 		["sqrt"] = args => Math.Sqrt(args[0].Solve()),
 		["cbrt"] = args => Math.Cbrt(args[0].Solve()),
 
+		["log"] = args => Math.Log(args[0].Solve(), args[1].Solve()),
+		["ln"] = args => Math.Log(args[0].Solve()),
+		#endregion
+
+		#region Rounding
 		["ceil"] = args => Math.Ceiling(args[0].Solve()),
 		["floor"] = args => Math.Floor(args[0].Solve()),
 		["round"] = args => Math.Round(args[0].Solve(), args.Count > 1 ? (int)args[1].Solve() : 0, (MidpointRounding)(args.Count > 2 ? args[2].Solve() : 0)),
 		["trunc"] = args => (int)args[0].Solve(),
+		#endregion
 
+		#region Trigonometry
 		["sin"] = args => Math.Sin(args[0].Solve()),
 		["cos"] = args => Math.Cos(args[0].Solve()),
 		["tan"] = args => Math.Tan(args[0].Solve()),
@@ -31,6 +39,7 @@ internal static class Functions
 		["arcsinh"] = args => Math.Asinh(args[0].Solve()),
 		["arccosh"] = args => Math.Acosh(args[0].Solve()),
 		["arctanh"] = args => Math.Atanh(args[0].Solve()),
+		#endregion
 
 		["abs"] = args => Math.Abs(args[0].Solve()),
 		["clamp"] = args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()),
@@ -40,6 +49,7 @@ internal static class Functions
 		["bitinc"] = args => Math.BitIncrement(args[0].Solve()),
 		["bitdec"] = args => Math.BitDecrement(args[0].Solve()),
 
+		#region List
 		["max"] = args => args.Select(x => x.Solve()).Max(),
 		["min"] = args => args.Select(x => x.Solve()).Min(),
 		["sum"] = args => args.Select(x => x.Solve()).Sum(),
@@ -54,9 +64,79 @@ internal static class Functions
 				: args[args.Count / 2].Solve();
 		},
 		["mode"] = args => args.Select(x => x.Solve()).GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key,
+		#endregion
 
-		["log"] = args => Math.Log(args[0].Solve(), args[1].Solve()),
-		["ln"] = args => Math.Log(args[0].Solve()),
+		#region ControlFlow
+		["if"] = args => args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve(),
+		["range"] = args =>
+		{
+			int i = (int)args[0].Solve();
+			int end = (int)args[1].Solve();
+			int count = 0;
+
+			if (i < end)
+			{
+				while (i < end)
+				{
+					args[2].Solve();
+					count++;
+					i++;
+					if (args[0] is IAssignable ia) ia.Assign(i);
+				}
+			}
+			else if (i > end)
+			{
+				while (i > end)
+				{
+					args[2].Solve();
+					count++;
+					i--;
+					if (args[0] is IAssignable ia) ia.Assign(i);
+				}
+			}
+
+			return count;
+		},
+		["for"] = args =>
+		{
+			args[0].Solve();
+			int count = 0;
+
+			while (args[1].Solve() != 0)
+			{
+				args[3].Solve();
+				args[2].Solve();
+				count++;
+			}
+
+			return count;
+		},
+		["while"] = args =>
+		{
+			int count = 0;
+
+			while (args[0].Solve() != 0)
+			{
+				args[1].Solve();
+				count++;
+			}
+
+			return count;
+		},
+		["dowhile"] = args =>
+		{
+			int count = 0;
+
+			do
+			{
+				args[1].Solve();
+				count++;
+			}
+			while (args[0].Solve() != 0);
+
+			return count;
+		},
+		#endregion
 	};
 
 	internal static Func<List<INode>, double> Get(string s) => _functions[s];

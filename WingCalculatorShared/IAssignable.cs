@@ -3,4 +3,5 @@
 internal interface IAssignable
 {
 	void Assign(INode a);
+	void Assign(double a);
 }

@@ -188,7 +188,6 @@ public partial class MainForm : Form
 				SendKeys.Send($"{{{e.KeyChar}}}");
 			}
 		}
-	
 
 		if (e.KeyChar == (char)Keys.Return)
 		{
@@ -226,11 +225,14 @@ public partial class MainForm : Form
 
 	private void Execute()
 	{
+		bool altMode = false; // if true, *do not* modify current entry, even if selected
+
 		if (string.IsNullOrWhiteSpace(omnibox.Text))
 		{
-			if (historyView.Items.Count < 1 || string.IsNullOrWhiteSpace(historyView.Items[^2].ToString())) return;
-			else omnibox.Text = GetEntryText(historyView.Items[^2].ToString());
+			if (historyView.Items.Count < 1 || string.IsNullOrWhiteSpace((string)historyView.Items[^2])) return;
+			else omnibox.Text = GetEntryText((string)historyView.Items[^2]);
 		}
+		else if ((ModifierKeys & Keys.Shift) != 0 && historyView.SelectedItem != null) altMode = true;
 
 		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
 
@@ -248,7 +250,7 @@ public partial class MainForm : Form
 			return;
 		}
 
-		if (historyView.SelectedItem != null)
+		if (historyView.SelectedItem != null && !altMode)
 		{
 			historyView.Items[historyView.SelectedIndex] = solveString;
 			RecalculateEntries(historyView.SelectedIndex + 1);
@@ -257,7 +259,7 @@ public partial class MainForm : Form
 		{
 			historyView.Items.Add(solveString);
 		}
-		
+
 		if ((string)historyView.Items[^1] != emptyEntry) historyView.Items.Add(emptyEntry); // add empty buffer entry
 
 		for (int i = 0; i < historyView.Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
@@ -308,7 +310,7 @@ public partial class MainForm : Form
 
 #pragma warning restore IDE1006
 
-	private static string GetEntryText(object x) => x.ToString().Split('\n')[0];
+	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
 	private string GetSolve(string s)
 	{
 		try

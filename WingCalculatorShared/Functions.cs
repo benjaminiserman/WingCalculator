@@ -172,11 +172,40 @@ internal static class Functions
 			solver.SetVariable((address + quote.Text.Length).ToString(), 0);
 
 			return address;
-		}
+		},
+
+		["memprint"] = args =>
+		{
+			PointerNode pointer = (PointerNode)args[0];
+
+			Solver solver = pointer.Solver;
+			double address = pointer.Address;
+			double value = solver.GetVariable(address.ToString());
+
+			solver.WriteLine($"${address} = {value}");
+			return value;
+		},
 		#endregion
 
 		#region Strings
+		["exec"] = args =>
+		{
+			PointerNode pointer = (PointerNode)args[0];
+			StringBuilder sb = new();
 
+			Solver solver = pointer.Solver;
+			double address = pointer.Address;
+
+			for (int i = 0; true; i++)
+			{
+				char found = (char)solver.GetVariable((address + i).ToString());
+
+				if (found == '\0') break;
+				else sb.Append(found);
+			}
+
+			return solver.Solve(sb.ToString());
+		},
 		#endregion
 	};
 

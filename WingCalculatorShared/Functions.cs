@@ -138,6 +138,7 @@ internal static class Functions
 		},
 		#endregion
 
+		#region Memory
 		["alloc"] = args =>
 		{
 			PointerNode pointer = (PointerNode)args[0];
@@ -153,7 +154,30 @@ internal static class Functions
 			}
 
 			return address;
+		},
+
+		["salloc"] = args =>
+		{
+			PointerNode pointer = (PointerNode)args[0];
+			QuoteNode quote = (QuoteNode)args[1];
+
+			Solver solver = pointer.Solver;
+			double address = pointer.Address;
+
+			for (int i = 0; i < quote.Text.Length; i++)
+			{
+				solver.SetVariable((address + i).ToString(), quote.Text[i]);
+			}
+
+			solver.SetVariable((address + quote.Text.Length).ToString(), 0);
+
+			return address;
 		}
+		#endregion
+
+		#region Strings
+
+		#endregion
 	};
 
 	internal static Func<List<INode>, double> Get(string s) => _functions[s];

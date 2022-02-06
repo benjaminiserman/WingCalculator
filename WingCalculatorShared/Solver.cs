@@ -400,11 +400,11 @@ public class Solver
 		return _macros[s];
 	}
 
-	internal INode SetMacro(string s, INode x)
+	internal double SetMacro(string s, INode x)
 	{
 		if (_macros.ContainsKey(s)) _macros[s] = x;
 		else _macros.Add(s, x);
 
-		return x;
+		return 1;
 	}
 }

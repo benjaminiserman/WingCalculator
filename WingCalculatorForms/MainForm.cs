@@ -21,6 +21,9 @@ public partial class MainForm : Form
 	{
 		InitializeComponent();
 
+		historyView.Items.Clear();
+		historyView.Items.Add(emptyEntry);
+
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
 

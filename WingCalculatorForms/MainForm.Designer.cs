@@ -61,19 +61,21 @@ partial class MainForm
 			// 
 			// omnibox
 			// 
-			this.omnibox.Location = new System.Drawing.Point(333, 9);
+			this.omnibox.Location = new System.Drawing.Point(233, 5);
+			this.omnibox.Margin = new System.Windows.Forms.Padding(2);
 			this.omnibox.Multiline = true;
 			this.omnibox.Name = "omnibox";
-			this.omnibox.Size = new System.Drawing.Size(350, 45);
+			this.omnibox.Size = new System.Drawing.Size(246, 29);
 			this.omnibox.TabIndex = 0;
 			this.omnibox.TextChanged += new System.EventHandler(this.omnibox_TextChanged);
 			// 
 			// bin_button
 			// 
 			this.bin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.bin_button.Location = new System.Drawing.Point(333, 380);
+			this.bin_button.Location = new System.Drawing.Point(233, 228);
+			this.bin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.bin_button.Name = "bin_button";
-			this.bin_button.Size = new System.Drawing.Size(83, 58);
+			this.bin_button.Size = new System.Drawing.Size(58, 35);
 			this.bin_button.TabIndex = 1;
 			this.bin_button.Text = "BIN";
 			this.bin_button.UseVisualStyleBackColor = true;
@@ -82,9 +84,10 @@ partial class MainForm
 			// pi_button
 			// 
 			this.pi_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.pi_button.Location = new System.Drawing.Point(422, 380);
+			this.pi_button.Location = new System.Drawing.Point(295, 228);
+			this.pi_button.Margin = new System.Windows.Forms.Padding(2);
 			this.pi_button.Name = "pi_button";
-			this.pi_button.Size = new System.Drawing.Size(83, 58);
+			this.pi_button.Size = new System.Drawing.Size(58, 35);
 			this.pi_button.TabIndex = 2;
 			this.pi_button.Text = "π";
 			this.pi_button.UseVisualStyleBackColor = true;
@@ -93,9 +96,10 @@ partial class MainForm
 			// clr_button
 			// 
 			this.clr_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.clr_button.Location = new System.Drawing.Point(511, 380);
+			this.clr_button.Location = new System.Drawing.Point(358, 228);
+			this.clr_button.Margin = new System.Windows.Forms.Padding(2);
 			this.clr_button.Name = "clr_button";
-			this.clr_button.Size = new System.Drawing.Size(83, 58);
+			this.clr_button.Size = new System.Drawing.Size(58, 35);
 			this.clr_button.TabIndex = 3;
 			this.clr_button.Text = "CLR";
 			this.clr_button.UseVisualStyleBackColor = true;
@@ -104,9 +108,10 @@ partial class MainForm
 			// exe_button
 			// 
 			this.exe_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.exe_button.Location = new System.Drawing.Point(600, 380);
+			this.exe_button.Location = new System.Drawing.Point(420, 228);
+			this.exe_button.Margin = new System.Windows.Forms.Padding(2);
 			this.exe_button.Name = "exe_button";
-			this.exe_button.Size = new System.Drawing.Size(83, 58);
+			this.exe_button.Size = new System.Drawing.Size(58, 35);
 			this.exe_button.TabIndex = 4;
 			this.exe_button.Text = "EXE";
 			this.exe_button.UseVisualStyleBackColor = true;
@@ -115,9 +120,10 @@ partial class MainForm
 			// ac_button
 			// 
 			this.ac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ac_button.Location = new System.Drawing.Point(600, 316);
+			this.ac_button.Location = new System.Drawing.Point(420, 190);
+			this.ac_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ac_button.Name = "ac_button";
-			this.ac_button.Size = new System.Drawing.Size(83, 58);
+			this.ac_button.Size = new System.Drawing.Size(58, 35);
 			this.ac_button.TabIndex = 8;
 			this.ac_button.Text = "AC";
 			this.ac_button.UseVisualStyleBackColor = true;
@@ -126,9 +132,10 @@ partial class MainForm
 			// ans_button
 			// 
 			this.ans_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ans_button.Location = new System.Drawing.Point(511, 316);
+			this.ans_button.Location = new System.Drawing.Point(358, 190);
+			this.ans_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ans_button.Name = "ans_button";
-			this.ans_button.Size = new System.Drawing.Size(83, 58);
+			this.ans_button.Size = new System.Drawing.Size(58, 35);
 			this.ans_button.TabIndex = 7;
 			this.ans_button.Text = "ANS";
 			this.ans_button.UseVisualStyleBackColor = true;
@@ -137,9 +144,10 @@ partial class MainForm
 			// tau_button
 			// 
 			this.tau_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tau_button.Location = new System.Drawing.Point(422, 316);
+			this.tau_button.Location = new System.Drawing.Point(295, 190);
+			this.tau_button.Margin = new System.Windows.Forms.Padding(2);
 			this.tau_button.Name = "tau_button";
-			this.tau_button.Size = new System.Drawing.Size(83, 58);
+			this.tau_button.Size = new System.Drawing.Size(58, 35);
 			this.tau_button.TabIndex = 6;
 			this.tau_button.Text = "τ";
 			this.tau_button.UseVisualStyleBackColor = true;
@@ -148,9 +156,10 @@ partial class MainForm
 			// hex_button
 			// 
 			this.hex_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.hex_button.Location = new System.Drawing.Point(333, 316);
+			this.hex_button.Location = new System.Drawing.Point(233, 190);
+			this.hex_button.Margin = new System.Windows.Forms.Padding(2);
 			this.hex_button.Name = "hex_button";
-			this.hex_button.Size = new System.Drawing.Size(83, 58);
+			this.hex_button.Size = new System.Drawing.Size(58, 35);
 			this.hex_button.TabIndex = 5;
 			this.hex_button.Text = "HEX";
 			this.hex_button.UseVisualStyleBackColor = true;
@@ -159,9 +168,10 @@ partial class MainForm
 			// cbrt_button
 			// 
 			this.cbrt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbrt_button.Location = new System.Drawing.Point(600, 252);
+			this.cbrt_button.Location = new System.Drawing.Point(420, 151);
+			this.cbrt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.cbrt_button.Name = "cbrt_button";
-			this.cbrt_button.Size = new System.Drawing.Size(83, 58);
+			this.cbrt_button.Size = new System.Drawing.Size(58, 35);
 			this.cbrt_button.TabIndex = 12;
 			this.cbrt_button.Text = "cbrt";
 			this.cbrt_button.UseVisualStyleBackColor = true;
@@ -170,9 +180,10 @@ partial class MainForm
 			// sqrt_button
 			// 
 			this.sqrt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.sqrt_button.Location = new System.Drawing.Point(511, 252);
+			this.sqrt_button.Location = new System.Drawing.Point(358, 151);
+			this.sqrt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.sqrt_button.Name = "sqrt_button";
-			this.sqrt_button.Size = new System.Drawing.Size(83, 58);
+			this.sqrt_button.Size = new System.Drawing.Size(58, 35);
 			this.sqrt_button.TabIndex = 11;
 			this.sqrt_button.Text = "sqrt";
 			this.sqrt_button.UseVisualStyleBackColor = true;
@@ -181,9 +192,10 @@ partial class MainForm
 			// e_button
 			// 
 			this.e_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.e_button.Location = new System.Drawing.Point(422, 252);
+			this.e_button.Location = new System.Drawing.Point(295, 151);
+			this.e_button.Margin = new System.Windows.Forms.Padding(2);
 			this.e_button.Name = "e_button";
-			this.e_button.Size = new System.Drawing.Size(83, 58);
+			this.e_button.Size = new System.Drawing.Size(58, 35);
 			this.e_button.TabIndex = 10;
 			this.e_button.Text = "e";
 			this.e_button.UseVisualStyleBackColor = true;
@@ -192,9 +204,10 @@ partial class MainForm
 			// dec_button
 			// 
 			this.dec_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.dec_button.Location = new System.Drawing.Point(333, 252);
+			this.dec_button.Location = new System.Drawing.Point(233, 151);
+			this.dec_button.Margin = new System.Windows.Forms.Padding(2);
 			this.dec_button.Name = "dec_button";
-			this.dec_button.Size = new System.Drawing.Size(83, 58);
+			this.dec_button.Size = new System.Drawing.Size(58, 35);
 			this.dec_button.TabIndex = 9;
 			this.dec_button.Text = "DEC";
 			this.dec_button.UseVisualStyleBackColor = true;
@@ -203,9 +216,10 @@ partial class MainForm
 			// txt_button
 			// 
 			this.txt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.txt_button.Location = new System.Drawing.Point(333, 188);
+			this.txt_button.Location = new System.Drawing.Point(233, 113);
+			this.txt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.txt_button.Name = "txt_button";
-			this.txt_button.Size = new System.Drawing.Size(83, 58);
+			this.txt_button.Size = new System.Drawing.Size(58, 35);
 			this.txt_button.TabIndex = 16;
 			this.txt_button.Text = "TXT";
 			this.txt_button.UseVisualStyleBackColor = true;
@@ -214,9 +228,10 @@ partial class MainForm
 			// arctan_button
 			// 
 			this.arctan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arctan_button.Location = new System.Drawing.Point(600, 188);
+			this.arctan_button.Location = new System.Drawing.Point(420, 113);
+			this.arctan_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arctan_button.Name = "arctan_button";
-			this.arctan_button.Size = new System.Drawing.Size(83, 58);
+			this.arctan_button.Size = new System.Drawing.Size(58, 35);
 			this.arctan_button.TabIndex = 15;
 			this.arctan_button.Text = "atan";
 			this.arctan_button.UseVisualStyleBackColor = true;
@@ -225,9 +240,10 @@ partial class MainForm
 			// arccos_button
 			// 
 			this.arccos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arccos_button.Location = new System.Drawing.Point(511, 188);
+			this.arccos_button.Location = new System.Drawing.Point(358, 113);
+			this.arccos_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arccos_button.Name = "arccos_button";
-			this.arccos_button.Size = new System.Drawing.Size(83, 58);
+			this.arccos_button.Size = new System.Drawing.Size(58, 35);
 			this.arccos_button.TabIndex = 14;
 			this.arccos_button.Text = "acos";
 			this.arccos_button.UseVisualStyleBackColor = true;
@@ -236,9 +252,10 @@ partial class MainForm
 			// pow_button
 			// 
 			this.pow_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.pow_button.Location = new System.Drawing.Point(600, 124);
+			this.pow_button.Location = new System.Drawing.Point(420, 74);
+			this.pow_button.Margin = new System.Windows.Forms.Padding(2);
 			this.pow_button.Name = "pow_button";
-			this.pow_button.Size = new System.Drawing.Size(83, 58);
+			this.pow_button.Size = new System.Drawing.Size(58, 35);
 			this.pow_button.TabIndex = 20;
 			this.pow_button.Text = "pow";
 			this.pow_button.UseVisualStyleBackColor = true;
@@ -247,9 +264,10 @@ partial class MainForm
 			// tan_button
 			// 
 			this.tan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tan_button.Location = new System.Drawing.Point(511, 124);
+			this.tan_button.Location = new System.Drawing.Point(358, 74);
+			this.tan_button.Margin = new System.Windows.Forms.Padding(2);
 			this.tan_button.Name = "tan_button";
-			this.tan_button.Size = new System.Drawing.Size(83, 58);
+			this.tan_button.Size = new System.Drawing.Size(58, 35);
 			this.tan_button.TabIndex = 19;
 			this.tan_button.Text = "tan";
 			this.tan_button.UseVisualStyleBackColor = true;
@@ -258,9 +276,10 @@ partial class MainForm
 			// cos_button
 			// 
 			this.cos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cos_button.Location = new System.Drawing.Point(422, 124);
+			this.cos_button.Location = new System.Drawing.Point(295, 74);
+			this.cos_button.Margin = new System.Windows.Forms.Padding(2);
 			this.cos_button.Name = "cos_button";
-			this.cos_button.Size = new System.Drawing.Size(83, 58);
+			this.cos_button.Size = new System.Drawing.Size(58, 35);
 			this.cos_button.TabIndex = 18;
 			this.cos_button.Text = "cos";
 			this.cos_button.UseVisualStyleBackColor = true;
@@ -269,9 +288,10 @@ partial class MainForm
 			// sin_button
 			// 
 			this.sin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.sin_button.Location = new System.Drawing.Point(333, 124);
+			this.sin_button.Location = new System.Drawing.Point(233, 74);
+			this.sin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.sin_button.Name = "sin_button";
-			this.sin_button.Size = new System.Drawing.Size(83, 58);
+			this.sin_button.Size = new System.Drawing.Size(58, 35);
 			this.sin_button.TabIndex = 17;
 			this.sin_button.Text = "sin";
 			this.sin_button.UseVisualStyleBackColor = true;
@@ -280,9 +300,10 @@ partial class MainForm
 			// log_button
 			// 
 			this.log_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.log_button.Location = new System.Drawing.Point(600, 60);
+			this.log_button.Location = new System.Drawing.Point(420, 36);
+			this.log_button.Margin = new System.Windows.Forms.Padding(2);
 			this.log_button.Name = "log_button";
-			this.log_button.Size = new System.Drawing.Size(83, 58);
+			this.log_button.Size = new System.Drawing.Size(58, 35);
 			this.log_button.TabIndex = 24;
 			this.log_button.Text = "log";
 			this.log_button.UseVisualStyleBackColor = true;
@@ -291,9 +312,10 @@ partial class MainForm
 			// ln_button
 			// 
 			this.ln_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ln_button.Location = new System.Drawing.Point(511, 60);
+			this.ln_button.Location = new System.Drawing.Point(358, 36);
+			this.ln_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ln_button.Name = "ln_button";
-			this.ln_button.Size = new System.Drawing.Size(83, 58);
+			this.ln_button.Size = new System.Drawing.Size(58, 35);
 			this.ln_button.TabIndex = 23;
 			this.ln_button.Text = "ln";
 			this.ln_button.UseVisualStyleBackColor = true;
@@ -302,9 +324,10 @@ partial class MainForm
 			// mac_button
 			// 
 			this.mac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.mac_button.Location = new System.Drawing.Point(422, 60);
+			this.mac_button.Location = new System.Drawing.Point(295, 36);
+			this.mac_button.Margin = new System.Windows.Forms.Padding(2);
 			this.mac_button.Name = "mac_button";
-			this.mac_button.Size = new System.Drawing.Size(83, 58);
+			this.mac_button.Size = new System.Drawing.Size(58, 35);
 			this.mac_button.TabIndex = 22;
 			this.mac_button.Text = "MAC";
 			this.mac_button.UseVisualStyleBackColor = true;
@@ -313,9 +336,10 @@ partial class MainForm
 			// var_button
 			// 
 			this.var_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.var_button.Location = new System.Drawing.Point(333, 60);
+			this.var_button.Location = new System.Drawing.Point(233, 36);
+			this.var_button.Margin = new System.Windows.Forms.Padding(2);
 			this.var_button.Name = "var_button";
-			this.var_button.Size = new System.Drawing.Size(83, 58);
+			this.var_button.Size = new System.Drawing.Size(58, 35);
 			this.var_button.TabIndex = 21;
 			this.var_button.Text = "VAR";
 			this.var_button.UseVisualStyleBackColor = true;
@@ -324,9 +348,10 @@ partial class MainForm
 			// arcsin_button
 			// 
 			this.arcsin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arcsin_button.Location = new System.Drawing.Point(422, 188);
+			this.arcsin_button.Location = new System.Drawing.Point(295, 113);
+			this.arcsin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arcsin_button.Name = "arcsin_button";
-			this.arcsin_button.Size = new System.Drawing.Size(83, 58);
+			this.arcsin_button.Size = new System.Drawing.Size(58, 35);
 			this.arcsin_button.TabIndex = 13;
 			this.arcsin_button.Text = "asin";
 			this.arcsin_button.UseVisualStyleBackColor = true;
@@ -338,9 +363,13 @@ partial class MainForm
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
-			this.historyView.Location = new System.Drawing.Point(12, 9);
+			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
+            "\n\n"});
+			this.historyView.Location = new System.Drawing.Point(8, 5);
+			this.historyView.Margin = new System.Windows.Forms.Padding(2);
 			this.historyView.Name = "historyView";
-			this.historyView.Size = new System.Drawing.Size(315, 429);
+			this.historyView.Size = new System.Drawing.Size(222, 259);
 			this.historyView.TabIndex = 25;
 			this.historyView.SelectedIndexChanged += new System.EventHandler(this.HistoryViewIndexChanged);
 			// 
@@ -348,28 +377,30 @@ partial class MainForm
 			// 
 			this.errorLabel.AutoSize = true;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
-			this.errorLabel.Location = new System.Drawing.Point(12, 439);
-			this.errorLabel.MaximumSize = new System.Drawing.Size(500, 0);
+			this.errorLabel.Location = new System.Drawing.Point(8, 263);
+			this.errorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.errorLabel.MaximumSize = new System.Drawing.Size(350, 0);
 			this.errorLabel.Name = "errorLabel";
-			this.errorLabel.Size = new System.Drawing.Size(0, 25);
+			this.errorLabel.Size = new System.Drawing.Size(0, 15);
 			this.errorLabel.TabIndex = 26;
 			// 
 			// darkModeButton
 			// 
 			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
 			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.darkModeButton.Location = new System.Drawing.Point(617, 443);
+			this.darkModeButton.Location = new System.Drawing.Point(432, 266);
+			this.darkModeButton.Margin = new System.Windows.Forms.Padding(2);
 			this.darkModeButton.Name = "darkModeButton";
-			this.darkModeButton.Size = new System.Drawing.Size(50, 50);
+			this.darkModeButton.Size = new System.Drawing.Size(35, 30);
 			this.darkModeButton.TabIndex = 27;
 			this.darkModeButton.UseVisualStyleBackColor = true;
 			this.darkModeButton.Click += new System.EventHandler(this.darkModeButton_Click);
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(693, 502);
+			this.ClientSize = new System.Drawing.Size(485, 301);
 			this.Controls.Add(this.darkModeButton);
 			this.Controls.Add(this.errorLabel);
 			this.Controls.Add(this.historyView);
@@ -401,8 +432,8 @@ partial class MainForm
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
+			this.Margin = new System.Windows.Forms.Padding(2);
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "MainForm";
 			this.Text = "WingCalculator";
 			this.ResumeLayout(false);

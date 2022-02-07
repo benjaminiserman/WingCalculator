@@ -346,7 +346,8 @@ partial class MainForm
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
-			this.historyView.Items.AddRange(new object[] {});
+			this.historyView.Items.AddRange(new object[] {
+            "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(332, 451);
@@ -453,7 +454,7 @@ partial class MainForm
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(721, 531);
+			this.MinimumSize = new System.Drawing.Size(729, 581);
 			this.Name = "MainForm";
 			this.Text = "WingCalculator";
 			this.buttonPanel.ResumeLayout(false);

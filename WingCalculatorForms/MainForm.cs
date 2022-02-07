@@ -121,6 +121,11 @@ public partial class MainForm : Form
 	{
 		switch (e.KeyCode)
 		{
+			case Keys.Escape:
+			{
+				historyView.Select(); // move focus back to MainForm
+				break;
+			}
 			case Keys.Up:
 			{
 				if (omnibox.SelectionStart != _textIndex)

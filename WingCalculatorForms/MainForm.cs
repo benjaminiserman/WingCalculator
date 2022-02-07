@@ -28,7 +28,6 @@ public partial class MainForm : Form
 
 		historyView.PreviewKeyDown += new PreviewKeyDownEventHandler(HandleDeleteKey);
 
-		//omnibox.PreviewKeyDown += new PreviewKeyDownEventHandler(PreviewControlKeys);
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 
 		ResetSolver();
@@ -112,29 +111,17 @@ public partial class MainForm : Form
 
 	#endregion
 
-	private void omnibox_TextChanged(object sender, EventArgs e) // this is for parens
+	private void omnibox_TextChanged(object sender, EventArgs e) // remove leading \r\n
 	{
 		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
-
-		if (_nextOffset != 0 || _bufferOffset != 0)
-		{
-			omnibox.SelectionStart += _nextOffset;
-			_nextOffset = _bufferOffset;
-			_bufferOffset = 0;
-			_textIndex = omnibox.SelectionStart;
-		}
 	}
 
 	private void OmniboxControlKeys(object send, KeyEventArgs e)
 	{
-		/*errorLabel.Text += $" {omnibox.SelectionStart}";
-		if (e.KeyCode == Keys.Back) errorLabel.Text = string.Empty;*/
-
 		switch (e.KeyCode)
 		{
 			case Keys.Up:
 			{
-				errorLabel.Text += $"omni: {omnibox.SelectionStart}, saved: {_textIndex}, key: Up";
 				if (omnibox.SelectionStart != _textIndex)
 				{
 					break;
@@ -156,7 +143,6 @@ public partial class MainForm : Form
 			}
 			case Keys.Down:
 			{
-				errorLabel.Text += $"omni: {omnibox.SelectionStart}, saved: {_textIndex}, key: Down";
 				if (omnibox.SelectionStart != _textIndex)
 				{
 					break;
@@ -213,10 +199,6 @@ public partial class MainForm : Form
 		{
 			Execute();
 		}
-
-		/*if (e.KeyChar == '(') SendParen(')');
-		if (e.KeyChar == '[') SendParen(']');
-		if (e.KeyChar == '{') SendParen('}');*/
 	}
 
 	private void HandleDeleteKey(object sender, PreviewKeyDownEventArgs e)
@@ -231,13 +213,6 @@ public partial class MainForm : Form
 			}
 		}
 	}
-
-	private void SendParen(char c)
-	{
-		SendKeys.Send($"{{{c}}}");
-		_bufferOffset -= 1;
-	}
-	
 
 	private void Execute()
 	{

@@ -31,6 +31,7 @@ public partial class MainForm : Form
 
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 
+		RefillBuffer();
 		ResetSolver();
 	}
 
@@ -261,9 +262,9 @@ public partial class MainForm : Form
 
 		_textIndex = 0;
 		_skipSelect = true;
-		historyView.TopIndex = historyView.Items.Count - 1;
 		historyView.SelectedIndex = 0;
 		historyView.SelectedIndex = -1;
+		historyView.TopIndex = historyView.Items.Count - 1;
 		omnibox.Clear();
 	}
 

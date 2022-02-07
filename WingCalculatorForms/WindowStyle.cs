@@ -57,6 +57,10 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 
 				if (lb is HistoryView hv) hv.RefreshEntries();
 			}
+			else if (c is Panel panel)
+			{
+				Apply(panel.Controls, form);
+			}
 
 			if (c.Name == "errorLabel") c.ForeColor = ErrorColor;
 			else c.ForeColor = TextColor;

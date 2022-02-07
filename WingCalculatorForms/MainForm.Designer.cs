@@ -57,26 +57,29 @@ partial class MainForm
 			this.historyView = new WingCalculatorForms.HistoryView();
 			this.errorLabel = new System.Windows.Forms.Label();
 			this.darkModeButton = new System.Windows.Forms.Button();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.buttonPanel = new System.Windows.Forms.Panel();
+			this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
+			this.calculatorTableLayout = new System.Windows.Forms.TableLayoutPanel();
+			this.buttonPanel.SuspendLayout();
+			this.mainTableLayout.SuspendLayout();
+			this.calculatorTableLayout.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// omnibox
 			// 
+			this.omnibox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.omnibox.Location = new System.Drawing.Point(2, 2);
 			this.omnibox.Margin = new System.Windows.Forms.Padding(2);
 			this.omnibox.Multiline = true;
 			this.omnibox.Name = "omnibox";
-			this.omnibox.Size = new System.Drawing.Size(246, 29);
+			this.omnibox.Size = new System.Drawing.Size(248, 32);
 			this.omnibox.TabIndex = 0;
 			this.omnibox.TextChanged += new System.EventHandler(this.omnibox_TextChanged);
 			// 
 			// bin_button
 			// 
 			this.bin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.bin_button.Location = new System.Drawing.Point(2, 225);
+			this.bin_button.Location = new System.Drawing.Point(0, 194);
 			this.bin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.bin_button.Name = "bin_button";
 			this.bin_button.Size = new System.Drawing.Size(58, 35);
@@ -88,7 +91,7 @@ partial class MainForm
 			// pi_button
 			// 
 			this.pi_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.pi_button.Location = new System.Drawing.Point(64, 225);
+			this.pi_button.Location = new System.Drawing.Point(62, 194);
 			this.pi_button.Margin = new System.Windows.Forms.Padding(2);
 			this.pi_button.Name = "pi_button";
 			this.pi_button.Size = new System.Drawing.Size(58, 35);
@@ -100,7 +103,7 @@ partial class MainForm
 			// clr_button
 			// 
 			this.clr_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.clr_button.Location = new System.Drawing.Point(127, 225);
+			this.clr_button.Location = new System.Drawing.Point(125, 194);
 			this.clr_button.Margin = new System.Windows.Forms.Padding(2);
 			this.clr_button.Name = "clr_button";
 			this.clr_button.Size = new System.Drawing.Size(58, 35);
@@ -112,7 +115,7 @@ partial class MainForm
 			// exe_button
 			// 
 			this.exe_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.exe_button.Location = new System.Drawing.Point(189, 225);
+			this.exe_button.Location = new System.Drawing.Point(187, 194);
 			this.exe_button.Margin = new System.Windows.Forms.Padding(2);
 			this.exe_button.Name = "exe_button";
 			this.exe_button.Size = new System.Drawing.Size(58, 35);
@@ -124,7 +127,7 @@ partial class MainForm
 			// ac_button
 			// 
 			this.ac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ac_button.Location = new System.Drawing.Point(189, 187);
+			this.ac_button.Location = new System.Drawing.Point(187, 156);
 			this.ac_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ac_button.Name = "ac_button";
 			this.ac_button.Size = new System.Drawing.Size(58, 35);
@@ -136,7 +139,7 @@ partial class MainForm
 			// ans_button
 			// 
 			this.ans_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ans_button.Location = new System.Drawing.Point(127, 187);
+			this.ans_button.Location = new System.Drawing.Point(125, 156);
 			this.ans_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ans_button.Name = "ans_button";
 			this.ans_button.Size = new System.Drawing.Size(58, 35);
@@ -148,7 +151,7 @@ partial class MainForm
 			// tau_button
 			// 
 			this.tau_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tau_button.Location = new System.Drawing.Point(64, 187);
+			this.tau_button.Location = new System.Drawing.Point(62, 156);
 			this.tau_button.Margin = new System.Windows.Forms.Padding(2);
 			this.tau_button.Name = "tau_button";
 			this.tau_button.Size = new System.Drawing.Size(58, 35);
@@ -160,7 +163,7 @@ partial class MainForm
 			// hex_button
 			// 
 			this.hex_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.hex_button.Location = new System.Drawing.Point(2, 187);
+			this.hex_button.Location = new System.Drawing.Point(0, 156);
 			this.hex_button.Margin = new System.Windows.Forms.Padding(2);
 			this.hex_button.Name = "hex_button";
 			this.hex_button.Size = new System.Drawing.Size(58, 35);
@@ -172,7 +175,7 @@ partial class MainForm
 			// cbrt_button
 			// 
 			this.cbrt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbrt_button.Location = new System.Drawing.Point(189, 148);
+			this.cbrt_button.Location = new System.Drawing.Point(187, 117);
 			this.cbrt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.cbrt_button.Name = "cbrt_button";
 			this.cbrt_button.Size = new System.Drawing.Size(58, 35);
@@ -184,7 +187,7 @@ partial class MainForm
 			// sqrt_button
 			// 
 			this.sqrt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.sqrt_button.Location = new System.Drawing.Point(127, 148);
+			this.sqrt_button.Location = new System.Drawing.Point(125, 117);
 			this.sqrt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.sqrt_button.Name = "sqrt_button";
 			this.sqrt_button.Size = new System.Drawing.Size(58, 35);
@@ -196,7 +199,7 @@ partial class MainForm
 			// e_button
 			// 
 			this.e_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.e_button.Location = new System.Drawing.Point(64, 148);
+			this.e_button.Location = new System.Drawing.Point(62, 117);
 			this.e_button.Margin = new System.Windows.Forms.Padding(2);
 			this.e_button.Name = "e_button";
 			this.e_button.Size = new System.Drawing.Size(58, 35);
@@ -208,7 +211,7 @@ partial class MainForm
 			// dec_button
 			// 
 			this.dec_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.dec_button.Location = new System.Drawing.Point(2, 148);
+			this.dec_button.Location = new System.Drawing.Point(0, 117);
 			this.dec_button.Margin = new System.Windows.Forms.Padding(2);
 			this.dec_button.Name = "dec_button";
 			this.dec_button.Size = new System.Drawing.Size(58, 35);
@@ -220,7 +223,7 @@ partial class MainForm
 			// txt_button
 			// 
 			this.txt_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.txt_button.Location = new System.Drawing.Point(2, 110);
+			this.txt_button.Location = new System.Drawing.Point(0, 79);
 			this.txt_button.Margin = new System.Windows.Forms.Padding(2);
 			this.txt_button.Name = "txt_button";
 			this.txt_button.Size = new System.Drawing.Size(58, 35);
@@ -232,7 +235,7 @@ partial class MainForm
 			// arctan_button
 			// 
 			this.arctan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arctan_button.Location = new System.Drawing.Point(189, 110);
+			this.arctan_button.Location = new System.Drawing.Point(187, 79);
 			this.arctan_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arctan_button.Name = "arctan_button";
 			this.arctan_button.Size = new System.Drawing.Size(58, 35);
@@ -244,7 +247,7 @@ partial class MainForm
 			// arccos_button
 			// 
 			this.arccos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arccos_button.Location = new System.Drawing.Point(127, 110);
+			this.arccos_button.Location = new System.Drawing.Point(125, 79);
 			this.arccos_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arccos_button.Name = "arccos_button";
 			this.arccos_button.Size = new System.Drawing.Size(58, 35);
@@ -256,7 +259,7 @@ partial class MainForm
 			// pow_button
 			// 
 			this.pow_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.pow_button.Location = new System.Drawing.Point(189, 71);
+			this.pow_button.Location = new System.Drawing.Point(187, 40);
 			this.pow_button.Margin = new System.Windows.Forms.Padding(2);
 			this.pow_button.Name = "pow_button";
 			this.pow_button.Size = new System.Drawing.Size(58, 35);
@@ -268,7 +271,7 @@ partial class MainForm
 			// tan_button
 			// 
 			this.tan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tan_button.Location = new System.Drawing.Point(127, 71);
+			this.tan_button.Location = new System.Drawing.Point(125, 40);
 			this.tan_button.Margin = new System.Windows.Forms.Padding(2);
 			this.tan_button.Name = "tan_button";
 			this.tan_button.Size = new System.Drawing.Size(58, 35);
@@ -280,7 +283,7 @@ partial class MainForm
 			// cos_button
 			// 
 			this.cos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cos_button.Location = new System.Drawing.Point(64, 71);
+			this.cos_button.Location = new System.Drawing.Point(62, 40);
 			this.cos_button.Margin = new System.Windows.Forms.Padding(2);
 			this.cos_button.Name = "cos_button";
 			this.cos_button.Size = new System.Drawing.Size(58, 35);
@@ -292,7 +295,7 @@ partial class MainForm
 			// sin_button
 			// 
 			this.sin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.sin_button.Location = new System.Drawing.Point(2, 71);
+			this.sin_button.Location = new System.Drawing.Point(0, 40);
 			this.sin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.sin_button.Name = "sin_button";
 			this.sin_button.Size = new System.Drawing.Size(58, 35);
@@ -304,7 +307,7 @@ partial class MainForm
 			// log_button
 			// 
 			this.log_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.log_button.Location = new System.Drawing.Point(189, 33);
+			this.log_button.Location = new System.Drawing.Point(187, 2);
 			this.log_button.Margin = new System.Windows.Forms.Padding(2);
 			this.log_button.Name = "log_button";
 			this.log_button.Size = new System.Drawing.Size(58, 35);
@@ -316,7 +319,7 @@ partial class MainForm
 			// ln_button
 			// 
 			this.ln_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ln_button.Location = new System.Drawing.Point(127, 33);
+			this.ln_button.Location = new System.Drawing.Point(125, 2);
 			this.ln_button.Margin = new System.Windows.Forms.Padding(2);
 			this.ln_button.Name = "ln_button";
 			this.ln_button.Size = new System.Drawing.Size(58, 35);
@@ -328,7 +331,7 @@ partial class MainForm
 			// mac_button
 			// 
 			this.mac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.mac_button.Location = new System.Drawing.Point(64, 33);
+			this.mac_button.Location = new System.Drawing.Point(62, 2);
 			this.mac_button.Margin = new System.Windows.Forms.Padding(2);
 			this.mac_button.Name = "mac_button";
 			this.mac_button.Size = new System.Drawing.Size(58, 35);
@@ -340,7 +343,7 @@ partial class MainForm
 			// var_button
 			// 
 			this.var_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.var_button.Location = new System.Drawing.Point(2, 33);
+			this.var_button.Location = new System.Drawing.Point(0, 2);
 			this.var_button.Margin = new System.Windows.Forms.Padding(2);
 			this.var_button.Name = "var_button";
 			this.var_button.Size = new System.Drawing.Size(58, 35);
@@ -352,7 +355,7 @@ partial class MainForm
 			// arcsin_button
 			// 
 			this.arcsin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.arcsin_button.Location = new System.Drawing.Point(64, 110);
+			this.arcsin_button.Location = new System.Drawing.Point(62, 79);
 			this.arcsin_button.Margin = new System.Windows.Forms.Padding(2);
 			this.arcsin_button.Name = "arcsin_button";
 			this.arcsin_button.Size = new System.Drawing.Size(58, 35);
@@ -381,11 +384,15 @@ partial class MainForm
             "\n\n",
             "\n\n",
             "\n\n",
+            "\n\n",
+            "\n\n",
+            "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(2, 2);
 			this.historyView.Margin = new System.Windows.Forms.Padding(2);
 			this.historyView.Name = "historyView";
-			this.historyView.Size = new System.Drawing.Size(234, 264);
+			this.historyView.Size = new System.Drawing.Size(233, 276);
 			this.historyView.TabIndex = 25;
 			this.historyView.SelectedIndexChanged += new System.EventHandler(this.HistoryViewIndexChanged);
 			// 
@@ -393,7 +400,7 @@ partial class MainForm
 			// 
 			this.errorLabel.AutoSize = true;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
-			this.errorLabel.Location = new System.Drawing.Point(2, 268);
+			this.errorLabel.Location = new System.Drawing.Point(2, 280);
 			this.errorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.errorLabel.MaximumSize = new System.Drawing.Size(350, 0);
 			this.errorLabel.Name = "errorLabel";
@@ -405,7 +412,7 @@ partial class MainForm
 			this.darkModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
 			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.darkModeButton.Location = new System.Drawing.Point(458, 270);
+			this.darkModeButton.Location = new System.Drawing.Point(458, 282);
 			this.darkModeButton.Margin = new System.Windows.Forms.Padding(2);
 			this.darkModeButton.Name = "darkModeButton";
 			this.darkModeButton.Size = new System.Drawing.Size(35, 30);
@@ -413,64 +420,77 @@ partial class MainForm
 			this.darkModeButton.UseVisualStyleBackColor = true;
 			this.darkModeButton.Click += new System.EventHandler(this.darkModeButton_Click);
 			// 
-			// panel1
+			// buttonPanel
 			// 
-			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel1.Controls.Add(this.omnibox);
-			this.panel1.Controls.Add(this.bin_button);
-			this.panel1.Controls.Add(this.pi_button);
-			this.panel1.Controls.Add(this.clr_button);
-			this.panel1.Controls.Add(this.log_button);
-			this.panel1.Controls.Add(this.exe_button);
-			this.panel1.Controls.Add(this.ln_button);
-			this.panel1.Controls.Add(this.hex_button);
-			this.panel1.Controls.Add(this.mac_button);
-			this.panel1.Controls.Add(this.tau_button);
-			this.panel1.Controls.Add(this.var_button);
-			this.panel1.Controls.Add(this.ans_button);
-			this.panel1.Controls.Add(this.pow_button);
-			this.panel1.Controls.Add(this.ac_button);
-			this.panel1.Controls.Add(this.tan_button);
-			this.panel1.Controls.Add(this.dec_button);
-			this.panel1.Controls.Add(this.cos_button);
-			this.panel1.Controls.Add(this.e_button);
-			this.panel1.Controls.Add(this.sin_button);
-			this.panel1.Controls.Add(this.sqrt_button);
-			this.panel1.Controls.Add(this.txt_button);
-			this.panel1.Controls.Add(this.cbrt_button);
-			this.panel1.Controls.Add(this.arctan_button);
-			this.panel1.Controls.Add(this.arcsin_button);
-			this.panel1.Controls.Add(this.arccos_button);
-			this.panel1.Location = new System.Drawing.Point(241, 3);
-			this.panel1.MinimumSize = new System.Drawing.Size(251, 262);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(251, 262);
-			this.panel1.TabIndex = 28;
+			this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPanel.Controls.Add(this.bin_button);
+			this.buttonPanel.Controls.Add(this.pi_button);
+			this.buttonPanel.Controls.Add(this.clr_button);
+			this.buttonPanel.Controls.Add(this.log_button);
+			this.buttonPanel.Controls.Add(this.exe_button);
+			this.buttonPanel.Controls.Add(this.ln_button);
+			this.buttonPanel.Controls.Add(this.hex_button);
+			this.buttonPanel.Controls.Add(this.mac_button);
+			this.buttonPanel.Controls.Add(this.tau_button);
+			this.buttonPanel.Controls.Add(this.var_button);
+			this.buttonPanel.Controls.Add(this.ans_button);
+			this.buttonPanel.Controls.Add(this.pow_button);
+			this.buttonPanel.Controls.Add(this.ac_button);
+			this.buttonPanel.Controls.Add(this.tan_button);
+			this.buttonPanel.Controls.Add(this.dec_button);
+			this.buttonPanel.Controls.Add(this.cos_button);
+			this.buttonPanel.Controls.Add(this.e_button);
+			this.buttonPanel.Controls.Add(this.sin_button);
+			this.buttonPanel.Controls.Add(this.sqrt_button);
+			this.buttonPanel.Controls.Add(this.txt_button);
+			this.buttonPanel.Controls.Add(this.cbrt_button);
+			this.buttonPanel.Controls.Add(this.arctan_button);
+			this.buttonPanel.Controls.Add(this.arcsin_button);
+			this.buttonPanel.Controls.Add(this.arccos_button);
+			this.buttonPanel.Location = new System.Drawing.Point(4, 39);
+			this.buttonPanel.Name = "buttonPanel";
+			this.buttonPanel.Size = new System.Drawing.Size(245, 232);
+			this.buttonPanel.TabIndex = 28;
 			// 
-			// tableLayoutPanel1
+			// mainTableLayout
 			// 
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.43525F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 257F));
-			this.tableLayoutPanel1.Controls.Add(this.errorLabel, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.historyView, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.darkModeButton, 1, 1);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(495, 302);
-			this.tableLayoutPanel1.TabIndex = 29;
+			this.mainTableLayout.ColumnCount = 2;
+			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.43525F));
+			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 257F));
+			this.mainTableLayout.Controls.Add(this.calculatorTableLayout, 1, 0);
+			this.mainTableLayout.Controls.Add(this.errorLabel, 0, 1);
+			this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
+			this.mainTableLayout.Controls.Add(this.darkModeButton, 1, 1);
+			this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
+			this.mainTableLayout.Name = "mainTableLayout";
+			this.mainTableLayout.RowCount = 2;
+			this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.mainTableLayout.Size = new System.Drawing.Size(495, 314);
+			this.mainTableLayout.TabIndex = 29;
+			// 
+			// calculatorTableLayout
+			// 
+			this.calculatorTableLayout.ColumnCount = 1;
+			this.calculatorTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.calculatorTableLayout.Controls.Add(this.omnibox, 0, 0);
+			this.calculatorTableLayout.Controls.Add(this.buttonPanel, 0, 1);
+			this.calculatorTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.calculatorTableLayout.Location = new System.Drawing.Point(240, 3);
+			this.calculatorTableLayout.Name = "calculatorTableLayout";
+			this.calculatorTableLayout.RowCount = 2;
+			this.calculatorTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.29958F));
+			this.calculatorTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 238F));
+			this.calculatorTableLayout.Size = new System.Drawing.Size(252, 274);
+			this.calculatorTableLayout.TabIndex = 30;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(495, 302);
-			this.Controls.Add(this.tableLayoutPanel1);
+			this.ClientSize = new System.Drawing.Size(495, 314);
+			this.Controls.Add(this.mainTableLayout);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Margin = new System.Windows.Forms.Padding(2);
@@ -478,10 +498,11 @@ partial class MainForm
 			this.MinimumSize = new System.Drawing.Size(511, 341);
 			this.Name = "MainForm";
 			this.Text = "WingCalculator";
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
+			this.buttonPanel.ResumeLayout(false);
+			this.mainTableLayout.ResumeLayout(false);
+			this.mainTableLayout.PerformLayout();
+			this.calculatorTableLayout.ResumeLayout(false);
+			this.calculatorTableLayout.PerformLayout();
 			this.ResumeLayout(false);
 
 	}
@@ -516,6 +537,7 @@ partial class MainForm
 	private HistoryView historyView;
 	private Label errorLabel;
 	private Button darkModeButton;
-	private Panel panel1;
-	private TableLayoutPanel tableLayoutPanel1;
+	private Panel buttonPanel;
+	private TableLayoutPanel mainTableLayout;
+	private TableLayoutPanel calculatorTableLayout;
 }

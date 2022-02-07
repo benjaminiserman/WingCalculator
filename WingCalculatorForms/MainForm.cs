@@ -300,7 +300,7 @@ public partial class MainForm : Form
 			omnibox.Text = GetEntryText(historyView.SelectedItem);
 		}
 
-		if (omnibox.Text.Length > 0)
+		if (omnibox.Text.Length > 0) // send cursor to far right
 		{
 			omnibox.SelectionStart = omnibox.Text.Length;
 			_textIndex = omnibox.SelectionStart;
@@ -308,6 +308,11 @@ public partial class MainForm : Form
 
 		_historyIndex = historyView.SelectedIndex;
 
+		RefillBuffer();
+	}
+
+	private void RefillBuffer()
+	{
 		for (int i = 0; i < historyView.Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{
 			if (string.IsNullOrWhiteSpace((string)historyView.Items[i]))
@@ -323,6 +328,7 @@ public partial class MainForm : Form
 #pragma warning restore IDE1006
 
 	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
+
 	private string GetSolve(string s)
 	{
 		try

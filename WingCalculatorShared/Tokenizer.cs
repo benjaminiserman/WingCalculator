@@ -6,7 +6,7 @@ using System.Text;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:?";
-	public static readonly string _unaryOperators = "+-$!@~";
+	public static readonly string _unaryOperators = "+-$!@~`";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";
@@ -148,6 +148,7 @@ internal static class Tokenizer
 		TokenType.Macro => char.IsLetter(c),
 		TokenType.Quote => false,
 		TokenType.Char => false,
+		TokenType.Local => false,
 		TokenType.Binary => c is '1' or '0',
 
 		_ => throw new NotImplementedException($"Unexpected character {c}! Current TokenType: {tokenType}")
@@ -164,6 +165,7 @@ internal static class Tokenizer
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
 		else if (c == '@') return TokenType.Macro;
+		else if (c == '`') return TokenType.Local;
 		else throw new NotImplementedException($"Token could not be constructed from character {c}!");
 	}
 }
@@ -172,5 +174,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Local
 }

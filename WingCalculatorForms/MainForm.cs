@@ -10,8 +10,6 @@ public partial class MainForm : Form
 {
 	private Solver _solver;
 
-	private int _bufferOffset = 0;
-	private int _nextOffset = 0;
 	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
 	private bool _darkMode = false;

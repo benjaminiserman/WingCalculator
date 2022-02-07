@@ -6,7 +6,7 @@ using WingCalculatorShared.Exceptions;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:?";
-	public static readonly string _unaryOperators = "+-$!@~";
+	public static readonly string _unaryOperators = "+-$!@~`";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";
@@ -168,6 +168,7 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Quote => false,
 		TokenType.Char => false,
+		TokenType.Local => false,
 
 		_ when c is '.' => throw new WingCalcException($"Unexpected character '{c}' found!"),
 
@@ -192,6 +193,7 @@ internal static class Tokenizer
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
 		else if (c == '@') return TokenType.Macro;
+		else if (c == '`') return TokenType.Local
 		else throw new WingCalcException($"Token could not be constructed from character {c}.");
 	}
 }
@@ -200,5 +202,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal, Local
 }

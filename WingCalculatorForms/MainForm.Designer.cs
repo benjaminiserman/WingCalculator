@@ -365,6 +365,7 @@ partial class MainForm
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
             "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(8, 5);
 			this.historyView.Margin = new System.Windows.Forms.Padding(2);
@@ -429,7 +430,6 @@ partial class MainForm
 			this.Controls.Add(this.pi_button);
 			this.Controls.Add(this.bin_button);
 			this.Controls.Add(this.omnibox);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Margin = new System.Windows.Forms.Padding(2);

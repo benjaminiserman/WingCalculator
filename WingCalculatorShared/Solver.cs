@@ -171,13 +171,13 @@ public class Solver
 					if (tokens[i].Text.Length == 1)
 					{
 						availableNodes.Add(new PreOperatorNode("@"));
-						isCoefficient = false;
 					}
 					else
 					{
 						availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
-						isCoefficient = true;
 					}
+
+					isCoefficient = false;
 
 					break;
 				}

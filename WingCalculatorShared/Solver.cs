@@ -421,4 +421,12 @@ public class Solver
 
 		return 1;
 	}
+
+	public IEnumerable<(string, double)> GetValues()
+	{
+		foreach (var kvp in _variables)
+		{
+			yield return (kvp.Key, kvp.Value);
+		}
+	}
 }

@@ -39,6 +39,8 @@ public class Solver
 		["DEC"] = 0,
 		["TXT"] = 1,
 		["BIN"] = 2,
+		["PCT"] = 3,
+		["FRAC"] = 4,
 		["OCT"] = 8,
 		["HEX"] = 16,
 

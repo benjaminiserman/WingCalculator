@@ -227,7 +227,7 @@ public partial class MainForm : Form
 
 		if (string.IsNullOrWhiteSpace(omnibox.Text))
 		{
-			if (historyView.Items.Count < 1 || string.IsNullOrWhiteSpace((string)historyView.Items[^2])) return;
+			if (historyView.Items.Count < 2 || string.IsNullOrWhiteSpace((string)historyView.Items[^2])) return;
 			else omnibox.Text = GetEntryText((string)historyView.Items[^2]);
 		}
 		else if ((ModifierKeys & Keys.Shift) != 0 && historyView.SelectedItem != null) altMode = true;

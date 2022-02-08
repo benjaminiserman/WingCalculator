@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using WingCalculatorForms.Properties;
 
 
-internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont, Bitmap darkModeButtonImage, Bitmap viewerButtonImage, Bitmap helpButtonImage)
+internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont, Bitmap DarkModeButtonImage, Bitmap ViewerButtonImage, Bitmap HelpButtonImage, Bitmap SettingsButtonImage)
 {
 	public static readonly Color DarkBase = Hex("#121212");
 
@@ -19,9 +19,10 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		ButtonStyle: FlatStyle.Popup,
 		MenuButtonStyle: FlatStyle.Flat,
 		TextFont: new FontFamily("Consolas"),
-		darkModeButtonImage: Resources.night_mode,
-		viewerButtonImage: Resources.menu_dark,
-		helpButtonImage: Resources.help_dark
+		DarkModeButtonImage: Resources.night_mode,
+		ViewerButtonImage: Resources.menu_dark,
+		HelpButtonImage: Resources.help_dark,
+		SettingsButtonImage: Resources.settings_dark
 	);
 
 	public static readonly WindowStyle LightMode = new
@@ -35,9 +36,10 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		ButtonStyle: FlatStyle.Standard,
 		MenuButtonStyle: FlatStyle.Standard,
 		TextFont: new FontFamily("Segoe UI"),
-		darkModeButtonImage: Resources.light_bulb,
-		viewerButtonImage: Resources.menu_light,
-		helpButtonImage: Resources.help_light
+		DarkModeButtonImage: Resources.light_bulb,
+		ViewerButtonImage: Resources.menu_light,
+		HelpButtonImage: Resources.help_light,
+		SettingsButtonImage: Resources.settings_light
 	);
 
 	public static List<string> MenuNames { get; } = new() { "darkModeButton" };
@@ -78,9 +80,10 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		
 		if (form is MainForm mf)
 		{
-			mf.darkModeButton.BackgroundImage = darkModeButtonImage;
-			mf.viewerButton.BackgroundImage = viewerButtonImage;
-			mf.helpButton.BackgroundImage = helpButtonImage;
+			mf.darkModeButton.BackgroundImage = DarkModeButtonImage;
+			mf.viewerButton.BackgroundImage = ViewerButtonImage;
+			mf.helpButton.BackgroundImage = HelpButtonImage;
+			mf.settingsButton.BackgroundImage = SettingsButtonImage;
 		}
 	}
 

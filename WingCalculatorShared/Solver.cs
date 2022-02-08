@@ -155,8 +155,7 @@ public class Solver
 						availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
 						isCoefficient = true;
 					}
-
-					
+		
 					break;
 				}
 				case TokenType.Macro:
@@ -185,6 +184,18 @@ public class Solver
 				{
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2)));
 					isCoefficient = true;
+					break;
+				}
+				case TokenType.Local:
+				{
+					if (isCoefficient)
+					{
+						availableNodes.Add(new PreOperatorNode("*"));
+					}
+
+					availableNodes.Add(new PreOperatorNode("`"));
+					isCoefficient = false;
+
 					break;
 				}
 			}

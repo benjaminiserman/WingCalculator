@@ -59,11 +59,12 @@ internal static class Functions
 		["mean"] = args => args.Select(x => x.Solve()).Average(),
 		["median"] = args =>
 		{
-			args.Sort();
+			List<double> solved = args.Select(x => x.Solve()).ToList();
+			solved.Sort();
 
-			return args.Count % 2 == 0
-				? args.GetRange(args.Count / 2 - 1, 2).Select(x => x.Solve()).Average()
-				: args[args.Count / 2].Solve();
+			return solved.Count % 2 == 0
+				? solved.GetRange(solved.Count / 2 - 1, 2).Average()
+				: solved[solved.Count / 2];
 		},
 		["mode"] = args => args.Select(x => x.Solve()).GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key,
 		#endregion
@@ -157,7 +158,6 @@ internal static class Functions
 
 			return address;
 		},
-
 		["salloc"] = args =>
 		{
 			PointerNode pointer = (PointerNode)args[0];
@@ -175,7 +175,6 @@ internal static class Functions
 
 			return address;
 		},
-
 		["memprint"] = args =>
 		{
 			PointerNode pointer = (PointerNode)args[0];

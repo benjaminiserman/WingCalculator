@@ -84,6 +84,8 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			mf.viewerButton.BackgroundImage = ViewerButtonImage;
 			mf.helpButton.BackgroundImage = HelpButtonImage;
 			mf.settingsButton.BackgroundImage = SettingsButtonImage;
+
+			Apply(mf.ViewerForm.Controls, mf.ViewerForm);
 		}
 	}
 

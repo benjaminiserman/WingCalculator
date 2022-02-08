@@ -41,6 +41,8 @@ internal static class Functions
 		["arctanh"] = args => Math.Atanh(args[0].Solve()),
 		#endregion
 
+		["eval"] = args => args[0].Solve(),
+
 		["abs"] = args => Math.Abs(args[0].Solve()),
 		["clamp"] = args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()),
 		["sign"] = args => Math.Sign(args[0].Solve()),

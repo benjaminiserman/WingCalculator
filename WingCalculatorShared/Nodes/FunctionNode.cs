@@ -6,4 +6,3 @@ internal record FunctionNode(string Name, Solver Solver, List<INode> Nodes) : IN
 {
 	public double Solve() => Functions.Get(Name)(Nodes);
 }
-

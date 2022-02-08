@@ -30,10 +30,10 @@ partial class ViewerForm
 	{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkboxPanel = new System.Windows.Forms.Panel();
-			this.allcapsCheck = new System.Windows.Forms.CheckBox();
-			this.pointersCheck = new System.Windows.Forms.CheckBox();
 			this.zerosCheck = new System.Windows.Forms.CheckBox();
-			this.variableView = new System.Windows.Forms.ListView();
+			this.pointersCheck = new System.Windows.Forms.CheckBox();
+			this.allcapsCheck = new System.Windows.Forms.CheckBox();
+			this.variableView = new System.Windows.Forms.ListBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.checkboxPanel.SuspendLayout();
 			this.SuspendLayout();
@@ -64,15 +64,15 @@ partial class ViewerForm
 			this.checkboxPanel.Size = new System.Drawing.Size(472, 117);
 			this.checkboxPanel.TabIndex = 1;
 			// 
-			// allcapsCheck
+			// zerosCheck
 			// 
-			this.allcapsCheck.AutoSize = true;
-			this.allcapsCheck.Location = new System.Drawing.Point(7, 13);
-			this.allcapsCheck.Name = "allcapsCheck";
-			this.allcapsCheck.Size = new System.Drawing.Size(160, 29);
-			this.allcapsCheck.TabIndex = 0;
-			this.allcapsCheck.Text = "Include all-caps";
-			this.allcapsCheck.UseVisualStyleBackColor = true;
+			this.zerosCheck.AutoSize = true;
+			this.zerosCheck.Location = new System.Drawing.Point(7, 83);
+			this.zerosCheck.Name = "zerosCheck";
+			this.zerosCheck.Size = new System.Drawing.Size(142, 29);
+			this.zerosCheck.TabIndex = 2;
+			this.zerosCheck.Text = "Include zeros";
+			this.zerosCheck.UseVisualStyleBackColor = true;
 			// 
 			// pointersCheck
 			// 
@@ -84,27 +84,26 @@ partial class ViewerForm
 			this.pointersCheck.Text = "Include pointers";
 			this.pointersCheck.UseVisualStyleBackColor = true;
 			// 
-			// zerosCheck
+			// allcapsCheck
 			// 
-			this.zerosCheck.AutoSize = true;
-			this.zerosCheck.Location = new System.Drawing.Point(7, 83);
-			this.zerosCheck.Name = "zerosCheck";
-			this.zerosCheck.Size = new System.Drawing.Size(142, 29);
-			this.zerosCheck.TabIndex = 2;
-			this.zerosCheck.Text = "Include zeros";
-			this.zerosCheck.UseVisualStyleBackColor = true;
+			this.allcapsCheck.AutoSize = true;
+			this.allcapsCheck.Location = new System.Drawing.Point(7, 13);
+			this.allcapsCheck.Name = "allcapsCheck";
+			this.allcapsCheck.Size = new System.Drawing.Size(160, 29);
+			this.allcapsCheck.TabIndex = 0;
+			this.allcapsCheck.Text = "Include all-caps";
+			this.allcapsCheck.UseVisualStyleBackColor = true;
 			// 
 			// variableView
 			// 
 			this.variableView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.variableView.GridLines = true;
-			this.variableView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.variableView.FormattingEnabled = true;
+			this.variableView.ItemHeight = 25;
 			this.variableView.Location = new System.Drawing.Point(3, 3);
-			this.variableView.MultiSelect = false;
 			this.variableView.Name = "variableView";
+			this.variableView.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.variableView.Size = new System.Drawing.Size(472, 517);
 			this.variableView.TabIndex = 2;
-			this.variableView.UseCompatibleStateImageBehavior = false;
 			// 
 			// ViewerForm
 			// 
@@ -132,5 +131,5 @@ partial class ViewerForm
 	private CheckBox zerosCheck;
 	private CheckBox pointersCheck;
 	private CheckBox allcapsCheck;
-	private ListView variableView;
+	private ListBox variableView;
 }

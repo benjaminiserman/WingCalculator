@@ -9,7 +9,7 @@ public partial class ViewerForm : Form
 		InitializeComponent();
 	}
 
-	public void Refresh(Solver solver)
+	public void RefreshEntries(Solver solver)
 	{
 		variableView.Items.Clear();
 
@@ -40,5 +40,11 @@ public partial class ViewerForm : Form
 		{
 			variableView.Items.Add($"${key} = {val}");
 		}
+	}
+
+	protected override void OnFormClosing(FormClosingEventArgs e)
+	{
+		Hide();
+		e.Cancel = true; // this cancels the close event.
 	}
 }

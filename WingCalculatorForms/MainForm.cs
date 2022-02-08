@@ -9,6 +9,7 @@ using WingCalculatorShared;
 public partial class MainForm : Form
 {
 	private Solver _solver;
+	private readonly ViewerForm _viewerForm = new();
 
 	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
@@ -108,6 +109,14 @@ public partial class MainForm : Form
 		{
 			WindowStyle.LightMode.Apply(Controls, this);
 			darkModeButton.BackgroundImage = Resources.night_mode;
+		}
+	}
+
+	private void viewerButton_Click(object sender, EventArgs e)
+	{
+		if (!_viewerForm.Visible)
+		{
+			_viewerForm.Show();
 		}
 	}
 
@@ -262,6 +271,7 @@ public partial class MainForm : Form
 
 		_textIndex = 0;
 		_skipSelect = true;
+		_viewerForm.RefreshEntries(_solver);
 		historyView.SelectedIndex = 0;
 		historyView.SelectedIndex = -1;
 		historyView.TopIndex = historyView.Items.Count - 1;
@@ -369,6 +379,8 @@ public partial class MainForm : Form
 		_solver.Write = Write;
 		_solver.WriteError = WriteError;
 		_solver.ReadLine = ReadLine;
+
+		_viewerForm.RefreshEntries(_solver);
 	}
 
 	#region IOHooks

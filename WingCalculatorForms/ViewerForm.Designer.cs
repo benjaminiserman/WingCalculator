@@ -119,7 +119,7 @@ partial class ViewerForm
 			this.Name = "ViewerForm";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.Text = "ViewerForm";
+			this.Text = "Variable Viewer";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.checkboxPanel.ResumeLayout(false);
 			this.checkboxPanel.PerformLayout();

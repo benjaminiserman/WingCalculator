@@ -73,6 +73,7 @@ partial class ViewerForm
 			this.zerosCheck.TabIndex = 2;
 			this.zerosCheck.Text = "Include zeros";
 			this.zerosCheck.UseVisualStyleBackColor = true;
+			this.zerosCheck.CheckedChanged += new System.EventHandler(this.zerosCheck_CheckedChanged);
 			// 
 			// pointersCheck
 			// 
@@ -83,6 +84,7 @@ partial class ViewerForm
 			this.pointersCheck.TabIndex = 1;
 			this.pointersCheck.Text = "Include pointers";
 			this.pointersCheck.UseVisualStyleBackColor = true;
+			this.pointersCheck.CheckedChanged += new System.EventHandler(this.pointersCheck_CheckedChanged);
 			// 
 			// allcapsCheck
 			// 
@@ -93,6 +95,7 @@ partial class ViewerForm
 			this.allcapsCheck.TabIndex = 0;
 			this.allcapsCheck.Text = "Include all-caps";
 			this.allcapsCheck.UseVisualStyleBackColor = true;
+			this.allcapsCheck.CheckedChanged += new System.EventHandler(this.allcapsCheck_CheckedChanged);
 			// 
 			// variableView
 			// 

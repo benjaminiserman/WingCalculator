@@ -60,6 +60,7 @@ partial class MainForm
 			this.buttonPanel = new System.Windows.Forms.Panel();
 			this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
 			this.menuPanel = new System.Windows.Forms.Panel();
+			this.settingsButton = new System.Windows.Forms.Button();
 			this.helpButton = new System.Windows.Forms.Button();
 			this.viewerButton = new System.Windows.Forms.Button();
 			this.calculatorTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -353,6 +354,9 @@ partial class MainForm
 			this.historyView.Items.AddRange(new object[] {
             "\n\n",
             "\n\n",
+            "\n\n",
+            "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -438,6 +442,7 @@ partial class MainForm
 			// 
 			// menuPanel
 			// 
+			this.menuPanel.Controls.Add(this.settingsButton);
 			this.menuPanel.Controls.Add(this.helpButton);
 			this.menuPanel.Controls.Add(this.viewerButton);
 			this.menuPanel.Controls.Add(this.darkModeButton);
@@ -446,6 +451,19 @@ partial class MainForm
 			this.menuPanel.Name = "menuPanel";
 			this.menuPanel.Size = new System.Drawing.Size(363, 62);
 			this.menuPanel.TabIndex = 32;
+			// 
+			// settingsButton
+			// 
+			this.settingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.settingsButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.settings_light;
+			this.settingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.settingsButton.Location = new System.Drawing.Point(89, 5);
+			this.settingsButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
+			this.settingsButton.Name = "settingsButton";
+			this.settingsButton.Size = new System.Drawing.Size(50, 47);
+			this.settingsButton.TabIndex = 32;
+			this.settingsButton.UseVisualStyleBackColor = true;
+			this.settingsButton.Visible = false;
 			// 
 			// helpButton
 			// 
@@ -545,4 +563,5 @@ partial class MainForm
 	private Panel menuPanel;
 	public Button helpButton;
 	public Button viewerButton;
+	public Button settingsButton;
 }

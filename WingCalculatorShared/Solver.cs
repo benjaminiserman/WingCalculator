@@ -201,6 +201,12 @@ public class Solver
 					isCoefficient = true;
 					break;
 				}
+				case TokenType.Octal:
+				{
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8)));
+					isCoefficient = true;
+					break;
+				}
 			}
 		}
 

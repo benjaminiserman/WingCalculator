@@ -7,3 +7,5 @@
 <a href="https://www.flaticon.com/free-icons/open-menu" title="open menu icons">Open menu icons created by Aldo Cervantes - Flaticon</a>
 
 <a href="https://www.flaticon.com/free-icons/ui" title="ui icons">Ui icons created by Aldo Cervantes - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/cog" title="cog icons">Cog icons created by Aldo Cervantes - Flaticon</a>

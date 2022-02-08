@@ -193,7 +193,7 @@ internal static class Tokenizer
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
 		else if (c == '@') return TokenType.Macro;
-		else if (c == '`') return TokenType.Local
+		else if (c == '`') return TokenType.Local;
 		else throw new WingCalcException($"Token could not be constructed from character {c}.");
 	}
 }

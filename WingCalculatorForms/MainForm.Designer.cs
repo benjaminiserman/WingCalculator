@@ -357,6 +357,7 @@ partial class MainForm
             "\n\n",
             "\n\n",
             "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -488,6 +489,7 @@ partial class MainForm
 			this.viewerButton.Size = new System.Drawing.Size(50, 47);
 			this.viewerButton.TabIndex = 30;
 			this.viewerButton.UseVisualStyleBackColor = true;
+			this.viewerButton.Click += new System.EventHandler(this.viewerButton_Click);
 			// 
 			// calculatorTableLayout
 			// 

@@ -295,7 +295,6 @@ public class Solver
 						break;
 					}
 				}
-				
 
 				void CheckAndCollapseNode(ref int i, Func<int, int> increment)
 				{

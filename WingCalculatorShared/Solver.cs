@@ -39,6 +39,8 @@ public class Solver
 		["DEC"] = 0,
 		["TXT"] = 1,
 		["BIN"] = 2,
+		["PCT"] = 3,
+		["FRAC"] = 4,
 		["OCT"] = 8,
 		["HEX"] = 16,
 
@@ -160,10 +162,22 @@ public class Solver
 				}
 				case TokenType.Macro:
 				{
-					if (tokens[i].Text.Length == 1) availableNodes.Add(new PreOperatorNode("@"));
-					else availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
+					if (isCoefficient)
+					{
+						availableNodes.Add(new PreOperatorNode("*"));
+					}
+
+					if (tokens[i].Text.Length == 1)
+					{
+						availableNodes.Add(new PreOperatorNode("@"));
+					}
+					else
+					{
+						availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
+					}
 
 					isCoefficient = false;
+
 					break;
 				}
 				case TokenType.Quote:

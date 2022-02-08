@@ -295,7 +295,6 @@ public class Solver
 						break;
 					}
 				}
-				
 
 				void CheckAndCollapseNode(ref int i, Func<int, int> increment)
 				{
@@ -420,5 +419,13 @@ public class Solver
 		else _macros.Add(s, x);
 
 		return 1;
+	}
+
+	public IEnumerable<(string, double)> GetValues()
+	{
+		foreach (var kvp in _variables)
+		{
+			yield return (kvp.Key, kvp.Value);
+		}
 	}
 }

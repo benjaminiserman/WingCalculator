@@ -59,9 +59,13 @@ partial class MainForm
 			this.darkModeButton = new System.Windows.Forms.Button();
 			this.buttonPanel = new System.Windows.Forms.Panel();
 			this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
+			this.menuPanel = new System.Windows.Forms.Panel();
+			this.helpButton = new System.Windows.Forms.Button();
+			this.viewerButton = new System.Windows.Forms.Button();
 			this.calculatorTableLayout = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonPanel.SuspendLayout();
 			this.mainTableLayout.SuspendLayout();
+			this.menuPanel.SuspendLayout();
 			this.calculatorTableLayout.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -347,6 +351,8 @@ partial class MainForm
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -369,7 +375,7 @@ partial class MainForm
 			this.darkModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
 			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.darkModeButton.Location = new System.Drawing.Point(647, 468);
+			this.darkModeButton.Location = new System.Drawing.Point(299, 5);
 			this.darkModeButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
 			this.darkModeButton.Name = "darkModeButton";
 			this.darkModeButton.Size = new System.Drawing.Size(50, 47);
@@ -415,10 +421,10 @@ partial class MainForm
 			this.mainTableLayout.ColumnCount = 2;
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.43525F));
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 369F));
+			this.mainTableLayout.Controls.Add(this.menuPanel, 1, 1);
 			this.mainTableLayout.Controls.Add(this.calculatorTableLayout, 1, 0);
 			this.mainTableLayout.Controls.Add(this.errorLabel, 0, 1);
 			this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
-			this.mainTableLayout.Controls.Add(this.darkModeButton, 1, 1);
 			this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -426,8 +432,44 @@ partial class MainForm
 			this.mainTableLayout.RowCount = 2;
 			this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 68F));
+			this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.mainTableLayout.Size = new System.Drawing.Size(707, 525);
 			this.mainTableLayout.TabIndex = 29;
+			// 
+			// menuPanel
+			// 
+			this.menuPanel.Controls.Add(this.helpButton);
+			this.menuPanel.Controls.Add(this.viewerButton);
+			this.menuPanel.Controls.Add(this.darkModeButton);
+			this.menuPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.menuPanel.Location = new System.Drawing.Point(341, 460);
+			this.menuPanel.Name = "menuPanel";
+			this.menuPanel.Size = new System.Drawing.Size(363, 62);
+			this.menuPanel.TabIndex = 32;
+			// 
+			// helpButton
+			// 
+			this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.helpButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.help_light;
+			this.helpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.helpButton.Location = new System.Drawing.Point(159, 5);
+			this.helpButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
+			this.helpButton.Name = "helpButton";
+			this.helpButton.Size = new System.Drawing.Size(50, 47);
+			this.helpButton.TabIndex = 31;
+			this.helpButton.UseVisualStyleBackColor = true;
+			// 
+			// viewerButton
+			// 
+			this.viewerButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.viewerButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.menu_light;
+			this.viewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.viewerButton.Location = new System.Drawing.Point(229, 5);
+			this.viewerButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
+			this.viewerButton.Name = "viewerButton";
+			this.viewerButton.Size = new System.Drawing.Size(50, 47);
+			this.viewerButton.TabIndex = 30;
+			this.viewerButton.UseVisualStyleBackColor = true;
 			// 
 			// calculatorTableLayout
 			// 
@@ -460,6 +502,7 @@ partial class MainForm
 			this.buttonPanel.ResumeLayout(false);
 			this.mainTableLayout.ResumeLayout(false);
 			this.mainTableLayout.PerformLayout();
+			this.menuPanel.ResumeLayout(false);
 			this.calculatorTableLayout.ResumeLayout(false);
 			this.calculatorTableLayout.PerformLayout();
 			this.ResumeLayout(false);
@@ -495,8 +538,11 @@ partial class MainForm
 	private Button pow_button;
 	private HistoryView historyView;
 	private Label errorLabel;
-	private Button darkModeButton;
+	public Button darkModeButton;
 	private Panel buttonPanel;
 	private TableLayoutPanel mainTableLayout;
 	private TableLayoutPanel calculatorTableLayout;
+	private Panel menuPanel;
+	public Button helpButton;
+	public Button viewerButton;
 }

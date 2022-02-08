@@ -78,9 +78,16 @@ internal static class Tokenizer
 			}
 			else
 			{
-				if (gotType == TokenType.Number && sb.ToString() == "0" && (c is 'b' or 'x'))
+				if (gotType == TokenType.Number && sb.ToString() == "0" && char.IsLetter(c))
 				{
-					currentType = c is 'b' ? TokenType.Binary : TokenType.Hex;
+					currentType = char.ToLowerInvariant(c) switch
+					{
+						'b' => TokenType.Binary,
+						'x' => TokenType.Hex,
+						'o' => TokenType.Octal,
+
+						_ => throw new NotImplementedException($"0{c} is not a recognized numeric literal!")
+					};
 				}
 				else if (Matches(gotType, c, sb))
 				{
@@ -149,6 +156,7 @@ internal static class Tokenizer
 		TokenType.Quote => false,
 		TokenType.Char => false,
 		TokenType.Binary => c is '1' or '0',
+		TokenType.Octal => char.IsDigit(c) && (c - '0') < 8,
 
 		_ => throw new NotImplementedException($"Unexpected character {c}! Current TokenType: {tokenType}")
 	};
@@ -172,5 +180,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal
 }

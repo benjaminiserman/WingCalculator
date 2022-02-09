@@ -45,6 +45,8 @@ public class Solver
 		["HEX"] = 16,
 
 		["ANS"] = 0,
+
+		["ඞ"] = 1337,
 	};
 
 	private readonly Dictionary<string, INode> _macros = new();

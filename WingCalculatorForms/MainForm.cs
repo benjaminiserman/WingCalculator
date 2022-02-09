@@ -48,7 +48,7 @@ public partial class MainForm : Form
 
 	private void hex_button_Click(object sender, EventArgs e) => SendString(":16");
 
-	private void tau_button_Click(object sender, EventArgs e) => SendString("$TAY");
+	private void tau_button_Click(object sender, EventArgs e) => SendString("$TAU");
 
 	private void ans_button_Click(object sender, EventArgs e) => SendString("$ANS");
 

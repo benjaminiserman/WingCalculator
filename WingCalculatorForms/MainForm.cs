@@ -76,7 +76,7 @@ public partial class MainForm : Form
 
 	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan");
 
-	private void sin_button_Click(object sender, EventArgs e) => SendString("sis");
+	private void sin_button_Click(object sender, EventArgs e) => SendString("sin");
 
 	private void cos_button_Click(object sender, EventArgs e) => SendString("cos");
 

@@ -402,4 +402,26 @@ public partial class MainForm : Form
 	private static string ReadLine() => throw new PlatformNotSupportedException("Prompting is not available in the WinForms app.");
 
 	#endregion
+
+	private void errorLabel_Click(object sender, EventArgs e)
+	{
+		string errorText = errorLabel.Text;
+		string copyText = "Copied to clipboard.";
+
+		if (string.IsNullOrWhiteSpace(errorText) || errorLabel.Text == copyText) return;
+
+		Clipboard.SetText(errorText);
+		errorLabel.Text = copyText;
+
+		Timer t = new();
+		t.Interval = 1000;
+		t.Tick += (_, _) => RefillErrorLabel(t, errorLabel.Text, errorText);
+		t.Start();
+	}
+
+	private void RefillErrorLabel(Timer t, string compare, string set)
+	{
+		if (errorLabel.Text == compare) errorLabel.Text = set;
+		t.Enabled = false;
+	}
 }

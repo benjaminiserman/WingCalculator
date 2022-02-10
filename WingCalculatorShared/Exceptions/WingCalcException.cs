@@ -1,7 +1,7 @@
 ﻿namespace WingCalculatorShared.Exceptions;
 using System;
 
-internal class WingCalcException : Exception
+public class WingCalcException : Exception
 {
 	public WingCalcException() { }
 	public WingCalcException(string message) : base(message) { }

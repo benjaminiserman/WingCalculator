@@ -360,6 +360,7 @@ partial class MainForm
             "\n\n",
             "\n\n",
             "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -375,6 +376,7 @@ partial class MainForm
 			this.errorLabel.Name = "errorLabel";
 			this.errorLabel.Size = new System.Drawing.Size(332, 68);
 			this.errorLabel.TabIndex = 26;
+			this.errorLabel.Click += new System.EventHandler(this.errorLabel_Click);
 			// 
 			// darkModeButton
 			// 

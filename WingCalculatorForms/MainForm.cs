@@ -372,7 +372,7 @@ public partial class MainForm : Form
 			errorLabel.Text = $"{ex.GetType()}: {ex.Message}";
 
 #if DEBUG
-			errorLabel.Text = $"{errorLabel.Text} @ {ex.TargetSite}";
+			errorLabel.Text = $"{errorLabel.Text} @ {ex.StackTrace}";
 #endif
 			throw;
 		}

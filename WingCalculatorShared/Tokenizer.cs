@@ -1,7 +1,7 @@
 ﻿namespace WingCalculatorShared;
-using System;
 using System.Collections.Generic;
 using System.Text;
+using WingCalculatorShared.Exceptions;
 
 internal static class Tokenizer
 {
@@ -86,7 +86,7 @@ internal static class Tokenizer
 						'x' => TokenType.Hex,
 						'o' => TokenType.Octal,
 
-						_ => throw new NotImplementedException($"0{c} is not a recognized numeric literal!")
+						_ => throw new WingCalcException($"0{c} is not a recognized numeric literal.")
 					};
 				}
 				else if (Matches(gotType, c, sb))
@@ -105,8 +105,8 @@ internal static class Tokenizer
 
 		PushCurrent();
 
-		if (quoted) throw new Exception("Quote is missing end quote!");
-		if (apostrophed) throw new Exception("Character is missing end quote!");
+		if (quoted) throw new WingCalcException("Quote literal is missing end quote.");
+		if (apostrophed) throw new WingCalcException("Character literal is missing end apostrophe.");
 
 		int additiveUnaryCount = 0;
 		for (int i = 0; i < tokens.Count; i++)
@@ -116,7 +116,7 @@ internal static class Tokenizer
 				additiveUnaryCount++;
 				if (additiveUnaryCount > 2 || (additiveUnaryCount == 2 && i == 1)) // if 3 +/- are found in a row, or 2 +/- at start
 				{
-					throw new Exception($"Too many + or - signs found in a row!");
+					throw new WingCalcException($"Unexpected character {tokens[i].Text} found. Only up to two + or - signs in a row are legal.");
 				}
 			}
 			else additiveUnaryCount = 0;
@@ -158,7 +158,7 @@ internal static class Tokenizer
 		TokenType.Binary => c is '1' or '0',
 		TokenType.Octal => char.IsDigit(c) && (c - '0') < 8,
 
-		_ => throw new NotImplementedException($"Unexpected character {c}! Current TokenType: {tokenType}")
+		_ => false
 	};
 
 	private static TokenType GetTokenType(char c)
@@ -172,7 +172,7 @@ internal static class Tokenizer
 		else if (c == ',') return TokenType.Comma;
 		else if (c == '$') return TokenType.Variable;
 		else if (c == '@') return TokenType.Macro;
-		else throw new NotImplementedException($"Token could not be constructed from character {c}!");
+		else throw new WingCalcException($"Token could not be constructed from character {c}.");
 	}
 }
 

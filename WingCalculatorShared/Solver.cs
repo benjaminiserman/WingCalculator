@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
 
 public class Solver
@@ -93,7 +94,7 @@ public class Solver
 				}
 				case TokenType.Function:
 				{
-					if (tokens[i + 1].TokenType != TokenType.OpenParen) throw new Exception("Function called but no opening parenthesis found!");
+					if (tokens[i + 1].TokenType != TokenType.OpenParen) throw new WingCalcException("Function called but no opening bracket found.");
 
 					int end = FindClosing(i + 1, tokens);
 
@@ -137,11 +138,11 @@ public class Solver
 				}
 				case TokenType.CloseParen:
 				{
-					throw new Exception("Dangling closing parenthesis found!");
+					throw new WingCalcException($"Unexpected character {tokens[i].Text} found.");
 				}
 				case TokenType.Comma:
 				{
-					throw new Exception("Dangling comma found!");
+					throw new WingCalcException($"Unexpected character {tokens[i].Text} found.");
 				}
 				case TokenType.Variable:
 				{
@@ -193,7 +194,7 @@ public class Solver
 				case TokenType.Char:
 				{
 					string unescaped = Regex.Unescape(tokens[i].Text);
-					if (unescaped.Length > 1) throw new Exception($"Character '{tokens[i].Text}' could not be resolved: too many characters.");
+					if (unescaped.Length > 1) throw new WingCalcException($"Character '{tokens[i].Text}' could not be resolved: too many characters found in character literal.");
 					availableNodes.Add(new ConstantNode(unescaped[0]));
 					isCoefficient = true;
 					break;
@@ -266,11 +267,11 @@ public class Solver
 						}
 						default:
 						{
-							throw new NotImplementedException($"{signNode.Text} is a valid unary operator but is not yet implemented.");
+							throw new WingCalcException($"{signNode.Text} is a valid unary operator but is not yet implemented.");
 						}
 					}
 				}
-				else throw new NotImplementedException($"{signNode.Text} is not a valid unary operator!");
+				else throw new WingCalcException($"{signNode.Text} is not a valid unary operator.");
 			}
 		}
 
@@ -325,7 +326,7 @@ public class Solver
 
 		if (availableNodes.Count > 1)
 		{
-			throw new Exception("Tree could not be made!");
+			throw new WingCalcException($"{availableNodes.Count - 1} extra nodes found, expression tree could not be made.");
 		}
 		else return availableNodes.First();
 	}
@@ -387,7 +388,7 @@ public class Solver
 					if (level == 0)
 					{
 						if (_matches[tokens[start].Text[0]] == tokens[i].Text[0]) return i;
-						else throw new Exception("Parentheses do not match!");
+						else throw new WingCalcException($"Closing bracket {tokens[i].Text[0]} does not match opening bracket {tokens[start].Text[0]}");
 					}
 
 					break;
@@ -395,7 +396,7 @@ public class Solver
 			}
 		}
 
-		throw new Exception($"Parentheses do not match! (level: {level})");
+		throw new WingCalcException($"No closing bracket found.");
 	}
 
 	private readonly Dictionary<char, char> _matches = new() { ['('] = ')', ['['] = ']', ['{'] = '}' };

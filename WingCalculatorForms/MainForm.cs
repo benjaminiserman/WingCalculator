@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using WingCalculatorForms.Properties;
 using WingCalculatorShared;
+using WingCalculatorShared.Exceptions;
 
 public partial class MainForm : Form
 {
@@ -293,6 +294,10 @@ public partial class MainForm : Form
 		{
 			if (!string.IsNullOrWhiteSpace((string)historyView.Items[i])) historyView.Items[i] = GetSolve(GetEntryText(historyView.Items[i]));
 		}
+		catch (WingCalcException ex)
+		{
+			historyView.Items[i] = $"{historyView.Items[i]}\n{ex.Message}";
+		}
 		catch (Exception ex)
 		{
 			historyView.Items[i] = $"{historyView.Items[i]}\n{ex.GetType()}: {ex.Message}";
@@ -356,6 +361,12 @@ public partial class MainForm : Form
 
 			return $"{s}\n{_stdoutGot}> Solution: {solve}";
 
+		}
+		catch (WingCalcException ex)
+		{
+			_stdout.Clear();
+			errorLabel.Text = ex.Message;
+			throw;
 		}
 		catch (Exception ex)
 		{

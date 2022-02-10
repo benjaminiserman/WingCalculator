@@ -358,6 +358,8 @@ partial class MainForm
             "\n\n",
             "\n\n",
             "\n\n",
+            "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -367,12 +369,11 @@ partial class MainForm
 			// 
 			// errorLabel
 			// 
-			this.errorLabel.AutoSize = true;
+			this.errorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
 			this.errorLabel.Location = new System.Drawing.Point(3, 457);
-			this.errorLabel.MaximumSize = new System.Drawing.Size(500, 0);
 			this.errorLabel.Name = "errorLabel";
-			this.errorLabel.Size = new System.Drawing.Size(0, 25);
+			this.errorLabel.Size = new System.Drawing.Size(332, 68);
 			this.errorLabel.TabIndex = 26;
 			// 
 			// darkModeButton
@@ -521,7 +522,6 @@ partial class MainForm
 			this.Text = "WingCalculator";
 			this.buttonPanel.ResumeLayout(false);
 			this.mainTableLayout.ResumeLayout(false);
-			this.mainTableLayout.PerformLayout();
 			this.menuPanel.ResumeLayout(false);
 			this.calculatorTableLayout.ResumeLayout(false);
 			this.calculatorTableLayout.PerformLayout();

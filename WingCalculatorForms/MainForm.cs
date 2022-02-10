@@ -346,8 +346,6 @@ public partial class MainForm : Form
 		if ((string)historyView.Items[^1] != emptyEntry) historyView.Items.Add(emptyEntry); // add empty buffer entry
 	}
 
-#pragma warning restore IDE1006
-
 	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
 
 	private string GetSolve(string s)
@@ -424,4 +422,6 @@ public partial class MainForm : Form
 		if (errorLabel.Text == compare) errorLabel.Text = set;
 		t.Enabled = false;
 	}
+
+#pragma warning restore IDE1006 // $$$ Bad, move this
 }

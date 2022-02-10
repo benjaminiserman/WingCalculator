@@ -288,7 +288,7 @@ public class Solver
 					{
 						for (int i = 0; i < availableNodes.Count; i++)
 						{
-							CheckAndCollapseNode(ref i, x => x--);
+							CheckAndCollapseNode(ref i, x => --x);
 						}
 
 						break;
@@ -297,7 +297,7 @@ public class Solver
 					{
 						for (int i = availableNodes.Count - 1; i >= 0; i--)
 						{
-							CheckAndCollapseNode(ref i, x => x++);
+							CheckAndCollapseNode(ref i, x => ++x);
 						}
 
 						break;

@@ -1,4 +1,4 @@
-﻿using WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 
 internal record OrNode(INode A, INode B) : INode
 {

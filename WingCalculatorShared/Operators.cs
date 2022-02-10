@@ -1,6 +1,7 @@
 ﻿namespace WingCalculatorShared;
 using System;
 using System.Linq;
+using WingCalculatorShared.Nodes;
 
 internal static class Operators
 {

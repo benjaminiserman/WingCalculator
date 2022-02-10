@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 
 internal record VariableNode(string Name, Solver Solver) : INode, IAssignable
 {

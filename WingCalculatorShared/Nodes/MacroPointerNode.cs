@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 
 internal record MacroPointerNode(INode A, Solver Solver) : INode, IAssignable
 {

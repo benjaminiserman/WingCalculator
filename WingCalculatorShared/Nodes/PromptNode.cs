@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 using InputHandler;
 
 internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode

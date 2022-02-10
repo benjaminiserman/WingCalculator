@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 
 internal record ElvisAssignmentNode(IAssignable A, INode B) : INode
 {

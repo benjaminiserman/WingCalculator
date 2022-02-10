@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 using System.Collections.Generic;
 
 internal record FunctionNode(string Name, Solver Solver, List<INode> Nodes) : INode

@@ -42,7 +42,7 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		SettingsButtonImage: Resources.settings_light
 	);
 
-	public static List<string> MenuNames { get; } = new() { "darkModeButton" };
+	public static List<string> MenuNames { get; } = new() { "darkModeButton", "viewerButton", "helpButton", "settingsButton", "graphingButton" };
 
 	public void Apply(Control.ControlCollection collection, Form form)
 	{

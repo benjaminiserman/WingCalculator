@@ -217,7 +217,7 @@ public class Solver
 		}
 
 		if (availableNodes.Count == 0) return null;
-		if (availableNodes[0] is PreOperatorNode firstNode && (firstNode.Text.Length >= 2 || !Tokenizer._unaryOperators.Contains(firstNode.Text[0])))
+		if (availableNodes[0] is PreOperatorNode firstNode && firstNode.Text.Length >= 2)
 		{
 			availableNodes.Insert(0, new VariableNode("ANS", this)); // add $ANS at when start with binary operator
 		}
@@ -314,6 +314,8 @@ public class Solver
 
 				void CheckAndCollapseNode(ref int i, Func<int, int> increment)
 				{
+					if (i < 0 || i >= availableNodes.Count) return;
+
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
 						if (i == 0 || availableNodes[i - 1] is null)

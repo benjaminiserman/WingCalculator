@@ -132,6 +132,8 @@ public class Solver
 					}
 					else availableNodes.Add(tree);
 
+					if (tree is null) throw new WingCalcException($"Empty brackets {tokens[i].Text}{tokens[end].Text} found.");
+
 					i = end;
 					isCoefficient = true;
 					break;
@@ -314,6 +316,15 @@ public class Solver
 				{
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
+						if (i == 0 || availableNodes[i - 1] is null)
+						{
+							throw new WingCalcException($"Operator {node.Text} is missing a left-hand operand.");
+						}
+						else if (i == availableNodes.Count - 1 || availableNodes[i + 1] is null)
+						{
+							throw new WingCalcException($"Operator {node.Text} is missing a right-hand operand.");
+						}
+
 						var binaryNode = Operators.CreateNode(availableNodes[i - 1], node, availableNodes[i + 1], this);
 
 						availableNodes.RemoveAt(i - 1);

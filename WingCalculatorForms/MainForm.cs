@@ -18,6 +18,7 @@ public partial class MainForm : Form
 	public static readonly string emptyEntry = "\n\n";
 	private int _textIndex;
 	private int _historyIndex = 0;
+	private float _currentFontSize = 9;
 
 	public MainForm()
 	{
@@ -130,6 +131,24 @@ public partial class MainForm : Form
 
 	private void OmniboxControlKeys(object send, KeyEventArgs e)
 	{
+		if (ModifierKeys.HasFlag(Keys.Control))
+		{
+			if (e.KeyCode == Keys.Oemplus)
+			{
+				_currentFontSize++;
+				FontSizer.ApplySize(Controls, this, _currentFontSize);
+				e.Handled = true;
+				return;
+			}
+			else if (e.KeyCode == Keys.OemMinus)
+			{
+				_currentFontSize--;
+				FontSizer.ApplySize(Controls, this, _currentFontSize);
+				e.Handled = true;
+				return;
+			}
+		}
+
 		switch (e.KeyCode)
 		{
 			case Keys.Escape:

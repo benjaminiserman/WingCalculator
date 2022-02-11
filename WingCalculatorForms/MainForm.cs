@@ -382,17 +382,21 @@ public partial class MainForm : Form
 		catch (WingCalcException ex)
 		{
 			_stdout.Clear();
-			errorLabel.Text = ex.Message;
+			string errorMessage = ex.Message.Replace("&", "&&");
+			errorLabel.Text = errorMessage;
 			throw;
 		}
 		catch (Exception ex)
 		{
 			_stdout.Clear();
-			errorLabel.Text = $"{ex.GetType()}: {ex.Message}";
+
+			string errorMessage = $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
 
 #if DEBUG
-			errorLabel.Text = $"{errorLabel.Text} @ {ex.StackTrace}";
+			errorMessage = $"{errorLabel.Text} @ {ex.StackTrace.Replace("&", "&&")}";
 #endif
+
+			errorLabel.Text = errorMessage;
 			throw;
 		}
 	}
@@ -422,7 +426,7 @@ public partial class MainForm : Form
 
 	private void errorLabel_Click(object sender, EventArgs e)
 	{
-		string errorText = errorLabel.Text;
+		string errorText = errorLabel.Text.Replace("&&", "&");
 		string copyText = "Copied to clipboard.";
 
 		if (string.IsNullOrWhiteSpace(errorText) || errorLabel.Text == copyText) return;
@@ -438,7 +442,7 @@ public partial class MainForm : Form
 
 	private void RefillErrorLabel(Timer t, string compare, string set)
 	{
-		if (errorLabel.Text == compare) errorLabel.Text = set;
+		if (errorLabel.Text == compare) errorLabel.Text = set.Replace("&", "&&");
 		t.Enabled = false;
 	}
 

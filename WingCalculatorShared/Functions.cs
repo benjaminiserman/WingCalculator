@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
 
 internal static class Functions
@@ -145,7 +146,7 @@ internal static class Functions
 		#region Memory
 		["alloc"] = args =>
 		{
-			PointerNode pointer = (PointerNode)args[0];
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function alloc requires a pointer node as its first argument.");
 
 			Solver solver = pointer.Solver;
 			double address = pointer.Address;
@@ -161,8 +162,8 @@ internal static class Functions
 		},
 		["salloc"] = args =>
 		{
-			PointerNode pointer = (PointerNode)args[0];
-			QuoteNode quote = (QuoteNode)args[1];
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function salloc requires a pointer node as its first argument."); ;
+			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function salloc requires a quote node as its second argument."); ;
 
 			Solver solver = pointer.Solver;
 			double address = pointer.Address;
@@ -178,7 +179,7 @@ internal static class Functions
 		},
 		["memprint"] = args =>
 		{
-			PointerNode pointer = (PointerNode)args[0];
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function memprint requires a pointer node as its first argument."); ;
 
 			Solver solver = pointer.Solver;
 			double address = pointer.Address;
@@ -192,7 +193,7 @@ internal static class Functions
 		#region Strings
 		["exec"] = args =>
 		{
-			PointerNode pointer = (PointerNode)args[0];
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function exec requires a pointer node as its first argument.");
 			StringBuilder sb = new();
 
 			Solver solver = pointer.Solver;

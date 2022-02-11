@@ -16,7 +16,11 @@ internal static class Functions
 		["sqrt"] = args => Math.Sqrt(args[0].Solve()),
 		["cbrt"] = args => Math.Cbrt(args[0].Solve()),
 
-		["log"] = args => Math.Log(args[0].Solve(), args[1].Solve()),
+		["log"] = args =>
+		{
+			if (args.Count == 1) return Math.Log(args[0].Solve(), 10);
+			else return Math.Log(args[0].Solve(), args[1].Solve());
+		},
 		["ln"] = args => Math.Log(args[0].Solve()),
 		#endregion
 

@@ -428,7 +428,7 @@ public class Solver
 			}
 		}
 
-		throw new WingCalcException($"No closing bracket found.");
+		throw new WingCalcException($"Closing bracket expected but not found.");
 	}
 
 	private readonly Dictionary<char, char> _matches = new() { ['('] = ')', ['['] = ']', ['{'] = '}' };

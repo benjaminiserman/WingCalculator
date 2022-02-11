@@ -1,6 +1,7 @@
 ﻿namespace WingCalculatorShared;
 using System;
 using System.Linq;
+using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
 
 internal static class Operators
@@ -91,12 +92,32 @@ internal static class Operators
 
 	}.ToDictionary(x => x.Symbol, x => x);
 
+
+
+	public static INode CreateNode(INode a, PreOperatorNode op, INode b, Solver solver = null)
+	{
+		try
+		{
+			return _operators[op.Text].Construct(a, b, solver);
+		}
+		catch (KeyNotFoundException)
+		{
+			throw new WingCalcException($"\"{op.Text}\" is not a valid binary operator.");
+		}
+	} 
+
+	public static int GetPrecedence(string symbol)
+	{
+		try
+		{
+			return _operators[symbol].Precedence;
+		}
+		catch (KeyNotFoundException)
+		{
+			throw new WingCalcException($"\"{symbol}\" is not a valid binary operator.");
+		}
+	}
 	
-
-	public static INode CreateNode(INode a, PreOperatorNode op, INode b, Solver solver = null) => _operators[op.Text].Construct(a, b, solver);
-
-	public static int GetPrecedence(string symbol) => _operators[symbol].Precedence;
-
 	record struct Operator(string Symbol, Func<INode, INode, Solver, INode> Construct, int Precedence);
 
 	public static Associativity GetTierAssociativity(int tier) => tier == _precedenceTiers["assignment"] || tier == _precedenceTiers["elvis"] ? Associativity.Right : Associativity.Left;

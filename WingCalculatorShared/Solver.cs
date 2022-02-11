@@ -288,11 +288,11 @@ public class Solver
 						}
 						default:
 						{
-							throw new WingCalcException($"{signNode.Text} is a valid unary operator but is not yet implemented.");
+							throw new WingCalcException($"\"{signNode.Text}\" is a valid unary operator but is not yet implemented.");
 						}
 					}
 				}
-				else throw new WingCalcException($"{signNode.Text} is not a valid unary operator.");
+				else throw new WingCalcException($"\"{signNode.Text}\" is not a valid unary operator.");
 			}
 		}
 

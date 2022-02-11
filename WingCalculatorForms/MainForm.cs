@@ -83,7 +83,7 @@ public partial class MainForm : Form
 
 	private void tan_button_Click(object sender, EventArgs e) => SendString("tan");
 
-	private void pow_button_Click(object sender, EventArgs e) => SendString("pow");
+	private void pow_button_Click(object sender, EventArgs e) => SendString("**");
 
 	private void var_button_Click(object sender, EventArgs e) => SendString("$");
 

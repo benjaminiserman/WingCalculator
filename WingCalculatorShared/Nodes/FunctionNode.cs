@@ -19,6 +19,10 @@ internal record FunctionNode(string Name, Solver Solver, List<INode> Nodes) : IN
 		{
 			throw new WingCalcException($"Function {Name} cannot be called without parameters.");
 		}
+		catch (InvalidCastException)
+		{
+			throw new WingCalcException($"Function {Name} was unable to cast some parameter(s).");
+		}
 	}
 }
 

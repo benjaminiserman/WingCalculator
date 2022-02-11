@@ -140,11 +140,11 @@ public class Solver
 				}
 				case TokenType.CloseParen:
 				{
-					throw new WingCalcException($"Unexpected character {tokens[i].Text} found.");
+					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found.");
 				}
 				case TokenType.Comma:
 				{
-					throw new WingCalcException($"Unexpected character {tokens[i].Text} found.");
+					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found.");
 				}
 				case TokenType.Variable:
 				{

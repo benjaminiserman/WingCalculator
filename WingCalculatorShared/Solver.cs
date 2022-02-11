@@ -122,6 +122,8 @@ public class Solver
 				}
 				case TokenType.Hex:
 				{
+					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Empty hex literal found.");
+
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16)));
 					isCoefficient = true;
 					break;

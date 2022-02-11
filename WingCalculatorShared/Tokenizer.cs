@@ -116,7 +116,7 @@ internal static class Tokenizer
 				additiveUnaryCount++;
 				if (additiveUnaryCount > 2 || (additiveUnaryCount == 2 && i == 1)) // if 3 +/- are found in a row, or 2 +/- at start
 				{
-					throw new WingCalcException($"Unexpected character {tokens[i].Text} found. Only up to two + or - signs in a row are legal.");
+					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found. Only up to two + or - signs in a row are legal.");
 				}
 			}
 			else additiveUnaryCount = 0;
@@ -146,15 +146,18 @@ internal static class Tokenizer
 		TokenType.Number when "+-".Contains(c) => "Ee".Contains(sb[^1]),
 		TokenType.Number => false,
 		TokenType.Operator => _operatorCharacters.Contains(c) && !_unaryOperators.Contains(c),
-		TokenType.Function => char.IsLetter(c),
-		TokenType.Hex => char.IsDigit(c) || _hexCharacters.Contains(c),
 		TokenType.OpenParen => false,
 		TokenType.CloseParen => false,
 		TokenType.Comma => false,
-		TokenType.Variable => char.IsLetter(c),
-		TokenType.Macro => char.IsLetter(c),
 		TokenType.Quote => false,
 		TokenType.Char => false,
+
+		_ when c is '.' => throw new WingCalcException($"Unexpected character '{c}' found!"),
+
+		TokenType.Function => char.IsLetter(c),
+		TokenType.Hex => char.IsDigit(c) || _hexCharacters.Contains(c),
+		TokenType.Variable => char.IsLetter(c),
+		TokenType.Macro => char.IsLetter(c),
 		TokenType.Binary => c is '1' or '0',
 		TokenType.Octal => char.IsDigit(c) && (c - '0') < 8,
 

@@ -82,7 +82,15 @@ public class Solver
 			{
 				case TokenType.Number:
 				{
-					availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));
+					try
+					{
+						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));
+					}
+					catch
+					{
+						throw new WingCalcException($"Unable to parse constant {tokens[i].Text}.");
+					}
+
 					isCoefficient = true;
 					break;
 				}

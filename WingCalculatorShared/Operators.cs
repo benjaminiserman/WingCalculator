@@ -104,6 +104,17 @@ internal static class Operators
 		{
 			throw new WingCalcException($"\"{op.Text}\" is not a valid binary operator.");
 		}
+		catch (InvalidCastException)
+		{
+			if (GetPrecedence(op.Text) == _precedenceTiers["assignment"])
+			{
+				throw new WingCalcException($"Operator {op.Text} was unable to cast some parameter(s). Make sure its left operand is something that can be assigned to.");
+			}
+			else
+			{
+				throw new WingCalcException($"Operator {op.Text} was unable to cast some parameter(s).");
+			}
+		}
 	} 
 
 	public static int GetPrecedence(string symbol)

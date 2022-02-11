@@ -128,7 +128,7 @@ public class Solver
 					isCoefficient = true;
 					break;
 				}
-				case TokenType.OpenParen: // $$$ add paren multiplication
+				case TokenType.OpenParen:
 				{
 					int end = FindClosing(i, tokens);
 

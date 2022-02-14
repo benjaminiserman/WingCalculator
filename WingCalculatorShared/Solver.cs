@@ -120,7 +120,7 @@ public class Solver
 						availableNodes.Add(Operators.CreateNode(coefficientNode, new("*"), tree));
 					}
 					else availableNodes.Add(tree);
-					
+
 					i = end;
 					isCoefficient = false;
 					break;
@@ -179,7 +179,7 @@ public class Solver
 						isCoefficient = true;
 					}
 
-					
+
 					break;
 				}
 				case TokenType.Macro:
@@ -242,7 +242,7 @@ public class Solver
 		for (int i = availableNodes.Count - 1; i >= 1; i--) // handle unary operators
 		{
 			if (availableNodes[i] is not PreOperatorNode
-				&& availableNodes[i - 1] is PreOperatorNode signNode 
+				&& availableNodes[i - 1] is PreOperatorNode signNode
 				&& (i == 1 || availableNodes[i - 2] is PreOperatorNode))
 			{
 				INode numberNode = availableNodes[i];
@@ -353,7 +353,7 @@ public class Solver
 						i = increment(i);
 					}
 				}
-			}	
+			}
 		}
 
 		if (availableNodes.Count > 1)
@@ -397,7 +397,7 @@ public class Solver
 		}
 
 		nodes.Add(CreateTree(tokens[next..tokens.Length]));
-		
+
 		return nodes;
 	}
 

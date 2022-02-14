@@ -45,7 +45,7 @@ internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode
 					x <<= 1;
 					x += c == '1' ? 1 : 0;
 				}
-				
+
 				A.Assign(new ConstantNode(x));
 
 				return x;

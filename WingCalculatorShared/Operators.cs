@@ -115,7 +115,7 @@ internal static class Operators
 				throw new WingCalcException($"Operator {op.Text} was unable to cast some parameter(s).");
 			}
 		}
-	} 
+	}
 
 	public static int GetPrecedence(string symbol)
 	{
@@ -128,7 +128,7 @@ internal static class Operators
 			throw new WingCalcException($"\"{symbol}\" is not a valid binary operator.");
 		}
 	}
-	
+
 	record struct Operator(string Symbol, Func<INode, INode, Solver, INode> Construct, int Precedence);
 
 	public static Associativity GetTierAssociativity(int tier) => tier == _precedenceTiers["assignment"] || tier == _precedenceTiers["elvis"] ? Associativity.Right : Associativity.Left;

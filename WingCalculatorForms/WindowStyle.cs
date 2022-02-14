@@ -77,7 +77,7 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		}
 
 		form.BackColor = BaseColor;
-		
+
 		if (form is MainForm mf)
 		{
 			mf.darkModeButton.BackgroundImage = DarkModeButtonImage;

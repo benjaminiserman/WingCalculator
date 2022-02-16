@@ -15,7 +15,6 @@ public partial class MainForm : Form
 	private readonly StringBuilder _stdout = new();
 	private bool _darkMode = false;
 	private int _textIndex;
-	private int _historyIndex = 0;
 	private float _currentFontSize = 9;
 
 	public MainForm()
@@ -241,8 +240,6 @@ public partial class MainForm : Form
 			}
 		}
 		else if ((ModifierKeys & Keys.Shift) != 0 && historyView.SelectedItem != null) altMode = true;
-
-		_historyIndex = -1;
 
 		string solveString;
 

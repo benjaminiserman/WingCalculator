@@ -318,7 +318,7 @@ public partial class MainForm : Form
 
 	private void HistoryViewIndexChanged(object sender, EventArgs e)
 	{
-		
+
 
 		return;
 		/*

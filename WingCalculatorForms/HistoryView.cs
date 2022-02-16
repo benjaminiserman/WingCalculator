@@ -57,10 +57,7 @@ internal class HistoryView : ListBox
 		return GetEntryText(i);
 	}
 
-	public void SelectedClear()
-	{
-		SelectedIndex = -1;
-	}
+	public void SelectedClear() => SelectedIndex = -1;
 
 	public void AddEntry(string s)
 	{
@@ -68,10 +65,7 @@ internal class HistoryView : ListBox
 		RefillEntryBuffer();
 	}
 
-	public void EditSelected(string s)
-	{
-		Items[SelectedIndex] = s;
-	}
+	public void EditSelected(string s) => Items[SelectedIndex] = s;
 
 	public void EditAt(int i, string s) => Items[i] = s;
 
@@ -93,7 +87,7 @@ internal class HistoryView : ListBox
 
 	public string GetEntryText(int i) => GetEntryText(Items[i]);
 
-	private string GetEntryText(object x) => ((string)x).Split('\n')[0];
+	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
 
 	public string GetLastNonEmptyEntry() => GetEntryText(Items[^2]);
 

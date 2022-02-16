@@ -330,11 +330,6 @@ public partial class MainForm : Form
 
 		if (historyView.SelectedItem is not null)
 		{
-			if (_historyIndex == -1)
-			{
-				_historyIndex = historyView.Items.Count - 1;
-			}
-
 			if (_historyIndex != -1)
 			{
 				if (GetEntryText(historyView.Items[_historyIndex]) != omnibox.Text)

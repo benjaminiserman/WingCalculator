@@ -129,7 +129,7 @@ public partial class MainForm : Form
 		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
 	}
 
-	private void OmniboxControlKeys(object send, KeyEventArgs e)
+	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
 	{
 		if (ModifierKeys.HasFlag(Keys.Control))
 		{
@@ -216,7 +216,7 @@ public partial class MainForm : Form
 		_textIndex = omnibox.SelectionStart;
 	}
 
-	private void FormControlKeys(object sender, KeyPressEventArgs e)
+	private void FormControlKeys(object sender, KeyPressEventArgs e) // focus keys to omnibox, capture return
 	{
 		if (!omnibox.Focused)
 		{
@@ -293,7 +293,7 @@ public partial class MainForm : Form
 		_skipSelect = true;
 		ViewerForm.RefreshEntries(_solver);
 		historyView.SelectedIndex = 0;
-		historyView.SelectedIndex = -1;
+		historyView.SelectedIndex = -1; // yes, this double set is necessary... it triggers an event iirc
 		historyView.TopIndex = historyView.Items.Count - 1;
 		omnibox.Clear();
 	}
@@ -327,8 +327,14 @@ public partial class MainForm : Form
 	private void HistoryViewIndexChanged(object sender, EventArgs e)
 	{
 		if (_skipSelect) _skipSelect = false;
-		else if (historyView.SelectedItem is not null)
+
+		if (historyView.SelectedItem is not null)
 		{
+			if (_historyIndex == -1)
+			{
+				_historyIndex = historyView.Items.Count - 1;
+			}
+
 			if (_historyIndex != -1)
 			{
 				if (GetEntryText(historyView.Items[_historyIndex]) != omnibox.Text)

@@ -1,7 +1,15 @@
 ﻿namespace WingCalculatorForms;
+
+using System;
+
 internal class HistoryView : ListBox
 {
 	private static readonly string _emptyEntry = "\n\n";
+
+	public bool SelectHandled { get; set; } = false;
+
+	private int _trackedIndex = -1;
+	private MainForm _mainForm;
 
 	public HistoryView()
 	{
@@ -10,6 +18,8 @@ internal class HistoryView : ListBox
 		DrawItem += OnDrawItem;
 		Items.Add(_emptyEntry);
 	}
+
+	public void Connect(MainForm mainForm) => _mainForm = mainForm;
 
 	public void RefreshEntries() => RecreateHandle();
 
@@ -48,19 +58,53 @@ internal class HistoryView : ListBox
 
 	public string SelectedChange(int i, string omniText)
 	{
-		if (SelectedIndex == -1) SelectedIndex = Items.Count - 1;
+		if (SelectedIndex == -1)
+		{
+			SelectHandled = true;
+			SelectedIndex = Items.Count - 1;
+			_trackedIndex = SelectedIndex;
+		}
 
 		if (GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText)) Items[SelectedIndex] = omniText;
 
+		SelectHandled = true;
 		SelectedIndex = i;
+		_trackedIndex = SelectedIndex;
 
 		return GetEntryText(i);
 	}
 
-	public void SelectedClear() => SelectedIndex = -1;
+	public void SelectedClear()
+	{
+		SelectHandled = true;
+		SelectedIndex = -1;
+		_trackedIndex = SelectedIndex;
+	}
+
+	protected override void OnSelectedIndexChanged(EventArgs e)
+	{
+		if (SelectHandled) SelectHandled = false;
+		else if (SelectedIndex == -1) return;
+		else
+		{
+			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
+
+			if (GetEntryText(Items[_trackedIndex]) != _mainForm.OmniText
+				&& !string.IsNullOrWhiteSpace(_mainForm.OmniText))
+			{
+				SelectHandled = true;
+				Items[SelectedIndex] = _mainForm.OmniText;
+			}
+
+			_trackedIndex = SelectedIndex;
+
+			_mainForm.OmniText = GetEntryText(Items[SelectedIndex]);
+		}
+	}
 
 	public void AddEntry(string s)
 	{
+		SelectedClear();
 		Items[^1] = s;
 		RefillEntryBuffer();
 	}
@@ -75,14 +119,17 @@ internal class HistoryView : ListBox
 		RefillEntryBuffer();
 	}
 
-	public void DeleteSelected()
+	public string DeleteSelected()
 	{
 		if (SelectedItem is not null && (string)SelectedItem != _emptyEntry)
 		{
 			int index = SelectedIndex;
 			Items.Remove(SelectedItem);
-			SelectedIndex = index;
+
+			return SelectedChange(index < Items.Count ? index : Items.Count - 1, null);
 		}
+
+		return null;
 	}
 
 	public string GetEntryText(int i) => GetEntryText(Items[i]);

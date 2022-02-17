@@ -21,6 +21,7 @@ public partial class MainForm : Form
 	{
 		InitializeComponent();
 
+		historyView.Connect(this);
 		historyView.Clear();
 
 		KeyPreview = true;
@@ -222,7 +223,7 @@ public partial class MainForm : Form
 	{
 		if (e.KeyCode == Keys.Delete)
 		{
-			historyView.DeleteSelected();
+			omnibox.Text = historyView.DeleteSelected();
 		}
 	}
 
@@ -315,8 +316,6 @@ public partial class MainForm : Form
 
 	private void HistoryViewIndexChanged(object sender, EventArgs e)
 	{
-
-
 		return;
 		/*
 		if (historyView.SelectedItem is not null)
@@ -342,6 +341,8 @@ public partial class MainForm : Form
 
 		RefillBuffer();*/
 	}
+
+	public string OmniText { get => omnibox.Text; set => omnibox.Text = value; }
 
 	private string GetSolve(string s)
 	{

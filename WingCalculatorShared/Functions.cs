@@ -49,6 +49,26 @@ internal static class Functions
 		["deg"] = args => args[0].Solve() * 180 / Math.PI,
 		#endregion
 
+		#region Probability
+
+		["perm"] = args =>
+		{
+			int x = (int)args[0].Solve();
+			int y = (int)args[1].Solve();
+
+			return FactorialDivision(x, x - y);
+		},
+		["comb"] = args =>
+		{
+			int x = (int)args[0].Solve();
+			int y = (int)args[1].Solve();
+
+			return FactorialDivision(x, x - y) / Factorial(y);
+		},
+		["factorial"] = args => Factorial((int)args[0].Solve()),
+
+		#endregion
+
 		["abs"] = args => Math.Abs(args[0].Solve()),
 		["clamp"] = args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()),
 		["sign"] = args => Math.Sign(args[0].Solve()),
@@ -217,4 +237,30 @@ internal static class Functions
 	};
 
 	internal static Func<List<INode>, double> Get(string s) => _functions[s];
+
+	private static long FactorialDivision(int x, int y)
+	{
+		if (x <= 0) throw new WingCalcException("Cannot compute permutation/combination with non-positive n.");
+		if (y < 0) throw new WingCalcException("Cannot compute permutation/combination with negative n - k.");
+		if (y > x) throw new WingCalcException("Cannot compute permutation/combination with k > n");
+
+		long result = 1;
+		for (int i = x; i > y; i--)
+		{
+			result *= i;
+		}
+
+		return result;
+	}
+
+	private static long Factorial(int x)
+	{
+		if (x < 0) throw new WingCalcException("Cannot calculate the factorial of a negative number.");
+
+		long result = 1;
+
+		for (int i = x; i > 1; i--) result *= i;
+
+		return result;
+	}
 }

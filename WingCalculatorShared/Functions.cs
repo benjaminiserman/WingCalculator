@@ -121,21 +121,14 @@ internal static class Functions
 		#endregion
 
 		#region List
-		["max"] = args => args.Select(x => x.Solve()).Max(),
-		["min"] = args => args.Select(x => x.Solve()).Min(),
-		["sum"] = args => args.Select(x => x.Solve()).Sum(),
-		["product"] = args => args.Aggregate((x, y) => new ConstantNode(x.Solve() * y.Solve())).Solve(),
-		["mean"] = args => args.Select(x => x.Solve()).Average(),
-		["median"] = args =>
-		{
-			List<double> solved = args.Select(x => x.Solve()).ToList();
-			solved.Sort();
-
-			return solved.Count % 2 == 0
-				? solved.GetRange(solved.Count / 2 - 1, 2).Average()
-				: solved[solved.Count / 2];
-		},
-		["mode"] = args => args.Select(x => x.Solve()).GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key,
+		["max"] = args => ListHandler.Solve(args, x => x.Max()),
+		["min"] = args => ListHandler.Solve(args, x => x.Min()),
+		["sum"] = args => ListHandler.Solve(args, x => x.Sum()),
+		["product"] = args => ListHandler.Solve(args, x => x.Product()),
+		["mean"] = args => ListHandler.Solve(args, x => x.Average()),
+		["average"] = args => ListHandler.Solve(args, x => x.Average()),
+		["median"] = args => ListHandler.Solve(args, x => x.Median()),
+		["mode"] = args => ListHandler.Solve(args, x => x.Mode()),
 		#endregion
 
 		#region ControlFlow
@@ -215,22 +208,16 @@ internal static class Functions
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
 
-			Solver solver = pointer.Solver;
-			double address = pointer.Address;
+			List<double> values = args.Skip(1).Select(x => x.Solve()).ToList();
 
-			solver.SetVariable(address.ToString(), args.Count - 1);
+			ListHandler.Allocate(pointer, values);
 
-			for (int i = 1; i < args.Count; i++)
-			{
-				solver.SetVariable((address + i).ToString(), args[i].Solve());
-			}
-
-			return address;
+			return pointer.Address;
 		},
 		["salloc"] = args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"salloc\" requires a pointer node as its first argument."); ;
-			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function \"salloc\" requires a quote node as its second argument."); ;
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"salloc\" requires a pointer node as its first argument.");
+			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function \"salloc\" requires a quote node as its second argument.");
 
 			Solver solver = pointer.Solver;
 			double address = pointer.Address;
@@ -246,7 +233,7 @@ internal static class Functions
 		},
 		["memprint"] = args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument."); ;
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument.");
 
 			Solver solver = pointer.Solver;
 			double address = pointer.Address;
@@ -254,6 +241,26 @@ internal static class Functions
 
 			solver.WriteLine($"${address} = {value}");
 			return value;
+		},
+		["print"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
+
+			pointer.Solver.WriteLine($"{{ {string.Join(", ", ListHandler.Enumerate(pointer))} }}");
+
+			return ListHandler.Length(pointer);
+		},
+		["len"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"len\" requires a pointer node as its first argument.");
+
+			return ListHandler.Length(pointer);
+		},
+		["get"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"get\" requires a pointer node as its first argument.");
+
+			return ListHandler.Get(pointer, args[1].Solve());
 		},
 		#endregion
 
@@ -276,6 +283,37 @@ internal static class Functions
 
 			return solver.Solve(sb.ToString());
 		},
+		#endregion
+
+		#region Factors
+		["gcd"] = args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.GCD((BigInteger)a, (BigInteger)b))),
+		["lcm"] = args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b))),
+		["factor"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"factor\" requires a pointer node as its first argument.");
+
+			List<double> factors = Factorizer.Factors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
+
+			ListHandler.Allocate(pointer, factors);
+
+			return factors.Count;
+		},
+		["prime"] = args =>
+		{
+			BigInteger x = (BigInteger)args[0].Solve();
+
+			return Factorizer.Factors(x).Count == 2 ? 1 : 0;
+		},
+		["primefactor"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"primefactor\" requires a pointer node as its first argument.");
+
+			List<double> factors = Factorizer.PrimeFactors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
+
+			ListHandler.Allocate(pointer, factors);
+
+			return factors.Count;
+		}
 		#endregion
 	};
 

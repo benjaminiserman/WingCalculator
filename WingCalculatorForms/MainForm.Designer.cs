@@ -351,17 +351,7 @@ partial class MainForm
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
-			this.historyView.Items.AddRange(new object[] {
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n"});
+			this.historyView.Items.AddRange(new object[] {});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(332, 451);

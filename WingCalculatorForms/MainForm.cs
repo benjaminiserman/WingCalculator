@@ -333,6 +333,8 @@ public partial class MainForm : Form
 			string _stdoutGot = _stdout.ToString();
 			_stdout.Clear();
 
+			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
+
 			return $"{s}\n{_stdoutGot}> Solution: {solve}";
 		}
 		catch (WingCalcException ex)

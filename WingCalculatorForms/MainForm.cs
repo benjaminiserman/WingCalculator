@@ -145,6 +145,9 @@ public partial class MainForm : Form
 			}
 		}
 
+		if (e.KeyCode == Keys.PageUp) omnibox.Text = historyView.SelectedChange(0, omnibox.Text);
+		if (e.KeyCode == Keys.PageDown) omnibox.Text = historyView.SelectedChange(historyView.Items.Count - 1, omnibox.Text);
+
 		switch (e.KeyCode)
 		{
 			case Keys.Escape:
@@ -331,7 +334,6 @@ public partial class MainForm : Form
 			_stdout.Clear();
 
 			return $"{s}\n{_stdoutGot}> Solution: {solve}";
-
 		}
 		catch (WingCalcException ex)
 		{

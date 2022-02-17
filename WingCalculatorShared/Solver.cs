@@ -333,11 +333,11 @@ public class Solver
 
 					if (availableNodes[i] is PreOperatorNode node && node.Tier == tier)
 					{
-						if (i == 0 || availableNodes[i - 1] is null)
+						if (i == 0 || availableNodes[i - 1] is null or PreOperatorNode)
 						{
 							throw new WingCalcException($"Operator {node.Text} is missing a left-hand operand.");
 						}
-						else if (i == availableNodes.Count - 1 || availableNodes[i + 1] is null)
+						else if (i == availableNodes.Count - 1 || availableNodes[i + 1] is null or PreOperatorNode)
 						{
 							throw new WingCalcException($"Operator {node.Text} is missing a right-hand operand.");
 						}

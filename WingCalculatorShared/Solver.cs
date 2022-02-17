@@ -107,7 +107,7 @@ public class Solver
 				}
 				case TokenType.Function:
 				{
-					if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen) throw new WingCalcException("Function called but no opening bracket found.");
+					if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen) throw new WingCalcException($"Function {tokens[i].Text} called but no opening bracket found.");
 
 					int end = FindClosing(i + 1, tokens);
 

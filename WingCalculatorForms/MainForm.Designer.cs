@@ -366,7 +366,6 @@ partial class MainForm
 			this.historyView.Name = "historyView";
 			this.historyView.Size = new System.Drawing.Size(332, 451);
 			this.historyView.TabIndex = 25;
-			this.historyView.SelectedIndexChanged += new System.EventHandler(this.HistoryViewIndexChanged);
 			// 
 			// errorLabel
 			// 

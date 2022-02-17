@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
@@ -15,6 +16,7 @@ internal static class Functions
 		["exp"] = args => Math.Exp(args[0].Solve()),
 		["sqrt"] = args => Math.Sqrt(args[0].Solve()),
 		["cbrt"] = args => Math.Cbrt(args[0].Solve()),
+		["powmod"] = args => (double)BigInteger.ModPow((BigInteger)args[0].Solve(), (BigInteger)args[1].Solve(), (BigInteger)args[2].Solve()),
 
 		["log"] = args =>
 		{

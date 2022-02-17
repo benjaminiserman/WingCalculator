@@ -82,11 +82,6 @@ public class Solver
 			{
 				case TokenType.Number:
 				{
-					if (isCoefficient)
-					{
-						availableNodes.Add(new PreOperatorNode("*"));
-					}
-
 					try
 					{
 						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));

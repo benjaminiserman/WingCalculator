@@ -428,7 +428,7 @@ public class Solver
 			}
 		}
 
-		throw new WingCalcException($"Closing bracket expected but not found.");
+		throw new WingCalcException($"Closing bracket for {tokens[start].Text} expected but not found.");
 	}
 
 	private readonly Dictionary<char, char> _matches = new() { ['('] = ')', ['['] = ']', ['{'] = '}' };

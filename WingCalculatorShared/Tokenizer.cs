@@ -114,9 +114,13 @@ internal static class Tokenizer
 			if (tokens[i].TokenType == TokenType.Operator && tokens[i].Text is "+" or "-")
 			{
 				additiveUnaryCount++;
-				if (additiveUnaryCount > 2 || (additiveUnaryCount == 2 && i == 1)) // if 3 +/- are found in a row, or 2 +/- at start
+				if (additiveUnaryCount > 2) // if 3 +/- are found in a row
 				{
 					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found. Only up to two + or - signs in a row are legal.");
+				}
+				else if (additiveUnaryCount == 2 && i == 1) // if 2 +/- at start
+				{
+					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found. Only one + or - sign is legal at the start of an equation.");
 				}
 			}
 			else additiveUnaryCount = 0;

@@ -49,8 +49,46 @@ internal static class Functions
 		["deg"] = args => args[0].Solve() * 180 / Math.PI,
 		#endregion
 
-		#region Probability
+		#region MathematicalLoops
+		["msum"] = args =>
+		{
+			args[0].Solve();
+			double sum = 0;
 
+			double end = args[1].Solve();
+
+			IAssignable assignable = ((AssignmentNode)args[0]).A;
+			INode counterNode = (INode)assignable;
+
+			while (counterNode.Solve() <= end)
+			{
+				sum += args[2].Solve();
+				assignable.Assign(counterNode.Solve() + 1);
+			}
+
+			return sum;
+		},
+		["mproduct"] = args =>
+		{
+			args[0].Solve();
+			double product = 1;
+
+			double end = args[1].Solve();
+
+			IAssignable assignable = ((AssignmentNode)args[0]).A;
+			INode counterNode = (INode)assignable;
+
+			while (counterNode.Solve() <= end)
+			{
+				product *= args[2].Solve();
+				assignable.Assign(counterNode.Solve() + 1);
+			}
+
+			return product;
+		},
+		#endregion
+
+		#region Probability
 		["perm"] = args =>
 		{
 			int x = (int)args[0].Solve();
@@ -66,16 +104,19 @@ internal static class Functions
 			return FactorialDivision(x, x - y) / Factorial(y);
 		},
 		["factorial"] = args => Factorial((int)args[0].Solve()),
-
 		#endregion
 
+		#region Numeric
 		["abs"] = args => Math.Abs(args[0].Solve()),
 		["clamp"] = args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()),
 		["sign"] = args => Math.Sign(args[0].Solve()),
 		["cpsign"] = args => Math.CopySign(args[0].Solve(), args[1].Solve()),
+		#endregion
 
+		#region Bits
 		["bitinc"] = args => Math.BitIncrement(args[0].Solve()),
 		["bitdec"] = args => Math.BitDecrement(args[0].Solve()),
+		#endregion
 
 		#region List
 		["max"] = args => args.Select(x => x.Solve()).Max(),

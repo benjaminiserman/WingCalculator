@@ -105,8 +105,8 @@ internal static class Tokenizer
 
 		PushCurrent();
 
-		if (quoted) throw new WingCalcException("Quote literal is missing end quote.");
-		if (apostrophed) throw new WingCalcException("Character literal is missing end apostrophe.");
+		if (quoted) throw new WingCalcException($"Quote literal \"{tokens[^1].Text} is missing end quote.");
+		if (apostrophed) throw new WingCalcException($"Character literal \'{tokens[^1].Text} is missing end apostrophe.");
 
 		int additiveUnaryCount = 0;
 		for (int i = 0; i < tokens.Count; i++)

@@ -12,20 +12,17 @@ public partial class MainForm : Form
 	private Solver _solver;
 	public ViewerForm ViewerForm { get; } = new();
 
-	private bool _skipSelect = false;
 	private readonly StringBuilder _stdout = new();
 	private bool _darkMode = false;
-	public static readonly string emptyEntry = "\n\n";
 	private int _textIndex;
-	private int _historyIndex = 0;
 	private float _currentFontSize = 9;
 
 	public MainForm()
 	{
 		InitializeComponent();
 
-		historyView.Items.Clear();
-		historyView.Items.Add(emptyEntry);
+		historyView.Connect(this);
+		historyView.Clear();
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
@@ -34,7 +31,6 @@ public partial class MainForm : Form
 
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 
-		RefillBuffer();
 		ResetSolver();
 	}
 
@@ -57,9 +53,9 @@ public partial class MainForm : Form
 	private void ac_button_Click(object sender, EventArgs e)
 	{
 		ResetSolver();
-		historyView.Items.Clear();
-		historyView.Items.Add(emptyEntry);
+		historyView.Clear();
 		omnibox.Clear();
+
 	}
 
 	private void dec_button_Click(object sender, EventArgs e) => SendString(":0");
@@ -162,17 +158,10 @@ public partial class MainForm : Form
 				{
 					break;
 				}
-				else if (historyView.SelectedIndex == -1)
-				{
-					historyView.SelectedIndex = historyView.Items.Count - 1;
-				}
-				else if (historyView.SelectedIndex <= 0)
-				{
-					historyView.SelectedIndex = historyView.Items.Count - 1;
-				}
 				else
 				{
-					historyView.SelectedIndex--;
+					omnibox.Text = historyView.SelectedUp(omnibox.Text);
+					SendCursorRight();
 				}
 
 				break;
@@ -183,17 +172,10 @@ public partial class MainForm : Form
 				{
 					break;
 				}
-				else if (historyView.SelectedIndex == -1)
-				{
-					historyView.SelectedIndex = 0;
-				}
-				else if (historyView.SelectedIndex >= historyView.Items.Count - 1)
-				{
-					historyView.SelectedIndex = 0;
-				}
 				else
 				{
-					historyView.SelectedIndex++;
+					omnibox.Text = historyView.SelectedDown(omnibox.Text);
+					SendCursorRight();
 				}
 
 				break;
@@ -241,12 +223,7 @@ public partial class MainForm : Form
 	{
 		if (e.KeyCode == Keys.Delete)
 		{
-			if (historyView.SelectedItem is not null && (string)historyView.SelectedItem != emptyEntry)
-			{
-				int index = historyView.SelectedIndex;
-				historyView.Items.Remove(historyView.SelectedItem);
-				historyView.SelectedIndex = index;
-			}
+			omnibox.Text = historyView.DeleteSelected();
 		}
 	}
 
@@ -256,12 +233,14 @@ public partial class MainForm : Form
 
 		if (string.IsNullOrWhiteSpace(omnibox.Text))
 		{
-			if (historyView.Items.Count < 2 || string.IsNullOrWhiteSpace((string)historyView.Items[^2])) return;
-			else omnibox.Text = GetEntryText((string)historyView.Items[^2]);
+			if (historyView.Items.Count < 2) return;
+			else
+			{
+				omnibox.Text = historyView.GetLastNonEmptyEntry();  // for duplicating last entry if omnibox empty
+				if (string.IsNullOrWhiteSpace(omnibox.Text)) return;
+			}
 		}
 		else if ((ModifierKeys & Keys.Shift) != 0 && historyView.SelectedItem != null) altMode = true;
-
-		_historyIndex = -1;
 
 		string solveString;
 
@@ -275,43 +254,50 @@ public partial class MainForm : Form
 			SendKeys.Send("{BACKSPACE}");
 			omnibox.SelectionStart = omnibox.Text.Length;
 			_textIndex = omnibox.SelectionStart;
-			if (historyView.SelectedItem != null && !altMode) historyView.Items[historyView.SelectedIndex] = omnibox.Text;
+
+			if (historyView.SelectedItem != null && !altMode)
+			{
+				historyView.Items[historyView.SelectedIndex] = omnibox.Text;
+			}
+
 			return;
 		}
 
 		if (historyView.SelectedItem != null && !altMode)
 		{
-			historyView.Items[historyView.SelectedIndex] = solveString;
-			RecalculateEntries(historyView.SelectedIndex + 1);
+			historyView.EditSelected(solveString);
+			CalculateEntries(historyView.SelectedIndex + 1);
 		}
 		else
 		{
-			historyView.Items.Add(solveString);
+			historyView.AddEntry(solveString);
 		}
 
 		_textIndex = 0;
-		_skipSelect = true;
 		ViewerForm.RefreshEntries(_solver);
-		historyView.SelectedIndex = 0;
-		historyView.SelectedIndex = -1; // yes, this double set is necessary... it triggers an event iirc
-		historyView.TopIndex = historyView.Items.Count - 1;
+		SendCursorRight();
+		historyView.SelectedClear(); // yes, this double set is necessary... it triggers an event iirc
+		if (historyView.SelectedChange == null || altMode) historyView.TopIndex = historyView.Items.Count - 1; // send scrollbar to bottom
 		omnibox.Clear();
 	}
 
 	#region Recalculate
-	private void RecalculateEntries(int start)
+	private void CalculateEntries(int start)
 	{
 		for (int i = start; i < historyView.Items.Count; i++)
 		{
-			Recalculate(i);
+			Calculate(i);
 		}
 	}
 
-	private void Recalculate(int i)
+	private void Calculate(int i)
 	{
 		try
 		{
-			if (!string.IsNullOrWhiteSpace((string)historyView.Items[i])) historyView.Items[i] = GetSolve(GetEntryText(historyView.Items[i]));
+			if (!string.IsNullOrWhiteSpace((string)historyView.Items[i]))
+			{
+				historyView.EditAt(i, GetSolve(historyView.GetEntryText(i)));
+			}
 		}
 		catch (WingCalcException ex)
 		{
@@ -324,10 +310,19 @@ public partial class MainForm : Form
 	}
 	#endregion
 
+	private void SendCursorRight()
+	{
+		if (omnibox.Text.Length > 0)
+		{
+			omnibox.SelectionStart = omnibox.Text.Length;
+			_textIndex = omnibox.SelectionStart;
+		}
+	}
+
 	private void HistoryViewIndexChanged(object sender, EventArgs e)
 	{
-		if (_skipSelect) _skipSelect = false;
-
+		return;
+		/*
 		if (historyView.SelectedItem is not null)
 		{
 			if (_historyIndex != -1)
@@ -349,24 +344,10 @@ public partial class MainForm : Form
 
 		_historyIndex = historyView.SelectedIndex;
 
-		RefillBuffer();
+		RefillBuffer();*/
 	}
 
-	private void RefillBuffer()
-	{
-		for (int i = 0; i < historyView.Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
-		{
-			if (string.IsNullOrWhiteSpace((string)historyView.Items[i]))
-			{
-				historyView.Items.RemoveAt(i);
-				i--;
-			}
-		}
-
-		if ((string)historyView.Items[^1] != emptyEntry) historyView.Items.Add(emptyEntry); // add empty buffer entry
-	}
-
-	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
+	public string OmniText { get => omnibox.Text; set => omnibox.Text = value; }
 
 	private string GetSolve(string s)
 	{

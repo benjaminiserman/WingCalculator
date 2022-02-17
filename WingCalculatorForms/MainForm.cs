@@ -319,34 +319,6 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void HistoryViewIndexChanged(object sender, EventArgs e)
-	{
-		return;
-		/*
-		if (historyView.SelectedItem is not null)
-		{
-			if (_historyIndex != -1)
-			{
-				if (GetEntryText(historyView.Items[_historyIndex]) != omnibox.Text)
-				{
-					historyView.Items[_historyIndex] = omnibox.Text;
-				}
-			}
-
-			omnibox.Text = GetEntryText(historyView.SelectedItem);
-		}
-
-		if (omnibox.Text.Length > 0) // send cursor to far right
-		{
-			omnibox.SelectionStart = omnibox.Text.Length;
-			_textIndex = omnibox.SelectionStart;
-		}
-
-		_historyIndex = historyView.SelectedIndex;
-
-		RefillBuffer();*/
-	}
-
 	public string OmniText { get => omnibox.Text; set => omnibox.Text = value; }
 
 	private string GetSolve(string s)

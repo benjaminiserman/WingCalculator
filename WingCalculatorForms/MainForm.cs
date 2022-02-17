@@ -254,7 +254,12 @@ public partial class MainForm : Form
 			SendKeys.Send("{BACKSPACE}");
 			omnibox.SelectionStart = omnibox.Text.Length;
 			_textIndex = omnibox.SelectionStart;
-			if (historyView.SelectedItem != null && !altMode) historyView.Items[historyView.SelectedIndex] = omnibox.Text;
+
+			if (historyView.SelectedItem != null && !altMode)
+			{
+				historyView.Items[historyView.SelectedIndex] = omnibox.Text;
+			}
+
 			return;
 		}
 

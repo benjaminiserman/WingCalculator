@@ -35,9 +35,13 @@ internal static class Factorizer
 			}
 		}
 
-		if (x != 1)
+		if (factors.Count == 0)
 		{
 			factors.Add(1);
+		}
+		
+		if (x != 1)
+		{
 			factors.Add(x);
 		}
 

@@ -330,12 +330,14 @@ public partial class MainForm : Form
 		{
 			double solve = _solver.Solve(s);
 
+			_stdout.Replace("\n", "\n>");
 			string _stdoutGot = _stdout.ToString();
 			_stdout.Clear();
 
 			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
+			else _stdoutGot = ">";
 
-			return $"{s}\n{_stdoutGot}> Solution: {solve}";
+			return $"{s}\n{_stdoutGot} Solution: {solve}";
 		}
 		catch (WingCalcException ex)
 		{

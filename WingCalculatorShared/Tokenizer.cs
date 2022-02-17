@@ -122,6 +122,10 @@ internal static class Tokenizer
 				{
 					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found. Only one + or - sign is legal at the start of an equation.");
 				}
+				else if (additiveUnaryCount == 2 && i == tokens.Count - 1) // if 2 +/- at end
+				{
+					throw new WingCalcException($"Unexpected character '{tokens[i].Text}' found. Only one + or - sign is legal at the end of an equation.");
+				}
 			}
 			else additiveUnaryCount = 0;
 		}

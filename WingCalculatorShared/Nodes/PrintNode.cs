@@ -30,6 +30,7 @@ internal record PrintNode(INode A, INode B, Solver Solver, bool Newline) : INode
 		2 => Convert.ToString((int)x, 2),
 		8 => Convert.ToString((int)x, 8),
 		16 => Convert.ToString((int)x, 16),
+		Math.PI => $"{x / Math.PI}π",
 
 		_ => throw new NotImplementedException($"Format {y} is not implemented.")
 	};

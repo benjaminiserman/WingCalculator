@@ -9,6 +9,8 @@ using WingCalculatorShared.Nodes;
 
 internal static class Functions
 {
+	public static Solver Solver { get; set; } // I don't love this solution
+
 	private static readonly Dictionary<string, Func<List<INode>, double>> _functions = new()
 	{
 		#region Exponential
@@ -290,11 +292,20 @@ internal static class Functions
 		["lcm"] = args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b))),
 		["factor"] = args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"factor\" requires a pointer node as its first argument.");
+			List<double> factors;
 
-			List<double> factors = Factorizer.Factors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
+			if (args[0] is PointerNode pointer)
+			{
+				factors = Factorizer.Factors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
 
-			ListHandler.Allocate(pointer, factors);
+				ListHandler.Allocate(pointer, factors);
+			}
+			else
+			{
+				factors = Factorizer.Factors((BigInteger)args[0].Solve()).Select(x => (double)x).ToList();
+
+				Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
+			}
 
 			return factors.Count;
 		},
@@ -306,11 +317,20 @@ internal static class Functions
 		},
 		["primefactor"] = args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"primefactor\" requires a pointer node as its first argument.");
+			List<double> factors;
 
-			List<double> factors = Factorizer.PrimeFactors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
+			if (args[0] is PointerNode pointer)
+			{
+				factors = Factorizer.PrimeFactors((BigInteger)args[1].Solve()).Select(x => (double)x).ToList();
 
-			ListHandler.Allocate(pointer, factors);
+				ListHandler.Allocate(pointer, factors);
+			}
+			else
+			{
+				factors = Factorizer.PrimeFactors((BigInteger)args[0].Solve()).Select(x => (double)x).ToList();
+
+				Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
+			}
 
 			return factors.Count;
 		}

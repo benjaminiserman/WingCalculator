@@ -60,6 +60,8 @@ public class Solver
 
 	public double Solve(string s, bool setAns = true)
 	{
+		Functions.Solver = this; // bleh
+
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
 		INode node = CreateTree(tokens);

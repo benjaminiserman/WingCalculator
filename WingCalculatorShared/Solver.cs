@@ -43,6 +43,7 @@ public class Solver
 		["BIN"] = 2,
 		["PCT"] = 3,
 		["FRAC"] = 4,
+		["EXACT"] = 5,
 		["OCT"] = 8,
 		["HEX"] = 16,
 

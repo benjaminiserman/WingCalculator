@@ -270,8 +270,6 @@ public partial class MainForm : Form
 		historyView.SelectedClear(); // yes, this double set is necessary... it triggers an event iirc
 		if (historyView.SelectedChange == null || altMode) historyView.TopIndex = historyView.Items.Count - 1; // send scrollbar to bottom
 		omnibox.Clear();
-
-		Error($"altMode: {altMode}");
 	}
 
 	#region Recalculate

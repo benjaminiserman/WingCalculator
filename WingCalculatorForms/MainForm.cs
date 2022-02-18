@@ -27,8 +27,6 @@ public partial class MainForm : Form
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
 
-		historyView.PreviewKeyDown += new PreviewKeyDownEventHandler(HandleDeleteKey);
-
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 
 		ResetSolver();
@@ -55,7 +53,6 @@ public partial class MainForm : Form
 		ResetSolver();
 		historyView.Clear();
 		omnibox.Clear();
-
 	}
 
 	private void dec_button_Click(object sender, EventArgs e) => SendString(":0");
@@ -150,11 +147,6 @@ public partial class MainForm : Form
 
 		switch (e.KeyCode)
 		{
-			case Keys.Escape:
-			{
-				historyView.Select(); // move focus back to MainForm
-				break;
-			}
 			case Keys.Up:
 			{
 				if (omnibox.SelectionStart != _textIndex)
@@ -183,29 +175,38 @@ public partial class MainForm : Form
 
 				break;
 			}
-			case Keys.Delete:
-			{
-				if (e.Control)
-				{
-					ac_button_Click(send, e);
-				}
-				else if (e.Alt)
-				{
-					HandleDeleteKey(send, new PreviewKeyDownEventArgs(e.KeyCode));
-				}
-
-				break;
-			}
 		}
 
 		_textIndex = omnibox.SelectionStart;
 	}
 
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (e.KeyCode == Keys.Return && e.Alt)
+		{
+			Execute();
+		}
+		else if (e.KeyCode == Keys.Back && e.Alt)
+		{
+			omnibox.Text = historyView.DeleteSelected();
+		}
+		else if (e.KeyCode == Keys.Delete && e.Alt)
+		{
+			ac_button_Click(this, e);
+		}
+		else base.OnKeyDown(e);
+	}
+
 	private void FormControlKeys(object sender, KeyPressEventArgs e) // focus keys to omnibox, capture return
 	{
+		if (e.KeyChar == (char)Keys.Return && !ModifierKeys.HasFlag(Keys.Shift))
+		{
+			Execute();
+		}
+
 		if (!omnibox.Focused)
 		{
-			omnibox.Focus();
+			omnibox.Select();
 			try
 			{
 				SendKeys.Send(e.KeyChar.ToString());
@@ -214,19 +215,6 @@ public partial class MainForm : Form
 			{
 				SendKeys.Send($"{{{e.KeyChar}}}");
 			}
-		}
-
-		if (e.KeyChar == (char)Keys.Return)
-		{
-			Execute();
-		}
-	}
-
-	private void HandleDeleteKey(object sender, PreviewKeyDownEventArgs e)
-	{
-		if (e.KeyCode == Keys.Delete)
-		{
-			omnibox.Text = historyView.DeleteSelected();
 		}
 	}
 
@@ -243,7 +231,7 @@ public partial class MainForm : Form
 				if (string.IsNullOrWhiteSpace(omnibox.Text)) return;
 			}
 		}
-		else if ((ModifierKeys & Keys.Shift) != 0 && historyView.SelectedItem != null) altMode = true;
+		else if (ModifierKeys.HasFlag(Keys.Alt) && historyView.SelectedItem != null) altMode = true;
 
 		string solveString;
 
@@ -282,6 +270,8 @@ public partial class MainForm : Form
 		historyView.SelectedClear(); // yes, this double set is necessary... it triggers an event iirc
 		if (historyView.SelectedChange == null || altMode) historyView.TopIndex = historyView.Items.Count - 1; // send scrollbar to bottom
 		omnibox.Clear();
+
+		Error($"altMode: {altMode}");
 	}
 
 	#region Recalculate
@@ -405,6 +395,16 @@ public partial class MainForm : Form
 		if (errorLabel.Text == compare) errorLabel.Text = set.Replace("&", "&&");
 		t.Enabled = false;
 	}
+
+	public void SelectOmnibox()
+	{
+		omnibox.Select();
+		SendCursorRight();
+	}
+
+#if DEBUG
+	public void Error(string s) => errorLabel.Text += s;
+#endif
 
 #pragma warning restore IDE1006 // $$$ Bad, move this
 }

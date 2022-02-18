@@ -65,7 +65,10 @@ internal class HistoryView : ListBox
 			_trackedIndex = SelectedIndex;
 		}
 
-		if (GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText)) Items[SelectedIndex] = omniText;
+		if (GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText))
+		{
+			Items[SelectedIndex] = omniText;
+		}
 
 		SelectHandled = true;
 		SelectedIndex = i;
@@ -76,9 +79,12 @@ internal class HistoryView : ListBox
 
 	public void SelectedClear()
 	{
-		SelectHandled = true;
-		SelectedIndex = -1;
-		_trackedIndex = SelectedIndex;
+		if (SelectedIndex != -1)
+		{
+			SelectHandled = true;
+			SelectedIndex = -1;
+			_trackedIndex = SelectedIndex;
+		}
 	}
 
 	protected override void OnSelectedIndexChanged(EventArgs e)
@@ -99,6 +105,7 @@ internal class HistoryView : ListBox
 			_trackedIndex = SelectedIndex;
 
 			_mainForm.OmniText = GetEntryText(Items[SelectedIndex]);
+			_mainForm.SelectOmnibox();
 		}
 	}
 

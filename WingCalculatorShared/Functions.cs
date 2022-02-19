@@ -225,6 +225,140 @@ internal static class Functions
 
 			return ListHandler.Stringify(pointer);
 		},
+		["iter"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"iter\" requires a pointer node as its first argument.");
+			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"iter\" requires an assignable node as its second argument.");
+
+			if (args.Count >= 4)
+			{
+				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"iter\" requires an assignable node as its third argument.");
+				foreach (var (x, i) in ListHandler.Enumerate(pointer).Select((x, i) => (x, i)))
+				{
+					lambdaVar.Assign(x);
+					indexVar.Assign(i);
+					args[3].Solve();
+				}
+			}
+			else
+			{
+				foreach (double x in ListHandler.Enumerate(pointer))
+				{
+					lambdaVar.Assign(x);
+					args[2].Solve();
+				}
+			}
+
+			return ListHandler.Enumerate(pointer).Count();
+		},
+		["filter"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"filter\" requires a pointer node as its first argument.");
+			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"filter\" requires an assignable node as its second argument.");
+
+			List<double> filtered = new();
+
+			if (args.Count >= 4)
+			{
+				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"filter\" requires an assignable node as its third argument.");
+				foreach (var (x, i) in ListHandler.Enumerate(pointer).Select((x, i) => (x, i)))
+				{
+					lambdaVar.Assign(x);
+					indexVar.Assign(i);
+
+					if (args[3].Solve() != 0)
+					{
+						filtered.Add(x);
+					}
+				}
+			}
+			else
+			{
+				foreach (double x in ListHandler.Enumerate(pointer))
+				{
+					lambdaVar.Assign(x);
+					
+					if (args[2].Solve() != 0)
+					{
+						filtered.Add(x);
+					}
+				}
+			}
+
+			ListHandler.Allocate(pointer, filtered);
+
+			return ListHandler.Enumerate(pointer).Count();
+		},
+		["any"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"any\" requires a pointer node as its first argument.");
+			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"any\" requires an assignable node as its second argument.");
+
+			if (args.Count >= 4)
+			{
+				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"any\" requires an assignable node as its third argument.");
+				foreach (var (x, i) in ListHandler.Enumerate(pointer).Select((x, i) => (x, i)))
+				{
+					lambdaVar.Assign(x);
+					indexVar.Assign(i);
+
+					if (args[3].Solve() != 0)
+					{
+						return 1;
+					}
+				}
+			}
+			else
+			{
+				foreach (double x in ListHandler.Enumerate(pointer))
+				{
+					lambdaVar.Assign(x);
+
+					if (args[2].Solve() != 0)
+					{
+						return 1;
+					}
+				}
+			}
+
+			return 0;
+		},
+		["count"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"count\" requires a pointer node as its first argument.");
+			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"count\" requires an assignable node as its second argument.");
+
+			int count = 0;
+
+			if (args.Count >= 4)
+			{
+				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"count\" requires an assignable node as its third argument.");
+				foreach (var (x, i) in ListHandler.Enumerate(pointer).Select((x, i) => (x, i)))
+				{
+					lambdaVar.Assign(x);
+					indexVar.Assign(i);
+
+					if (args[3].Solve() != 0)
+					{
+						count++;
+					}
+				}
+			}
+			else
+			{
+				foreach (double x in ListHandler.Enumerate(pointer))
+				{
+					lambdaVar.Assign(x);
+
+					if (args[2].Solve() != 0)
+					{
+						count++;
+					}
+				}
+			}
+
+			return count;
+		},
 		#endregion
 
 		#region ControlFlow
@@ -375,6 +509,32 @@ internal static class Functions
 		["slen"] = args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"slen\" requires a pointer node as its first argument.");
+
+			return ListHandler.StringEnumerate(pointer).Count();
+		},
+		["siter"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"siter\" requires a pointer node as its first argument.");
+			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"siter\" requires an assignable node as its second argument.");
+
+			if (args.Count >= 4)
+			{
+				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"siter\" requires an assignable node as its third argument.");
+				foreach (var (x, i) in ListHandler.StringEnumerate(pointer).Select((x, i) => (x, i)))
+				{
+					lambdaVar.Assign(x);
+					indexVar.Assign(i);
+					args[3].Solve();
+				}
+			}
+			else
+			{
+				foreach (double x in ListHandler.StringEnumerate(pointer))
+				{
+					lambdaVar.Assign(x);
+					args[2].Solve();
+				}
+			}
 
 			return ListHandler.StringEnumerate(pointer).Count();
 		},

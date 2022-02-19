@@ -10,6 +10,7 @@ using WingCalculatorShared.Nodes;
 internal static class Functions
 {
 	public static Solver Solver { get; set; } // I don't love this solution
+	private static Random _random = new();
 
 	private static readonly Dictionary<string, Func<List<INode>, double>> _functions = new()
 	{
@@ -110,6 +111,16 @@ internal static class Functions
 
 			return product;
 		},
+		#endregion
+
+		#region Comparison
+		["equals"] = args =>
+		{
+			double error = args.Count >= 3 ? args[2].Solve() : 0;
+
+			return Math.Abs(args[0].Solve() - args[1].Solve()) <= error ? 1 : 0;
+		},
+		["nan"] = args => double.IsNaN(args[0].Solve()) ? 1 : 0,
 		#endregion
 
 		#region Probability
@@ -230,6 +241,12 @@ internal static class Functions
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"stringify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Stringify(pointer);
+		},
+		["sort"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"sort\" requires a pointer node as its first argument.");
+
+			return ListHandler.Allocate(pointer, ListHandler.Enumerate(pointer).OrderBy(x => x).ToList());
 		},
 		["iter"] = args =>
 		{
@@ -602,6 +619,16 @@ internal static class Functions
 			}
 
 			return assignable.Assign(args[1].Solve());
+		},
+		["ignore"] = args => 0,
+		#endregion
+
+		#region Random
+		["rand"] = args =>
+		{
+			if (args.Count == 0) return _random.NextDouble();
+			else if (args.Count == 1) return _random.Next((int)args[0].Solve());
+			else return _random.Next((int)args[0].Solve(), (int)args[1].Solve());
 		},
 		#endregion
 	};

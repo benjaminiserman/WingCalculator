@@ -40,7 +40,7 @@ internal static class ListHandler
 
 	public static double Get(PointerNode pointer, double i)
 	{
-		if (i < 0) i = Length(pointer) - i;
+		if (i < 0) i = Length(pointer) + i;
 		return pointer.Solver.GetVariable((pointer.Address + i + 1).ToString());
 	}
 

@@ -196,6 +196,12 @@ internal static class Functions
 
 			return ListHandler.Clear(pointer);
 		},
+		["contains"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"contains\" requires a pointer node as its first argument.");
+
+			return ListHandler.Enumerate(pointer).Contains(args[1].Solve()) ? 1 : 0;
+		},
 		["concat"] = args =>
 		{
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");

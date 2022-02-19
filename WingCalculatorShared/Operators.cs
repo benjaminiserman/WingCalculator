@@ -10,6 +10,7 @@ internal static class Operators
 	{
 		"prompt",
 		"exponential",
+		"coefficient",
 		"multiplicative",
 		"additive",
 		"shift",
@@ -31,6 +32,8 @@ internal static class Operators
 		new("?", (a, b, solver) => new PromptNode((IAssignable)a, b, solver), _precedenceTiers["prompt"]),
 
 		new("**", (a, b, solver) => new BinaryNode(a, b, (x, y) => Math.Pow(x, y)), _precedenceTiers["exponential"]),
+
+		new("coeff", (a, b, solver) => new BinaryNode(a, b, (x, y) => x * y), _precedenceTiers["coefficient"]),
 
 		new("*", (a, b, solver) => new BinaryNode(a, b, (x, y) => x * y), _precedenceTiers["multiplicative"]),
 		new("/", (a, b, solver) => new BinaryNode(a, b, (x, y) => x / y), _precedenceTiers["multiplicative"]),

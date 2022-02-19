@@ -115,7 +115,7 @@ public class Solver
 					{
 						INode coefficientNode = availableNodes[^1];
 						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(Operators.CreateNode(coefficientNode, new("*"), tree));
+						availableNodes.Add(Operators.CreateNode(coefficientNode, new("coeff"), tree));
 					}
 					else availableNodes.Add(tree);
 
@@ -141,7 +141,7 @@ public class Solver
 					{
 						INode coefficientNode = availableNodes[^1];
 						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(Operators.CreateNode(coefficientNode, new("*"), tree));
+						availableNodes.Add(Operators.CreateNode(coefficientNode, new("coeff"), tree));
 					}
 					else availableNodes.Add(tree);
 
@@ -163,7 +163,7 @@ public class Solver
 				{
 					if (isCoefficient)
 					{
-						availableNodes.Add(new PreOperatorNode("*"));
+						availableNodes.Add(new PreOperatorNode("coeff"));
 					}
 
 					if (tokens[i].Text.Length == 1)
@@ -184,7 +184,7 @@ public class Solver
 				{
 					if (isCoefficient)
 					{
-						availableNodes.Add(new PreOperatorNode("*"));
+						availableNodes.Add(new PreOperatorNode("coeff"));
 					}
 
 					if (tokens[i].Text.Length == 1)
@@ -259,7 +259,7 @@ public class Solver
 							availableNodes.RemoveAt(i - 1);
 							//availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
 							availableNodes.Insert(i - 1, new ConstantNode(-1));
-							availableNodes.Insert(i, new PreOperatorNode("*"));
+							availableNodes.Insert(i, new PreOperatorNode("coeff"));
 							availableNodes.Insert(i + 1, numberNode);
 							break;
 						}

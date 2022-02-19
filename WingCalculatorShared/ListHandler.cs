@@ -38,7 +38,11 @@ internal static class ListHandler
 
 	public static double Length(PointerNode pointer) => pointer.Solver.GetVariable(pointer.Address.ToString());
 
-	public static double Get(PointerNode pointer, double i) => pointer.Solver.GetVariable((pointer.Address + i + 1).ToString());
+	public static double Get(PointerNode pointer, double i)
+	{
+		if (i < 0) i = Length(pointer) - i;
+		return pointer.Solver.GetVariable((pointer.Address + i + 1).ToString());
+	}
 
 	public static double Set(PointerNode pointer, double i, double x) => pointer.Solver.SetVariable((pointer.Address + i + 1).ToString(), x);
 

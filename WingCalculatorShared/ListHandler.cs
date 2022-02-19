@@ -55,7 +55,7 @@ internal static class ListHandler
 		solver.SetVariable(address.ToString(), length);
 		solver.SetVariable((address + length).ToString(), x);
 
-		return address;
+		return x;
 	}
 
 	public static double IndexOf(PointerNode pointer, double x)

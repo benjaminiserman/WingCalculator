@@ -61,8 +61,18 @@ internal static class Functions
 
 			double end = args[1].Solve();
 
-			IAssignable assignable = ((AssignmentNode)args[0]).A;
-			INode counterNode = (INode)assignable;
+			IAssignable assignable;
+			INode counterNode;
+
+			try
+			{
+				assignable = ((AssignmentNode)args[0]).A;
+				counterNode = (INode)assignable;
+			}
+			catch
+			{
+				throw new WingCalcException($"The first argument of the \"msum\" must be an assignment.");
+			}
 
 			while (counterNode.Solve() <= end)
 			{
@@ -79,8 +89,18 @@ internal static class Functions
 
 			double end = args[1].Solve();
 
-			IAssignable assignable = ((AssignmentNode)args[0]).A;
-			INode counterNode = (INode)assignable;
+			IAssignable assignable;
+			INode counterNode;
+
+			try
+			{
+				assignable = ((AssignmentNode)args[0]).A;
+				counterNode = (INode)assignable;
+			}
+			catch
+			{
+				throw new WingCalcException($"The first argument of the \"mproduct\" must be an assignment.");
+			}
 
 			while (counterNode.Solve() <= end)
 			{

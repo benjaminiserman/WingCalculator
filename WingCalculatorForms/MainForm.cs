@@ -262,6 +262,7 @@ public partial class MainForm : Form
 		else
 		{
 			historyView.AddEntry(solveString);
+			historyView.TopIndex = historyView.Items.Count - 1;
 		}
 
 		_textIndex = 0;

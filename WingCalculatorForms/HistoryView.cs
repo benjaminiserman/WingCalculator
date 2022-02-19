@@ -116,7 +116,11 @@ internal class HistoryView : ListBox
 		RefillEntryBuffer();
 	}
 
-	public void EditSelected(string s) => Items[SelectedIndex] = s;
+	public void EditSelected(string s)
+	{
+		Items[SelectedIndex] = s;
+		RefillEntryBuffer();
+	}
 
 	public void EditAt(int i, string s) => Items[i] = s;
 

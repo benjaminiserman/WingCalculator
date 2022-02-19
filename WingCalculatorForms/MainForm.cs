@@ -330,21 +330,20 @@ public partial class MainForm : Form
 
 			return $"{s}\n{_stdoutGot} Solution: {solve}";
 		}
-		catch (WingCalcException ex)
-		{
-			_stdout.Clear();
-			string errorMessage = ex.Message.Replace("&", "&&");
-			errorLabel.Text = errorMessage;
-			throw;
-		}
 		catch (Exception ex)
 		{
+			_stdout.Replace("\n", "\n>");
+			string _stdoutGot = _stdout.ToString();
 			_stdout.Clear();
 
-			string errorMessage = $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
+			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}\n";
+
+			string errorMessage = ex is WingCalcException or CustomException 
+				? ex.Message.Replace("&", "&&")
+				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
 
 #if DEBUG
-			errorMessage = $"{errorLabel.Text} @ {ex.StackTrace.Replace("&", "&&")}";
+			if (ex is not WingCalcException and not CustomException) errorMessage += $"{errorLabel.Text} @ {ex.StackTrace.Replace("&", "&&")}";
 #endif
 
 			errorLabel.Text = errorMessage;

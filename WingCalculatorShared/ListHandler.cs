@@ -44,7 +44,11 @@ internal static class ListHandler
 		return pointer.Solver.GetVariable((pointer.Address + i + 1).ToString());
 	}
 
-	public static double Set(PointerNode pointer, double i, double x) => pointer.Solver.SetVariable((pointer.Address + i + 1).ToString(), x);
+	public static double Set(PointerNode pointer, double i, double x)
+	{
+		if (i < 0) i = Length(pointer) + i;
+		return pointer.Solver.SetVariable((pointer.Address + i + 1).ToString(), x);
+	}
 
 	public static double Add(PointerNode pointer, double x)
 	{
@@ -142,4 +146,6 @@ internal static class ListHandler
 		if (args[0] is PointerNode pointer) return func(Enumerate(pointer));
 		else return func(args.Select(x => x.Solve()));
 	}
+
+	public static string SolveDocumentation => "Given a list represented by either its first argument as a pointer, or by all of its arguments evaluated as doubles, ";
 }

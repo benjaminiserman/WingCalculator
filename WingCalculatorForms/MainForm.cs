@@ -34,7 +34,7 @@ public partial class MainForm : Form
 
 #pragma warning disable IDE1006 // Naming Styles
 	#region CalculatorButtons
-	private void bin_button_Click(object sender, EventArgs e) => SendString(":2");
+	private void bin_button_Click(object sender, EventArgs e) => SendString("::2");
 
 	private void pi_button_Click(object sender, EventArgs e) => SendString("$PI");
 
@@ -42,7 +42,7 @@ public partial class MainForm : Form
 
 	private void exe_button_Click(object sender, EventArgs e) => Execute();
 
-	private void hex_button_Click(object sender, EventArgs e) => SendString(":16");
+	private void hex_button_Click(object sender, EventArgs e) => SendString("::16");
 
 	private void tau_button_Click(object sender, EventArgs e) => SendString("$TAU");
 
@@ -55,7 +55,7 @@ public partial class MainForm : Form
 		omnibox.Clear();
 	}
 
-	private void dec_button_Click(object sender, EventArgs e) => SendString(":0");
+	private void frac_button_Click(object sender, EventArgs e) => SendString("::$FRAC");
 
 	private void e_button_Click(object sender, EventArgs e) => SendString("$E");
 
@@ -63,7 +63,7 @@ public partial class MainForm : Form
 
 	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt");
 
-	private void txt_button_Click(object sender, EventArgs e) => SendString(":1");
+	private void txt_button_Click(object sender, EventArgs e) => SendString("::$TXT");
 
 	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin");
 

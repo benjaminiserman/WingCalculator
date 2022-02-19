@@ -41,7 +41,7 @@ partial class MainForm
 			this.cbrt_button = new System.Windows.Forms.Button();
 			this.sqrt_button = new System.Windows.Forms.Button();
 			this.e_button = new System.Windows.Forms.Button();
-			this.dec_button = new System.Windows.Forms.Button();
+			this.frac_button = new System.Windows.Forms.Button();
 			this.txt_button = new System.Windows.Forms.Button();
 			this.arctan_button = new System.Windows.Forms.Button();
 			this.arccos_button = new System.Windows.Forms.Button();
@@ -201,16 +201,16 @@ partial class MainForm
 			this.e_button.UseVisualStyleBackColor = true;
 			this.e_button.Click += new System.EventHandler(this.e_button_Click);
 			// 
-			// dec_button
+			// frac_button
 			// 
-			this.dec_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.dec_button.Location = new System.Drawing.Point(0, 195);
-			this.dec_button.Name = "dec_button";
-			this.dec_button.Size = new System.Drawing.Size(83, 58);
-			this.dec_button.TabIndex = 9;
-			this.dec_button.Text = "DEC";
-			this.dec_button.UseVisualStyleBackColor = true;
-			this.dec_button.Click += new System.EventHandler(this.dec_button_Click);
+			this.frac_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.frac_button.Location = new System.Drawing.Point(0, 195);
+			this.frac_button.Name = "frac_button";
+			this.frac_button.Size = new System.Drawing.Size(83, 58);
+			this.frac_button.TabIndex = 9;
+			this.frac_button.Text = "FRAC";
+			this.frac_button.UseVisualStyleBackColor = true;
+			this.frac_button.Click += new System.EventHandler(this.frac_button_Click);
 			// 
 			// txt_button
 			// 
@@ -351,9 +351,11 @@ partial class MainForm
 			this.historyView.FormattingEnabled = true;
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
-			this.historyView.Items.AddRange(new object[] {});
+			this.historyView.Items.AddRange(new object[] {
+            "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
+			this.historyView.SelectHandled = false;
 			this.historyView.Size = new System.Drawing.Size(332, 451);
 			this.historyView.TabIndex = 25;
 			// 
@@ -397,7 +399,7 @@ partial class MainForm
 			this.buttonPanel.Controls.Add(this.pow_button);
 			this.buttonPanel.Controls.Add(this.ac_button);
 			this.buttonPanel.Controls.Add(this.tan_button);
-			this.buttonPanel.Controls.Add(this.dec_button);
+			this.buttonPanel.Controls.Add(this.frac_button);
 			this.buttonPanel.Controls.Add(this.cos_button);
 			this.buttonPanel.Controls.Add(this.e_button);
 			this.buttonPanel.Controls.Add(this.sin_button);
@@ -534,7 +536,7 @@ partial class MainForm
 	private Button cbrt_button;
 	private Button sqrt_button;
 	private Button e_button;
-	private Button dec_button;
+	private Button frac_button;
 	private Button txt_button;
 	private Button arctan_button;
 	private Button arccos_button;

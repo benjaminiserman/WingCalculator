@@ -29,6 +29,8 @@ public partial class MainForm : Form
 
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 
+		ResizeEnd += (_, _) => historyView.RefreshEntries();
+
 		ResetSolver();
 	}
 

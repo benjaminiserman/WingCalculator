@@ -130,6 +130,15 @@ internal static class Tokenizer
 			else additiveUnaryCount = 0;
 		}
 
+		for (int i = 0; i < tokens.Count - 2; i++)
+		{
+			if (tokens[i].Text == "**" && tokens[i + 1].Text == "-"  && tokens[i + 2].TokenType != TokenType.OpenParen)
+			{
+				tokens.Insert(i + 1, new Token(TokenType.OpenParen, "("));
+				tokens.Insert(i + 4, new Token(TokenType.CloseParen, ")"));
+			}
+		}
+
 		return tokens;
 
 		void PushCurrent()

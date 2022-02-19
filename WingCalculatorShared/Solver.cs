@@ -257,7 +257,10 @@ public class Solver
 						case "-":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
+							//availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
+							availableNodes.Insert(i - 1, new ConstantNode(-1));
+							availableNodes.Insert(i, new PreOperatorNode("*"));
+							availableNodes.Insert(i + 1, numberNode);
 							break;
 						}
 						case "$":

@@ -131,7 +131,7 @@ internal static class Operators
 
 	record struct Operator(string Symbol, Func<INode, INode, Solver, INode> Construct, int Precedence);
 
-	public static Associativity GetTierAssociativity(int tier) => tier == _precedenceTiers["assignment"] || tier == _precedenceTiers["elvis"] ? Associativity.Right : Associativity.Left;
+	public static Associativity GetTierAssociativity(int tier) => tier == _precedenceTiers["assignment"] || tier == _precedenceTiers["elvis"] || tier == _precedenceTiers["exponential"] ? Associativity.Right : Associativity.Left;
 
 	public enum Associativity { Left, Right }
 }

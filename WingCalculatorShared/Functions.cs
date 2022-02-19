@@ -12,50 +12,50 @@ internal static class Functions
 	public static Solver Solver { get; set; } // I don't love this solution
 	private static Random _random = new();
 
-	private static readonly Dictionary<string, Func<List<INode>, double>> _functions = new()
+	private static readonly Dictionary<string, StandardFunction> _functions = new List<StandardFunction>()
 	{
 		#region Exponential
-		["pow"] = args => Math.Pow(args[0].Solve(), args[1].Solve()),
-		["exp"] = args => Math.Exp(args[0].Solve()),
-		["sqrt"] = args => Math.Sqrt(args[0].Solve()),
-		["cbrt"] = args => Math.Cbrt(args[0].Solve()),
-		["powmod"] = args => (double)BigInteger.ModPow((BigInteger)args[0].Solve(), (BigInteger)args[1].Solve(), (BigInteger)args[2].Solve()),
+		new("pow", args => Math.Pow(args[0].Solve(), args[1].Solve())),
+		new("exp", args => Math.Exp(args[0].Solve())),
+		new("sqrt", args => Math.Sqrt(args[0].Solve())),
+		new("cbrt", args => Math.Cbrt(args[0].Solve())),
+		new("powmod", args => (double)BigInteger.ModPow((BigInteger)args[0].Solve(), (BigInteger)args[1].Solve(), (BigInteger)args[2].Solve())),
 
-		["log"] = args =>
+		new("log", args =>
 		{
 			if (args.Count == 1) return Math.Log(args[0].Solve(), 10);
 			else return Math.Log(args[0].Solve(), args[1].Solve());
-		},
-		["ln"] = args => Math.Log(args[0].Solve()),
+		}),
+		new("ln", args => Math.Log(args[0].Solve())),
 		#endregion
 
 		#region Rounding
-		["ceil"] = args => Math.Ceiling(args[0].Solve()),
-		["floor"] = args => Math.Floor(args[0].Solve()),
-		["round"] = args => Math.Round(args[0].Solve(), args.Count > 1 ? (int)args[1].Solve() : 0, (MidpointRounding)(args.Count > 2 ? args[2].Solve() : 0)),
-		["trunc"] = args => (int)args[0].Solve(),
+		new("ceil", args => Math.Ceiling(args[0].Solve())),
+		new("floor", args => Math.Floor(args[0].Solve())),
+		new("round", args => Math.Round(args[0].Solve(), args.Count > 1 ? (int)args[1].Solve() : 0, (MidpointRounding)(args.Count > 2 ? args[2].Solve() : 0))),
+		new("trunc", args => (int)args[0].Solve()),
 		#endregion
 
 		#region Trigonometry
-		["sin"] = args => Math.Sin(args[0].Solve()),
-		["cos"] = args => Math.Cos(args[0].Solve()),
-		["tan"] = args => Math.Tan(args[0].Solve()),
-		["asin"] = args => Math.Asin(args[0].Solve()),
-		["acos"] = args => Math.Acos(args[0].Solve()),
-		["atan"] = args => args.Count > 1 ? Math.Atan2(args[0].Solve(), args[1].Solve()) : Math.Atan(args[0].Solve()),
-		["sinh"] = args => Math.Sinh(args[0].Solve()),
-		["cosh"] = args => Math.Cosh(args[0].Solve()),
-		["tanh"] = args => Math.Tanh(args[0].Solve()),
-		["asinh"] = args => Math.Asinh(args[0].Solve()),
-		["acosh"] = args => Math.Acosh(args[0].Solve()),
-		["atanh"] = args => Math.Atanh(args[0].Solve()),
+		new("sin", args => Math.Sin(args[0].Solve())),
+		new("cos", args => Math.Cos(args[0].Solve())),
+		new("tan", args => Math.Tan(args[0].Solve())),
+		new("asin", args => Math.Asin(args[0].Solve())),
+		new("acos", args => Math.Acos(args[0].Solve())),
+		new("atan", args => args.Count > 1 ? Math.Atan2(args[0].Solve(), args[1].Solve()) : Math.Atan(args[0].Solve())),
+		new("sinh", args => Math.Sinh(args[0].Solve())),
+		new("cosh", args => Math.Cosh(args[0].Solve())),
+		new("tanh", args => Math.Tanh(args[0].Solve())),
+		new("asinh", args => Math.Asinh(args[0].Solve())),
+		new("acosh", args => Math.Acosh(args[0].Solve())),
+		new("atanh", args => Math.Atanh(args[0].Solve())),
 
-		["rad"] = args => args[0].Solve() * Math.PI / 180,
-		["deg"] = args => args[0].Solve() * 180 / Math.PI,
+		new("rad", args => args[0].Solve() * Math.PI / 180),
+		new("deg", args => args[0].Solve() * 180 / Math.PI),
 		#endregion
 
 		#region MathematicalLoops
-		["msum"] = args =>
+		new("msum", args =>
 		{
 			args[0].Solve();
 			double sum = 0;
@@ -82,8 +82,8 @@ internal static class Functions
 			}
 
 			return sum;
-		},
-		["mproduct"] = args =>
+		}),
+		new("mproduct", args =>
 		{
 			args[0].Solve();
 			double product = 1;
@@ -110,110 +110,110 @@ internal static class Functions
 			}
 
 			return product;
-		},
+		}),
 		#endregion
 
 		#region Comparison
-		["equals"] = args =>
+		new("equals", args =>
 		{
 			double error = args.Count >= 3 ? args[2].Solve() : 0;
 
 			return Math.Abs(args[0].Solve() - args[1].Solve()) <= error ? 1 : 0;
-		},
-		["nan"] = args => double.IsNaN(args[0].Solve()) ? 1 : 0,
+		}),
+		new("nan", args => double.IsNaN(args[0].Solve()) ? 1 : 0),
 		#endregion
 
 		#region Probability
-		["perm"] = args =>
+		new("perm", args =>
 		{
 			int x = (int)args[0].Solve();
 			int y = (int)args[1].Solve();
 
 			return FactorialDivision(x, x - y);
-		},
-		["comb"] = args =>
+		}),
+		new("comb", args =>
 		{
 			int x = (int)args[0].Solve();
 			int y = (int)args[1].Solve();
 
 			return FactorialDivision(x, x - y) / Factorial(y);
-		},
-		["factorial"] = args => Factorial((int)args[0].Solve()),
+		}),
+		new("factorial", args => Factorial((int)args[0].Solve())),
 		#endregion
 
 		#region Numeric
-		["abs"] = args => Math.Abs(args[0].Solve()),
-		["clamp"] = args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()),
-		["sign"] = args => Math.Sign(args[0].Solve()),
-		["cpsign"] = args => Math.CopySign(args[0].Solve(), args[1].Solve()),
+		new("abs", args => Math.Abs(args[0].Solve())),
+		new("clamp", args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve())),
+		new("sign", args => Math.Sign(args[0].Solve())),
+		new("cpsign", args => Math.CopySign(args[0].Solve(), args[1].Solve())),
 		#endregion
 
 		#region Bits
-		["bitinc"] = args => Math.BitIncrement(args[0].Solve()),
-		["bitdec"] = args => Math.BitDecrement(args[0].Solve()),
+		new("bitinc", args => Math.BitIncrement(args[0].Solve())),
+		new("bitdec", args => Math.BitDecrement(args[0].Solve())),
 		#endregion
 
 		#region ListProperties
-		["max"] = args => ListHandler.Solve(args, x => x.Max()),
-		["min"] = args => ListHandler.Solve(args, x => x.Min()),
-		["sum"] = args => ListHandler.Solve(args, x => x.Sum()),
-		["product"] = args => ListHandler.Solve(args, x => x.Product()),
-		["mean"] = args => ListHandler.Solve(args, x => x.Average()),
-		["average"] = args => ListHandler.Solve(args, x => x.Average()),
-		["median"] = args => ListHandler.Solve(args, x => x.Median()),
-		["mode"] = args => ListHandler.Solve(args, x => x.Mode()),
+		new("max", args => ListHandler.Solve(args, x => x.Max())),
+		new("min", args => ListHandler.Solve(args, x => x.Min())),
+		new("sum", args => ListHandler.Solve(args, x => x.Sum())),
+		new("product", args => ListHandler.Solve(args, x => x.Product())),
+		new("mean", args => ListHandler.Solve(args, x => x.Average())),
+		new("average", args => ListHandler.Solve(args, x => x.Average())),
+		new("median", args => ListHandler.Solve(args, x => x.Median())),
+		new("mode", args => ListHandler.Solve(args, x => x.Mode())),
 		#endregion
 
 		#region ListMemory
-		["len"] = args =>
+		new("len", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"len\" requires a pointer node as its first argument.");
 
 			return ListHandler.Length(pointer);
-		},
-		["get"] = args =>
+		}),
+		new("get", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"get\" requires a pointer node as its first argument.");
 
 			return ListHandler.Get(pointer, args[1].Solve());
-		},
-		["set"] = args =>
+		}),
+		new("set", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"set\" requires a pointer node as its first argument.");
 
 			return ListHandler.Set(pointer, args[1].Solve(), args[2].Solve());
-		},
-		["add"] = args =>
+		}),
+		new("add", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"add\" requires a pointer node as its first argument.");
 
 			return ListHandler.Add(pointer, args[1].Solve());
-		},
-		["indexof"] = args =>
+		}),
+		new("indexof", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");
 
 			return ListHandler.IndexOf(pointer, args[1].Solve());
-		},
-		["remove"] = args =>
+		}),
+		new("remove", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"remove\" requires a pointer node as its first argument.");
 
 			return ListHandler.Remove(pointer, args[1].Solve());
-		},
-		["clear"] = args =>
+		}),
+		new("clear", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"clear\" requires a pointer node as its first argument.");
 
 			return ListHandler.Clear(pointer);
-		},
-		["contains"] = args =>
+		}),
+		new("contains", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"contains\" requires a pointer node as its first argument.");
 
 			return ListHandler.Enumerate(pointer).Contains(args[1].Solve()) ? 1 : 0;
-		},
-		["concat"] = args =>
+		}),
+		new("concat", args =>
 		{
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");
 			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its second argument.");
@@ -222,33 +222,33 @@ internal static class Functions
 								: a;
 
 			return ListHandler.Concat(a, b, c);
-		},
-		["copy"] = args =>
+		}),
+		new("copy", args =>
 		{
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its first argument.");
 			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its second argument.");
 
 			return ListHandler.Copy(a, b);
-		},
-		["setify"] = args =>
+		}),
+		new("setify", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"setify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Setify(pointer);
-		},
-		["stringify"] = args =>
+		}),
+		new("stringify", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"stringify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Stringify(pointer);
-		},
-		["sort"] = args =>
+		}),
+		new("sort", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"sort\" requires a pointer node as its first argument.");
 
 			return ListHandler.Allocate(pointer, ListHandler.Enumerate(pointer).OrderBy(x => x).ToList());
-		},
-		["iter"] = args =>
+		}),
+		new("iter", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"iter\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"iter\" requires an assignable node as its second argument.");
@@ -273,8 +273,8 @@ internal static class Functions
 			}
 
 			return ListHandler.Enumerate(pointer).Count();
-		},
-		["filter"] = args =>
+		}),
+		new("filter", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"filter\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"filter\" requires an assignable node as its second argument.");
@@ -311,8 +311,8 @@ internal static class Functions
 			ListHandler.Allocate(pointer, filtered);
 
 			return ListHandler.Enumerate(pointer).Count();
-		},
-		["any"] = args =>
+		}),
+		new("any", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"any\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"any\" requires an assignable node as its second argument.");
@@ -345,8 +345,8 @@ internal static class Functions
 			}
 
 			return 0;
-		},
-		["count"] = args =>
+		}),
+		new("count", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"count\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"count\" requires an assignable node as its second argument.");
@@ -381,12 +381,12 @@ internal static class Functions
 			}
 
 			return count;
-		},
+		}),
 		#endregion
 
 		#region ControlFlow
-		["if"] = args => args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve(),
-		["for"] = args =>
+		new("if", args => args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve()),
+		new("for", args =>
 		{
 			args[0].Solve();
 			int count = 0;
@@ -399,8 +399,8 @@ internal static class Functions
 			}
 
 			return count;
-		},
-		["while"] = args =>
+		}),
+		new("while", args =>
 		{
 			int count = 0;
 
@@ -411,8 +411,8 @@ internal static class Functions
 			}
 
 			return count;
-		},
-		["dowhile"] = args =>
+		}),
+		new("dowhile", args =>
 		{
 			int count = 0;
 
@@ -424,8 +424,8 @@ internal static class Functions
 			while (args[0].Solve() != 0);
 
 			return count;
-		},
-		["repeat"] = args =>
+		}),
+		new("repeat", args =>
 		{
 			double count = args[1].Solve();
 
@@ -435,26 +435,26 @@ internal static class Functions
 			}
 
 			return count;
-		},
+		}),
 		#endregion
 
 		#region Memory
-		["alloc"] = args =>
+		new("alloc", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
 
 			List<double> values = args.Skip(1).Select(x => x.Solve()).ToList();
 
 			return ListHandler.Allocate(pointer, values);
-		},
-		["salloc"] = args =>
+		}),
+		new("salloc", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"salloc\" requires a pointer node as its first argument.");
 			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function \"salloc\" requires a quote node as its second argument.");
 
 			return ListHandler.StringAllocate(pointer, quote.Text.Select(x => (double)x).ToList());
-		},
-		["range"] = args =>
+		}),
+		new("range", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
 
@@ -478,8 +478,8 @@ internal static class Functions
 			}
 
 			return ListHandler.Allocate(pointer, vals);
-		},
-		["memprint"] = args =>
+		}),
+		new("memprint", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument.");
 
@@ -489,19 +489,19 @@ internal static class Functions
 
 			solver.WriteLine($"${address} = {value}");
 			return value;
-		},
-		["print"] = args =>
+		}),
+		new("print", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
 
 			pointer.Solver.WriteLine($"{{ {string.Join(", ", ListHandler.Enumerate(pointer))} }}");
 
 			return ListHandler.Length(pointer);
-		},
+		}),
 		#endregion
 
 		#region Strings
-		["exec"] = args =>
+		new("exec", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"exec\" requires a pointer node as its first argument.");
 			StringBuilder sb = new();
@@ -518,20 +518,20 @@ internal static class Functions
 			}
 
 			return solver.Solve(sb.ToString());
-		},
-		["listify"] = args =>
+		}),
+		new("listify", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"listify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Listify(pointer);
-		},
-		["slen"] = args =>
+		}),
+		new("slen", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"slen\" requires a pointer node as its first argument.");
 
 			return ListHandler.StringEnumerate(pointer).Count();
-		},
-		["siter"] = args =>
+		}),
+		new("siter", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"siter\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"siter\" requires an assignable node as its second argument.");
@@ -556,13 +556,13 @@ internal static class Functions
 			}
 
 			return ListHandler.StringEnumerate(pointer).Count();
-		},
+		}),
 		#endregion
 
 		#region Factors
-		["gcd"] = args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.GCD((BigInteger)a, (BigInteger)b))),
-		["lcm"] = args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b))),
-		["factor"] = args =>
+		new("gcd", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.GCD((BigInteger)a, (BigInteger)b)))),
+		new("lcm", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b)))),
+		new("factor", args =>
 		{
 			List<double> factors;
 
@@ -580,9 +580,9 @@ internal static class Functions
 			}
 
 			return factors.Count;
-		},
-		["prime"] = args => Factorizer.IsPrime((BigInteger)args[0].Solve()) ? 1 : 0,
-		["primefactor"] = args =>
+		}),
+		new("prime", args => Factorizer.IsPrime((BigInteger)args[0].Solve()) ? 1 : 0),
+		new("primefactor", args =>
 		{
 			List<double> factors;
 
@@ -600,12 +600,12 @@ internal static class Functions
 			}
 
 			return factors.Count;
-		},
+		}),
 		#endregion
 
 		#region Programming
-		["eval"] = args => args[0].Solve(),
-		["assign"] = args =>
+		new("eval", args => args[0].Solve()),
+		new("assign", args =>
 		{
 			IAssignable assignable;
 
@@ -619,9 +619,9 @@ internal static class Functions
 			}
 
 			return assignable.Assign(args[1].Solve());
-		},
-		["ignore"] = args => 0,
-		["catch"] = args =>
+		}),
+		new("ignore", args => 0),
+		new("catch", args =>
 		{
 			try
 			{
@@ -631,8 +631,8 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		},
-		["catchwc"] = args =>
+		}),
+		new("catchwc", args =>
 		{
 			try
 			{
@@ -642,8 +642,8 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		},
-		["catchcs"] = args =>
+		}),
+		new("catchcs", args =>
 		{
 			try
 			{
@@ -653,51 +653,51 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		},
-		["throw"] = args =>
+		}),
+		new("throw", args =>
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException($"The first argument of \"throw\" must be a QuoteNode.");
 
 			throw new CustomException(quote.Text);
-		},
+		}),
 		#endregion
 
 		#region Random
-		["rand"] = args =>
+		new("rand", args =>
 		{
 			if (args.Count == 0) return _random.NextDouble();
 			else if (args.Count == 1) return _random.Next((int)args[0].Solve());
 			else return _random.Next((int)args[0].Solve(), (int)args[1].Solve());
-		},
-		["srand"] = args =>
+		}),
+		new("srand", args =>
 		{
 			int x = (int)args[0].Solve();
 			_random = new(x);
 			return x;
-		},
+		}),
 		#endregion
 
 		#region Write
-		["write"] = args =>
+		new("write", args =>
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"write\" requires a quote node as its first argument.");
 
 			quote.Solver.Write(quote.Text);
 
 			return quote.Text.Length;
-		},
-		["writeline"] = args =>
+		}),
+		new("writeline", args =>
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"writeline\" requires a quote node as its first argument.");
 
 			quote.Solver.WriteLine(quote.Text);
 
 			return quote.Text.Length;
-		},
+		}),
 		#endregion
-	};
+	}.ToDictionary(x => x.Name, x => x);
 
-	internal static Func<List<INode>, double> Get(string s) => _functions[s];
+	internal static Func<List<INode>, double> Get(string s) => _functions[s].Function;
 
 	private static long FactorialDivision(int x, int y)
 	{
@@ -724,4 +724,6 @@ internal static class Functions
 
 		return result;
 	}
+
+	record struct StandardFunction(string Name, Func<List<INode>, double> Function);
 }

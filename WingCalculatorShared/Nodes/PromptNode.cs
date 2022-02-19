@@ -56,4 +56,6 @@ internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode
 			}
 		}
 	}
+
+	public static string Documentation => "PromptNode is under construction, and documentation is not available at this time.\nNote: PromptNode is not available in the WinForms app.";
 }

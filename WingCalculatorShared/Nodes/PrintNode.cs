@@ -8,16 +8,8 @@ internal record PrintNode(INode A, INode B, Solver Solver, bool Newline) : INode
 		double a = A.Solve();
 		double b = B.Solve();
 
-		if (A is QuoteNode qn && b == 1)
-		{
-			if (Newline) Solver.WriteLine(qn.Text);
-			else Solver.Write(qn.Text);
-		}
-		else
-		{
-			if (Newline) Solver.WriteLine(GetPrint(a, b));
-			else Solver.Write(GetPrint(a, b));
-		}
+		if (Newline) Solver.WriteLine(GetPrint(a, b));
+		else Solver.Write(GetPrint(a, b));
 
 		return a;
 	}
@@ -37,6 +29,20 @@ internal record PrintNode(INode A, INode B, Solver Solver, bool Newline) : INode
 
 		_ => throw new NotImplementedException($"Format {y} is not implemented.")
 	};
+
+	public static string Documentation => "Prints its left-hand operand to standard output, as specified by its right-hand operand.\n" +
+		"Valid Formats:\n" +
+		" [-1 / $NL] => prints a newline\n" +
+		" [0 / $DEC] => prints the left-hand operand\n" +
+		" [1 / $TXT] => prints the left-hand operand converted to a UTF-16 character\n" +
+		" [2 / $BIN] => prints the left-hand operand casted to an integer and converted into binary\n" +
+		" [3 / $PCT] => prints the left-hand operand as a percentage\n" +
+		" [4 / $FRAC] => prints the left-hand operand as a fraction accurate to within 1e-20\n" +
+		" [5 / $EXACT] => prints the left-hand operand as an exact decimal value\n" +
+		" [8 / $OCT] => prints the left-hand operand casted to an integer and converted into octal\n" +
+		" [16 / $HEX] => prints the left-hand operand casted to an integer and converted into hexadecimal\n" +
+		"Note: Each pair format string [X / $Y] pair is provided as a variable $Y and its default value X.\n" +
+		"PrintNodes choose a format specifier based on *the default value* of $Y, so if $Y is changed, it may cause unexpected behavior when used as a format specifier.";
 
 	// adapted from the Stern-Brocot tree traversal algorithm described here: https://stackoverflow.com/questions/5124743/algorithm-for-simplifying-decimal-to-fractions
 	private static string GetFraction(double x, double error = 1e-20)

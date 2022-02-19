@@ -674,7 +674,26 @@ internal static class Functions
 			int x = (int)args[0].Solve();
 			_random = new(x);
 			return x;
-		}
+		},
+		#endregion
+
+		#region Write
+		["write"] = args =>
+		{
+			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"write\" requires a quote node as its first argument.");
+
+			quote.Solver.Write(quote.Text);
+
+			return quote.Text.Length;
+		},
+		["writeline"] = args =>
+		{
+			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"writeline\" requires a quote node as its first argument.");
+
+			quote.Solver.WriteLine(quote.Text);
+
+			return quote.Text.Length;
+		},
 		#endregion
 	};
 

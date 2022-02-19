@@ -621,6 +621,45 @@ internal static class Functions
 			return assignable.Assign(args[1].Solve());
 		},
 		["ignore"] = args => 0,
+		["catch"] = args =>
+		{
+			try
+			{
+				return args[0].Solve();
+			}
+			catch
+			{
+				return args[1].Solve();
+			}
+		},
+		["catchwc"] = args =>
+		{
+			try
+			{
+				return args[0].Solve();
+			}
+			catch (WingCalcException)
+			{
+				return args[1].Solve();
+			}
+		},
+		["catchcs"] = args =>
+		{
+			try
+			{
+				return args[0].Solve();
+			}
+			catch (Exception ex) when (ex is not WingCalcException and not CustomException)
+			{
+				return args[1].Solve();
+			}
+		},
+		["throw"] = args =>
+		{
+			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException($"The first argument of \"throw\" must be a QuoteNode.");
+
+			throw new CustomException(quote.Text);
+		},
 		#endregion
 
 		#region Random

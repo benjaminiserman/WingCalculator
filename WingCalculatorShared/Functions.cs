@@ -46,9 +46,9 @@ internal static class Functions
 		["sinh"] = args => Math.Sinh(args[0].Solve()),
 		["cosh"] = args => Math.Cosh(args[0].Solve()),
 		["tanh"] = args => Math.Tanh(args[0].Solve()),
-		["arcsinh"] = args => Math.Asinh(args[0].Solve()),
-		["arccosh"] = args => Math.Acosh(args[0].Solve()),
-		["arctanh"] = args => Math.Atanh(args[0].Solve()),
+		["asinh"] = args => Math.Asinh(args[0].Solve()),
+		["acosh"] = args => Math.Acosh(args[0].Solve()),
+		["atanh"] = args => Math.Atanh(args[0].Solve()),
 
 		["rad"] = args => args[0].Solve() * Math.PI / 180,
 		["deg"] = args => args[0].Solve() * 180 / Math.PI,

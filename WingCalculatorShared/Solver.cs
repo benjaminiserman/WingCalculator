@@ -257,7 +257,6 @@ public class Solver
 						case "-":
 						{
 							availableNodes.RemoveAt(i - 1);
-							//availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => -x));
 							availableNodes.Insert(i - 1, new ConstantNode(-1));
 							availableNodes.Insert(i, new PreOperatorNode("coeff"));
 							availableNodes.Insert(i + 1, numberNode);

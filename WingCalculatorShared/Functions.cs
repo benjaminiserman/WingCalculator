@@ -630,6 +630,12 @@ internal static class Functions
 			else if (args.Count == 1) return _random.Next((int)args[0].Solve());
 			else return _random.Next((int)args[0].Solve(), (int)args[1].Solve());
 		},
+		["srand"] = args =>
+		{
+			int x = (int)args[0].Solve();
+			_random = new(x);
+			return x;
+		}
 		#endregion
 	};
 

@@ -283,7 +283,7 @@ internal static class Functions
 				foreach (double x in ListHandler.Enumerate(pointer))
 				{
 					lambdaVar.Assign(x);
-					
+
 					if (args[2].Solve() != 0)
 					{
 						filtered.Add(x);
@@ -369,35 +369,6 @@ internal static class Functions
 
 		#region ControlFlow
 		["if"] = args => args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve(),
-		["range"] = args =>
-		{
-			int i = (int)args[0].Solve();
-			int end = (int)args[1].Solve();
-			int count = 0;
-
-			if (i < end)
-			{
-				while (i < end)
-				{
-					args[2].Solve();
-					count++;
-					i++;
-					if (args[0] is IAssignable ia) ia.Assign(i);
-				}
-			}
-			else if (i > end)
-			{
-				while (i > end)
-				{
-					args[2].Solve();
-					count++;
-					i--;
-					if (args[0] is IAssignable ia) ia.Assign(i);
-				}
-			}
-
-			return count;
-		},
 		["for"] = args =>
 		{
 			args[0].Solve();
@@ -465,6 +436,31 @@ internal static class Functions
 			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function \"salloc\" requires a quote node as its second argument.");
 
 			return ListHandler.StringAllocate(pointer, quote.Text.Select(x => (double)x).ToList());
+		},
+		["range"] = args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
+
+			double start, end;
+
+			if (args.Count >= 3)
+			{
+				start = args[1].Solve();
+				end = args[2].Solve();
+			}
+			else
+			{
+				start = 0;
+				end = args[1].Solve();
+			}
+
+			List<double> vals = new();
+			for (double i = start; i < end; i++)
+			{
+				vals.Add(i);
+			}
+
+			return ListHandler.Allocate(pointer, vals);
 		},
 		["memprint"] = args =>
 		{
@@ -587,7 +583,26 @@ internal static class Functions
 			}
 
 			return factors.Count;
-		}
+		},
+		#endregion
+
+		#region Programming
+		["eval"] = args => args[0].Solve(),
+		["assign"] = args =>
+		{
+			IAssignable assignable;
+
+			try
+			{
+				assignable = ((AssignmentNode)args[0]).A;
+			}
+			catch
+			{
+				throw new WingCalcException($"The first argument of the \"msum\" must be an assignment.");
+			}
+
+			return assignable.Assign(args[1].Solve());
+		},
 		#endregion
 	};
 

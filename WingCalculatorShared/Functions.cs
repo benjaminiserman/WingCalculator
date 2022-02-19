@@ -309,12 +309,7 @@ internal static class Functions
 
 			return factors.Count;
 		},
-		["prime"] = args =>
-		{
-			BigInteger x = (BigInteger)args[0].Solve();
-
-			return Factorizer.Factors(x).Count == 2 ? 1 : 0;
-		},
+		["prime"] = args => Factorizer.IsPrime((BigInteger)args[0].Solve()) ? 1 : 0,
 		["primefactor"] = args =>
 		{
 			List<double> factors;

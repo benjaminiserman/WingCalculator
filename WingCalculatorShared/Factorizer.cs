@@ -18,6 +18,8 @@ internal static class Factorizer
 	{
 		List<BigInteger> factors = new();
 
+		if (x == 0) return new();
+
 		int max = (int)Math.Ceiling(Math.Sqrt((double)x));
 
 		while (x % 2 == 0)
@@ -52,9 +54,11 @@ internal static class Factorizer
 	{
 		HashSet<BigInteger> factors = new();
 
+		if (x == 0) return new();
+
 		int max = (int)Math.Ceiling(Math.Sqrt((double)x));
 
-		for (int i = 1; i < max; i++)
+		for (int i = 1; i <= max; i++)
 		{
 			if (x % i == 0)
 			{
@@ -62,10 +66,12 @@ internal static class Factorizer
 				factors.Add(x / i);
 			}
 		}
-
+		
 		var list = factors.ToList();
 		list.Sort();
 
 		return list;
 	}
+
+	public static bool IsPrime(BigInteger x) => (Factors(x)?.Count ?? 0) == 2;
 }

@@ -264,6 +264,29 @@ internal static class Functions
 
 			return ListHandler.Add(pointer, args[1].Solve());
 		}, "Adds and returns the value represented by its second argument to the end of the list at the pointer represented by its first argument."),
+		new("insert", args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
+
+			List<double> made = ListHandler.Enumerate(pointer).ToList(); // Yes, this is particularly inefficient. If you have a problem with it, ope n a github issue about it and I'll fix it.
+
+			int index = (int)args[1].Solve();
+			if (index < 0) index += made.Count;
+
+			double val = args[2].Solve();
+			try
+			{
+				made.Insert(index, val);
+			}
+			catch
+			{
+				throw new WingCalcException($"List at address {pointer.Address} is not big enough to insert at {index}.");
+			}
+
+			ListHandler.Allocate(pointer, made);
+
+			return val;
+		}, "From the list at the pointer represented by its first value, $name inserts its third argument into the 0-based index represented by its second argument and returns the inserted value. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("indexof", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");

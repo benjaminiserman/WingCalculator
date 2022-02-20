@@ -165,7 +165,35 @@ internal static class Functions
 		new("mean", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
 		new("average", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
 		new("median", args => ListHandler.Solve(args, x => x.Median()), ListHandler.SolveDocumentation + "$name returns the mathematical median of the list after sorting it."),
-		new("mode", args => ListHandler.Solve(args, x => x.Mode()), ListHandler.SolveDocumentation + "of the values that appear the most in the list, $name returns the greatest value."),
+		new("mode", args =>
+		{
+			IEnumerable<double> modes;
+			if (args[0] is PointerNode pointer)
+			{
+				if (args.Count == 1)
+				{
+					modes = ListHandler.Enumerate(pointer).Mode();
+					pointer.Solver.WriteLine(string.Join(", ", modes));
+				}
+				else if (args[1] is PointerNode second)
+				{
+					modes = ListHandler.Enumerate(second).Mode();
+					ListHandler.Allocate(pointer, modes.ToList());
+				}
+				else
+				{
+					modes = args.GetRange(1, args.Count - 1).Select(x => x.Solve()).Mode();
+					ListHandler.Allocate(pointer, modes.ToList());
+				}
+			}
+			else
+			{
+				modes = args.Select(x => x.Solve()).Mode();
+				args[0].Solver.WriteLine(string.Join(", ", modes));
+			}
+
+			return modes.Count();
+		}, "If there is only one argument and it is a pointer, $name prints to standard output the modes of the list at the pointer represented by the first argument. If the first and second arguments are both pointers, $name computes finds the modes of the list at the pointer represented by its second argument and stores them in a list at the pointer represented by its first argument. If the first argument is a pointer and the second is not, $name finds the modes of the list represented by every argument other than the first and stores them in a list at the pointer represented by the first argument. Otherwise, $name finds the modes of all of the arguments and prints them to standard output. $name returns the number of modes found."),
 		#endregion
 
 		#region ListMemory

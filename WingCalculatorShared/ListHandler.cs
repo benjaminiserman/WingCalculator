@@ -6,7 +6,7 @@ using WingCalculatorShared.Nodes;
 
 internal static class ListHandler
 {
-	public static double Allocate(PointerNode pointer, List<double> values)
+	public static double Allocate(PointerNode pointer, IList<double> values)
 	{
 		Solver solver = pointer.Solver;
 		double address = pointer.Address;
@@ -21,7 +21,7 @@ internal static class ListHandler
 		return address;
 	}
 
-	public static double StringAllocate(PointerNode pointer, List<double> values)
+	public static double StringAllocate(PointerNode pointer, IList<double> values)
 	{
 		Solver solver = pointer.Solver;
 		double address = pointer.Address;
@@ -89,7 +89,7 @@ internal static class ListHandler
 		}
 	}
 
-	public static double Clear(PointerNode pointer) => Allocate(pointer, new());
+	public static double Clear(PointerNode pointer) => Allocate(pointer, new List<double>());
 
 	public static double Concat(PointerNode a, PointerNode b, PointerNode c) => Allocate(c, Enumerate(a).Concat(Enumerate(b)).ToList());
 
@@ -137,11 +137,11 @@ internal static class ListHandler
 			: sorted[sorted.Count / 2];
 	}
 
-	public static double Mode(this IEnumerable<double> list) => list.GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key;
+	public static IEnumerable<double> Mode(this IEnumerable<double> list) => new HashSet<double>(list.GroupBy(v => list.Count(x => x == v)).OrderByDescending(g => g.Key).First().Select(x => x));
 
 	public static double Product(this IEnumerable<double> list) => list.Aggregate((a, b) => a * b);
 
-	public static double Solve(List<INode> args, Func<IEnumerable<double>, double> func)
+	public static double Solve(IList<INode> args, Func<IEnumerable<double>, double> func)
 	{
 		if (args[0] is PointerNode pointer) return func(Enumerate(pointer));
 		else return func(args.Select(x => x.Solve()));

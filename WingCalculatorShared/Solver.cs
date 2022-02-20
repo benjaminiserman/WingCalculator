@@ -301,6 +301,12 @@ public class Solver
 							availableNodes.Insert(i - 1, new LocalNode(numberNode, null)); // $$$ replace null with an actual LocalList
 							break;
 						}
+						case "`":
+						{
+							availableNodes.RemoveAt(i - 1);
+							availableNodes.Insert(i - 1, new LocalNode(numberNode, null)); // $$$ replace null with an actual LocalList
+							break;
+						}
 						default:
 						{
 							throw new WingCalcException($"\"{signNode.Text}\" is a valid unary operator but is not yet implemented.");

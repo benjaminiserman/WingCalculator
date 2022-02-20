@@ -141,6 +141,8 @@ internal static class ListHandler
 
 	public static double Product(this IEnumerable<double> list) => list.Aggregate((a, b) => a * b);
 
+	public static double GeometricMean(this IEnumerable<double> list) => Math.Pow(list.Product(), 1.0 / list.Count());
+
 	public static double Solve(IList<INode> args, Func<IEnumerable<double>, double> func)
 	{
 		if (args[0] is PointerNode pointer) return func(Enumerate(pointer));

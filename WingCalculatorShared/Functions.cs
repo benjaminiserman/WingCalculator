@@ -165,6 +165,7 @@ internal static class Functions
 		new("mean", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
 		new("average", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
 		new("median", args => ListHandler.Solve(args, x => x.Median()), ListHandler.SolveDocumentation + "$name returns the mathematical median of the list after sorting it."),
+		new("geomean", args => ListHandler.Solve(args, x => x.GeometricMean()), ListHandler.SolveDocumentation + "$name returns the geometric mean of the list."),
 		new("mode", args =>
 		{
 			IEnumerable<double> modes;

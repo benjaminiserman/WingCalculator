@@ -593,7 +593,7 @@ internal static class Functions
 			{
 				throw new WingCalcException("Function \"exec\" requires a pointer node or a quote node as its first argument.");
 			}
-		}, "Given its first argument as a pointer, $name reads the list at that pointer as a string and executes it as a WingCalc expression."),
+		}, "Given its first argument as a pointer, $name reads the list at that pointer as a string and executes it as a WingCalc expression. Or, given its first argument as a quote, $name executes the text of the quote as a WingCalc expression."),
 		#endregion
 
 		#region Factors
@@ -717,21 +717,80 @@ internal static class Functions
 		#region Write
 		new("write", args =>
 		{
-			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"write\" requires a quote node as its first argument.");
+			if (args[0] is QuoteNode quote)
+			{
+				quote.Solver.Write(quote.Text);
 
-			quote.Solver.Write(quote.Text);
+				return quote.Text.Length;
+			}
+			else if (args[0] is PointerNode pointer)
+			{
+				string text = new(ListHandler.Enumerate(pointer).Select(x => (char)x).ToArray());
+				pointer.Solver.Write(text);
 
-			return quote.Text.Length;
-		}, "Given a quote node as its first argument, $name prints it to standard output and returns its length."),
+				return text.Length;
+			}
+			else
+			{
+				throw new WingCalcException("Function \"write\" requires a pointer node or a quote node as its first argument.");
+			}
+		}, "Given a quote as its first argument, $name prints the text of the quote to standard output. Or, given a pointer as its first argument, $name interprets the list at the pointer as text and prints it to standard output. Finally, $name returns the number of characters printed to standard output."),
 		new("writeline", args =>
 		{
-			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"writeline\" requires a quote node as its first argument.");
+			if (args[0] is QuoteNode quote)
+			{
+				quote.Solver.WriteLine(quote.Text);
 
-			quote.Solver.WriteLine(quote.Text);
+				return quote.Text.Length;
+			}
+			else if (args[0] is PointerNode pointer)
+			{
+				string text = new(ListHandler.Enumerate(pointer).Select(x => (char)x).ToArray());
+				pointer.Solver.WriteLine(text);
 
-			return quote.Text.Length;
-		}, "Given a quote node as its first argument, $name prints it to standard output followed by a newline and returns its length (not including the added newline)."),
+				return text.Length;
+			}
+			else
+			{
+				throw new WingCalcException("Function \"writeline\" requires a pointer node or a quote node as its first argument.");
+			}
+		}, "Given a quote as its first argument, $name prints the text of the quote to standard output followed by a newline. Or, given a pointer as its first argument, $name interprets the list at the pointer as text and prints it to standard output followed by a newline. Finally, $name returns the number of characters printed to standard output (not including the added newline)."),
 		#endregion
+
+		#region Meta
+		new("help", args =>
+		{
+			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"help\" requires a quote node as its first argument.");
+
+			try
+			{
+				quote.Solver.WriteLine($"Documentation for {quote.Text}: {_functions[quote.Text].Documentation.Replace("$name", quote.Text)}");
+			}
+			catch
+			{
+				throw new WingCalcException($"Function \"{quote.Text}\" does not exist.");
+			}
+
+			return 42;
+		}, "Given a quote representing a function name as its first argument, $name prints the documentation of the function to standard output. Finally, $name returns 42."),
+		new("stdlist", args =>
+		{
+			double i = args[0].Solve();
+
+			List<string> names = new();
+
+			foreach (string name in _functions.Keys)
+			{
+				names.Add(name);
+				if (--i == 0) break;
+			}
+
+			args[0].Solver.WriteLine($"{{ {string.Join(", ", names)} }}");
+
+			return _functions.Count;
+		}, "Prints to standard output a number of function names from the standard library equal to its first argument. If its first argument is less than or equal to 0, $name prints every function name in the standard library. Finally, $name returns the number of functions in the standard library."),
+		#endregion
+
 	}.ToDictionary(x => x.Name, x => x);
 
 	internal static Func<List<INode>, double> Get(string s) => _functions[s].Function;

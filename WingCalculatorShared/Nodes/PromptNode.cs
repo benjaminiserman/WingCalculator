@@ -12,7 +12,7 @@ internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode
 			case 0:
 			{
 				double x = Input.Get(s => double.Parse(s.Replace("_", string.Empty)), Solver.ReadLine, Solver.WriteError, (_, _) => "Enter a double.");
-				A.Assign(new ConstantNode(x));
+				A.Assign(new ConstantNode(x, Solver));
 				return x;
 			}
 			case 1:
@@ -46,7 +46,7 @@ internal record PromptNode(IAssignable A, INode B, Solver Solver) : INode
 					x += c == '1' ? 1 : 0;
 				}
 
-				A.Assign(new ConstantNode(x));
+				A.Assign(new ConstantNode(x, Solver));
 
 				return x;
 			}

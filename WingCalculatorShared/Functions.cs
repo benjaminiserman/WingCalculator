@@ -9,49 +9,53 @@ using WingCalculatorShared.Nodes;
 
 internal static class Functions
 {
-	public static Solver Solver { get; set; } // I don't love this solution
 	private static Random _random = new();
 
 	private static readonly Dictionary<string, StandardFunction> _functions = new List<StandardFunction>()
 	{
 		#region Exponential
-		new("pow", args => Math.Pow(args[0].Solve(), args[1].Solve())),
-		new("exp", args => Math.Exp(args[0].Solve())),
-		new("sqrt", args => Math.Sqrt(args[0].Solve())),
-		new("cbrt", args => Math.Cbrt(args[0].Solve())),
-		new("powmod", args => (double)BigInteger.ModPow((BigInteger)args[0].Solve(), (BigInteger)args[1].Solve(), (BigInteger)args[2].Solve())),
+		new("pow", args => Math.Pow(args[0].Solve(), args[1].Solve()), "Returns its first argument raised to the power of its second argument."),
+		new("exp", args => Math.Exp(args[0].Solve()), "Returns e raised to the power of its first argument."),
+		new("sqrt", args => Math.Sqrt(args[0].Solve()), "Returns the square root of its first argument."),
+		new("cbrt", args => Math.Cbrt(args[0].Solve()), "Returns the cube root of its first argument."),
+		new("powmod", args => (double)BigInteger.ModPow((BigInteger)args[0].Solve(), (BigInteger)args[1].Solve(), (BigInteger)args[2].Solve()), "Casts its first three arguments into BigIntegers, raises its first argument to the power of its second argument, then returns the modulus division of the result and its third argument."),
 
 		new("log", args =>
 		{
 			if (args.Count == 1) return Math.Log(args[0].Solve(), 10);
 			else return Math.Log(args[0].Solve(), args[1].Solve());
-		}),
-		new("ln", args => Math.Log(args[0].Solve())),
+		}, "If there is only one argument, log returns the base 10 logarithm of its first argument. Otherwise, log returns the logarithm of its first argument in the base of its second argument."),
+		new("ln", args => Math.Log(args[0].Solve()), "Returns the natural (base e) logarithm of its first argument."),
 		#endregion
 
 		#region Rounding
-		new("ceil", args => Math.Ceiling(args[0].Solve())),
-		new("floor", args => Math.Floor(args[0].Solve())),
-		new("round", args => Math.Round(args[0].Solve(), args.Count > 1 ? (int)args[1].Solve() : 0, (MidpointRounding)(args.Count > 2 ? args[2].Solve() : 0))),
-		new("trunc", args => (int)args[0].Solve()),
+		new("ceil", args => Math.Ceiling(args[0].Solve()), "Returns its first argument rounded up."),
+		new("floor", args => Math.Floor(args[0].Solve()), "Returns its first argument rounded down."),
+		new("round", args => Math.Round(args[0].Solve(), args.Count > 1 ? (int)args[1].Solve() : 0, (MidpointRounding)(args.Count > 2 ? args[2].Solve() : 0)), "If there is only one argument, round returns its first argument rounded to the nearest whole number. Otherwise, round returns its first argument rounded under the scheme described by its second argument:\n" +
+			" [0] => rounds to the nearest integer, or towards the nearest even integer if halfway between two integers\n" +
+			" [1] => rounds away from zero\n" +
+			" [2] => rounds towards zero\n" +
+			" [3] => rounds towards negative infinity (floor)\n" +
+			" [4] => rounds towards positive infinity (ceil)"),
+		new("trunc", args => Math.Truncate(args[0].Solve()), "Returns its first argument rounded towards zero."),
 		#endregion
 
 		#region Trigonometry
-		new("sin", args => Math.Sin(args[0].Solve())),
-		new("cos", args => Math.Cos(args[0].Solve())),
-		new("tan", args => Math.Tan(args[0].Solve())),
-		new("asin", args => Math.Asin(args[0].Solve())),
-		new("acos", args => Math.Acos(args[0].Solve())),
-		new("atan", args => args.Count > 1 ? Math.Atan2(args[0].Solve(), args[1].Solve()) : Math.Atan(args[0].Solve())),
-		new("sinh", args => Math.Sinh(args[0].Solve())),
-		new("cosh", args => Math.Cosh(args[0].Solve())),
-		new("tanh", args => Math.Tanh(args[0].Solve())),
-		new("asinh", args => Math.Asinh(args[0].Solve())),
-		new("acosh", args => Math.Acosh(args[0].Solve())),
-		new("atanh", args => Math.Atanh(args[0].Solve())),
+		new("sin", args => Math.Sin(args[0].Solve()), "Returns the radian sine of its first argument."),
+		new("cos", args => Math.Cos(args[0].Solve()), "Returns the radian cosine of its first argument."),
+		new("tan", args => Math.Tan(args[0].Solve()), "Returns the radian tangent of its first argument."),
+		new("asin", args => Math.Asin(args[0].Solve()), "Returns the inverse radian sine of its first argument."),
+		new("acos", args => Math.Acos(args[0].Solve()), "Returns the inverse radian cosine of its first argument."),
+		new("atan", args => args.Count > 1 ? Math.Atan2(args[0].Solve(), args[1].Solve()) : Math.Atan(args[0].Solve()), "If there is only one argument, $name returns the inverse radian tangent of its first argument. Otherwise, $name returns the inverse radian tangent of the quotient of its first two arguments."),
+		new("sinh", args => Math.Sinh(args[0].Solve()), "Returns the hyperbolic radian sine radian  of its first argument."),
+		new("cosh", args => Math.Cosh(args[0].Solve()), "Returns the hyperbolic radian cosine of its first argument."),
+		new("tanh", args => Math.Tanh(args[0].Solve()), "Returns the hyperbolic radian tangent of its first argument."),
+		new("asinh", args => Math.Asinh(args[0].Solve()), "Returns the inverse hyperbolic radian sine of its first argument."),
+		new("acosh", args => Math.Acosh(args[0].Solve()), "Returns the inverse hyperbolic radian cosine of its first argument."),
+		new("atanh", args => Math.Atanh(args[0].Solve()), "Returns the inverse hyperbolic radian tangent of its first argument."),
 
-		new("rad", args => args[0].Solve() * Math.PI / 180),
-		new("deg", args => args[0].Solve() * 180 / Math.PI),
+		new("rad", args => args[0].Solve() * Math.PI / 180, "Returns its first argument converted into radians."),
+		new("deg", args => args[0].Solve() * 180 / Math.PI, "Returns its first argument converted into degrees."),
 		#endregion
 
 		#region MathematicalLoops
@@ -72,7 +76,7 @@ internal static class Functions
 			}
 			catch
 			{
-				throw new WingCalcException($"The first argument of the \"msum\" must be an assignment.");
+				throw new WingCalcException($"The first argument of the \"msum\" function must be an assignment.");
 			}
 
 			while (counterNode.Solve() <= end)
@@ -82,7 +86,7 @@ internal static class Functions
 			}
 
 			return sum;
-		}),
+		}, "Returns the mathematical sum of its arguments, where its first argument is an assignment of the bound variable to the lower bound of summation, its second argument is the upper bound of summation, and its third argument is the expression to be summed."),
 		new("mproduct", args =>
 		{
 			args[0].Solve();
@@ -100,7 +104,7 @@ internal static class Functions
 			}
 			catch
 			{
-				throw new WingCalcException($"The first argument of the \"mproduct\" must be an assignment.");
+				throw new WingCalcException($"The first argument of the \"mproduct\" function must be an assignment.");
 			}
 
 			while (counterNode.Solve() <= end)
@@ -110,7 +114,7 @@ internal static class Functions
 			}
 
 			return product;
-		}),
+		}, "Returns the mathematical product of its arguments, where its first argument is an assignment of the bound variable to the lower bound of multiplication, its second argument is the upper bound of multiplication, and its third argument is the expression to be multiplied."),
 		#endregion
 
 		#region Comparison
@@ -119,8 +123,8 @@ internal static class Functions
 			double error = args.Count >= 3 ? args[2].Solve() : 0;
 
 			return Math.Abs(args[0].Solve() - args[1].Solve()) <= error ? 1 : 0;
-		}),
-		new("nan", args => double.IsNaN(args[0].Solve()) ? 1 : 0),
+		}, "Returns 1 if its first and second argument are equal and otherwise returns 0. Optionally, a tolerance value within which numbers are considered equal may be provided."),
+		new("nan", args => double.IsNaN(args[0].Solve()) ? 1 : 0, "Returns 1 if its first is NaN, otherwise returns 0.\nNote: This function cannot be emulated by $x == $NAN, because according to IEEE 754 floating-point specifications, NaN != NaN."),
 		#endregion
 
 		#region Probability
@@ -130,38 +134,38 @@ internal static class Functions
 			int y = (int)args[1].Solve();
 
 			return FactorialDivision(x, x - y);
-		}),
+		}, "Performs mathematical permutation. Considering a set with a length equal to its first argument (x), $name returns the number of unique ordered subsets of length equal to its second argument (y) that can be created from that set. i.e.: xPy"),
 		new("comb", args =>
 		{
 			int x = (int)args[0].Solve();
 			int y = (int)args[1].Solve();
 
 			return FactorialDivision(x, x - y) / Factorial(y);
-		}),
-		new("factorial", args => Factorial((int)args[0].Solve())),
+		}, "Performs mathematical combination. Considering a set with a length equal to its first argument (x), $name returns the number of unique subsets of length equal to its second argument (y) that can be created from that set, regardless of order. i.e.: xCy"),
+		new("factorial", args => Factorial((int)args[0].Solve()), "Returns the factorial of its first argument."),
 		#endregion
 
 		#region Numeric
-		new("abs", args => Math.Abs(args[0].Solve())),
-		new("clamp", args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve())),
-		new("sign", args => Math.Sign(args[0].Solve())),
-		new("cpsign", args => Math.CopySign(args[0].Solve(), args[1].Solve())),
+		new("abs", args => Math.Abs(args[0].Solve()), "Returns the absolute value of its first argument."),
+		new("clamp", args => Math.Clamp(args[0].Solve(), args[1].Solve(), args[2].Solve()), "Returns its first argument if it is between its second and third arguments. Otherwise, if its first argument is less than its second, clamp returns its second argument. Finally, if its first argument is greater than its third, clamp returns its second argument."),
+		new("sign", args => Math.Sign(args[0].Solve()), "Given its first argument, returns +1 if it is positive, 0 if it is 0, or -1 if it is negative."),
+		new("cpsign", args => Math.CopySign(args[0].Solve(), args[1].Solve()), "Returns a value with the magnitude of its first argument and the sign of its second argument."),
 		#endregion
 
 		#region Bits
-		new("bitinc", args => Math.BitIncrement(args[0].Solve())),
-		new("bitdec", args => Math.BitDecrement(args[0].Solve())),
+		new("bitinc", args => Math.BitIncrement(args[0].Solve()), "Returns its first argument incremented by the smallest computationally-possible amount."),
+		new("bitdec", args => Math.BitDecrement(args[0].Solve()), "Returns its first argument decremented by the smallest computationally-possible amount."),
 		#endregion
 
 		#region ListProperties
-		new("max", args => ListHandler.Solve(args, x => x.Max())),
-		new("min", args => ListHandler.Solve(args, x => x.Min())),
-		new("sum", args => ListHandler.Solve(args, x => x.Sum())),
-		new("product", args => ListHandler.Solve(args, x => x.Product())),
-		new("mean", args => ListHandler.Solve(args, x => x.Average())),
-		new("average", args => ListHandler.Solve(args, x => x.Average())),
-		new("median", args => ListHandler.Solve(args, x => x.Median())),
-		new("mode", args => ListHandler.Solve(args, x => x.Mode())),
+		new("max", args => ListHandler.Solve(args, x => x.Max()), ListHandler.SolveDocumentation + "$name returns the maximum value of the list."),
+		new("min", args => ListHandler.Solve(args, x => x.Min()), ListHandler.SolveDocumentation + "$name returns the minimum value of the list."),
+		new("sum", args => ListHandler.Solve(args, x => x.Sum()), ListHandler.SolveDocumentation + "$name returns the sum of the values of the list."),
+		new("product", args => ListHandler.Solve(args, x => x.Product()), ListHandler.SolveDocumentation + "$name returns the product of the values of the list."),
+		new("mean", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
+		new("average", args => ListHandler.Solve(args, x => x.Average()), ListHandler.SolveDocumentation + "$name returns the mathematical mean of the list."),
+		new("median", args => ListHandler.Solve(args, x => x.Median()), ListHandler.SolveDocumentation + "$name returns the mathematical median of the list after sorting it."),
+		new("mode", args => ListHandler.Solve(args, x => x.Mode()), ListHandler.SolveDocumentation + "of the values that appear the most in the list, $name returns the greatest value."),
 		#endregion
 
 		#region ListMemory
@@ -170,49 +174,49 @@ internal static class Functions
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"len\" requires a pointer node as its first argument.");
 
 			return ListHandler.Length(pointer);
-		}),
+		}, "Returns the length of the list at the pointer described by its first argument."),
 		new("get", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"get\" requires a pointer node as its first argument.");
 
 			return ListHandler.Get(pointer, args[1].Solve());
-		}),
+		}, "From the list at the pointer represented by its first value, $name returns the element at the 0-based index represented by its second argument. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("set", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"set\" requires a pointer node as its first argument.");
 
 			return ListHandler.Set(pointer, args[1].Solve(), args[2].Solve());
-		}),
+		}, "From the list at the pointer represented by its first value, $name sets the element at the 0-based index represented by its second argument to its third argument and returns its third argument. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("add", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"add\" requires a pointer node as its first argument.");
 
 			return ListHandler.Add(pointer, args[1].Solve());
-		}),
+		}, "Adds and returns the value represented by its second argument to the end of the list at the pointer represented by its first argument."),
 		new("indexof", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");
 
 			return ListHandler.IndexOf(pointer, args[1].Solve());
-		}),
+		}, "Returns the 0-based index of its second argument as found within the list at the pointer represented by its first argument, or -1 if that list does not contain the second argument of indexof."),
 		new("remove", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"remove\" requires a pointer node as its first argument.");
 
 			return ListHandler.Remove(pointer, args[1].Solve());
-		}),
+		}, "If the value represented by its second argument can be found within the list at the pointer represented by its first argument, $name removes the first occurence of that value and returns 1. Otherwise, remove returns 0."),
 		new("clear", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"clear\" requires a pointer node as its first argument.");
 
 			return ListHandler.Clear(pointer);
-		}),
+		}, "Clears the list at the pointer represented by its first argument and returns the address of the pointer."),
 		new("contains", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"contains\" requires a pointer node as its first argument.");
 
 			return ListHandler.Enumerate(pointer).Contains(args[1].Solve()) ? 1 : 0;
-		}),
+		}, "Returns 1 if its second argument is contained within the list at the pointer represented by the first argument, otherwise returns 0."),
 		new("concat", args =>
 		{
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");
@@ -222,32 +226,26 @@ internal static class Functions
 								: a;
 
 			return ListHandler.Concat(a, b, c);
-		}),
+		}, "If there are two arguments, $name adds each element of the list at the pointer represented by the second argument to the list at the pointer represented by the first argument. Otherwise, $name creates a new list at the pointer represented by the third argument and adds each element of the list at the pointer represented by the first argument to it, then adds each element of the list at the pointer represented by the second argument to it. Finally, $name returns the address of the pointer containing the concatenated list."),
 		new("copy", args =>
 		{
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its first argument.");
 			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its second argument.");
 
 			return ListHandler.Copy(a, b);
-		}),
+		}, "Creates a copy of the list at the pointer represented by the first argument to the pointer represented by the second argument and returns the address of the pointer the list was copied to."),
 		new("setify", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"setify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Setify(pointer);
-		}),
-		new("stringify", args =>
-		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"stringify\" requires a pointer node as its first argument.");
-
-			return ListHandler.Stringify(pointer);
-		}),
+		}, "Removes all duplicate elements from the list at the pointer represented by the first argument and returns the address of the pointer."),
 		new("sort", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"sort\" requires a pointer node as its first argument.");
 
 			return ListHandler.Allocate(pointer, ListHandler.Enumerate(pointer).OrderBy(x => x).ToList());
-		}),
+		}, "Sorts the list at the pointer represented by the first argument and returns the address of the pointer."),
 		new("iter", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"iter\" requires a pointer node as its first argument.");
@@ -273,7 +271,7 @@ internal static class Functions
 			}
 
 			return ListHandler.Enumerate(pointer).Count();
-		}),
+		}, "Enumerates through the list at the pointer represented by its first argument, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. Finally, $name returns the number of elements contained within the list."),
 		new("filter", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"filter\" requires a pointer node as its first argument.");
@@ -311,7 +309,7 @@ internal static class Functions
 			ListHandler.Allocate(pointer, filtered);
 
 			return ListHandler.Enumerate(pointer).Count();
-		}),
+		}, "Enumerates through the list at the pointer represented by its first argument, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. For each element in the list, if the expression evaluated to 0, that element is removed from the list. Finally, $name returns address of the pointer represented by its first argument."),
 		new("any", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"any\" requires a pointer node as its first argument.");
@@ -345,7 +343,7 @@ internal static class Functions
 			}
 
 			return 0;
-		}),
+		}, "Enumerates through the list at the pointer represented by its first argument until the given expression doesn't evaluate to 0, or until the end of the list is found, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. Finally, $name returns 1 if an element matching the expression was found, and 0 otherwise."),
 		new("count", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"count\" requires a pointer node as its first argument.");
@@ -381,11 +379,16 @@ internal static class Functions
 			}
 
 			return count;
-		}),
+		}, "Enumerates through the list at the pointer represented by its first argument, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. For each element in the list, if the expression evaluated to 0, that element is removed from the list. Finally, $name returns the number of elements in the list for which the expression did not evaluate to 0."),
 		#endregion
 
 		#region ControlFlow
-		new("if", args => args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve()),
+		new("if", args =>
+		{
+			if (args.Count == 2) return args[0].Solve() != 0 ? args[1].Solve() : 0;
+			else return args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve();
+		}, "If its first argument does not evaluate to 0, $name returns its second argument. If its first argument evaluates to 0, if there are two arguments $name returns 0, or otherwise evaluates and returns its third argument."),
+		new("else", args => args[0].Solve() == 0 ? args[1].Solve() : 1, "If its first argument evaluates to 0, $name returns its second argument. Otherwise, it returns 1."),
 		new("for", args =>
 		{
 			args[0].Solve();
@@ -399,7 +402,7 @@ internal static class Functions
 			}
 
 			return count;
-		}),
+		}, "Evaluates its first argument. Then, while its second argument doesn't evaluate to 0, $name evaluates its fourth argument and then its third argument. Finally, $name returns the number of iterations that occurred."),
 		new("while", args =>
 		{
 			int count = 0;
@@ -411,7 +414,7 @@ internal static class Functions
 			}
 
 			return count;
-		}),
+		}, "While its first argument doesn't evaluate to 0, $name evaluates its second argument. Finally, $name returns the number of iterations that occurred."),
 		new("dowhile", args =>
 		{
 			int count = 0;
@@ -424,7 +427,7 @@ internal static class Functions
 			while (args[0].Solve() != 0);
 
 			return count;
-		}),
+		}, "Evaluates its second argument. Then, while its first argument doesn't evaluate to 0, $name evaluates its second argument. Finally, $name returns the number of iterations that occurred."),
 		new("repeat", args =>
 		{
 			double count = args[1].Solve();
@@ -435,7 +438,7 @@ internal static class Functions
 			}
 
 			return count;
-		}),
+		}, "$name evaluates its second argument, then repeatedly evaluates its first argument that many times. Finally, $name returns the number of iterations that occurred."),
 		#endregion
 
 		#region Memory
@@ -443,17 +446,19 @@ internal static class Functions
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
 
-			List<double> values = args.Skip(1).Select(x => x.Solve()).ToList();
+			List<double> values;
+
+			if (args[1] is QuoteNode quote)
+			{
+				values = quote.Text.Select(c => (double)c).ToList();
+			}
+			else
+			{
+				values = args.Skip(1).Select(x => x.Solve()).ToList();
+			}
 
 			return ListHandler.Allocate(pointer, values);
-		}),
-		new("salloc", args =>
-		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"salloc\" requires a pointer node as its first argument.");
-			QuoteNode quote = args[1] as QuoteNode ?? throw new WingCalcException("Function \"salloc\" requires a quote node as its second argument.");
-
-			return ListHandler.StringAllocate(pointer, quote.Text.Select(x => (double)x).ToList());
-		}),
+		}, "If its second argument is a quote, $name allocates each character of that quote to a new list at the pointer represented by its first argument. Otherwise, $name allocates all of its arguments (other than the first) to a new list at the pointer represented by its first argument."),
 		new("range", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
@@ -478,7 +483,7 @@ internal static class Functions
 			}
 
 			return ListHandler.Allocate(pointer, vals);
-		}),
+		}, "If there are two parameters, $range allocates each integer in the range [0, second argument) to a list at the pointer represented by its first argument. Otherwise, $range allocates each integer in the range [second argument, third argument) to a list at the pointer represented by its first argument."),
 		new("memprint", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument.");
@@ -489,7 +494,7 @@ internal static class Functions
 
 			solver.WriteLine($"${address} = {value}");
 			return value;
-		}),
+		}, "Given its first argument as a pointer, $name prints the address of the pointer and the value at the pointer to standard output. Finally, $name returns the value at the pointer."),
 		new("print", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
@@ -497,71 +502,32 @@ internal static class Functions
 			pointer.Solver.WriteLine($"{{ {string.Join(", ", ListHandler.Enumerate(pointer))} }}");
 
 			return ListHandler.Length(pointer);
-		}),
+		}, "Given its first argument as a pointer, $name enumerates the list found at the pointer and prints each element within it to standard out. Finally, $name returns the number of values printed."),
 		#endregion
 
 		#region Strings
 		new("exec", args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"exec\" requires a pointer node as its first argument.");
-			StringBuilder sb = new();
-
-			Solver solver = pointer.Solver;
-			double address = pointer.Address;
-
-			for (int i = 0; true; i++)
+			if (args[0] is PointerNode pointer)
 			{
-				char found = (char)solver.GetVariable((address + i).ToString());
-
-				if (found == '\0') break;
-				else sb.Append(found);
+				StringBuilder sb = new();
+				foreach (double x in ListHandler.Enumerate(pointer)) sb.Append((char)x);
+				return pointer.Solver.Solve(sb.ToString());
 			}
-
-			return solver.Solve(sb.ToString());
-		}),
-		new("listify", args =>
-		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"listify\" requires a pointer node as its first argument.");
-
-			return ListHandler.Listify(pointer);
-		}),
-		new("slen", args =>
-		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"slen\" requires a pointer node as its first argument.");
-
-			return ListHandler.StringEnumerate(pointer).Count();
-		}),
-		new("siter", args =>
-		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"siter\" requires a pointer node as its first argument.");
-			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"siter\" requires an assignable node as its second argument.");
-
-			if (args.Count >= 4)
+			else if (args[0] is QuoteNode quote)
 			{
-				IAssignable indexVar = args[2] as IAssignable ?? throw new WingCalcException("Function \"siter\" requires an assignable node as its third argument.");
-				foreach (var (x, i) in ListHandler.StringEnumerate(pointer).Select((x, i) => (x, i)))
-				{
-					lambdaVar.Assign(x);
-					indexVar.Assign(i);
-					args[3].Solve();
-				}
+				return quote.Solver.Solve(quote.Text);
 			}
 			else
 			{
-				foreach (double x in ListHandler.StringEnumerate(pointer))
-				{
-					lambdaVar.Assign(x);
-					args[2].Solve();
-				}
+				throw new WingCalcException("Function \"exec\" requires a pointer node or a quote node as its first argument.");
 			}
-
-			return ListHandler.StringEnumerate(pointer).Count();
-		}),
+		}, "Given its first argument as a pointer, $name reads the list at that pointer as a string and executes it as a WingCalc expression."),
 		#endregion
 
 		#region Factors
-		new("gcd", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.GCD((BigInteger)a, (BigInteger)b)))),
-		new("lcm", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b)))),
+		new("gcd", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.GCD((BigInteger)a, (BigInteger)b))), ListHandler.SolveDocumentation + "$name computes and returns the greatest common denominator of the list."),
+		new("lcm", args => ListHandler.Solve(args, x => (double)x.Aggregate((a, b) => (double)Factorizer.LCM((BigInteger)a, (BigInteger)b))), ListHandler.SolveDocumentation + "$name computes and returns the least common multiple of the list."),
 		new("factor", args =>
 		{
 			List<double> factors;
@@ -576,12 +542,12 @@ internal static class Functions
 			{
 				factors = Factorizer.Factors((BigInteger)args[0].Solve()).Select(x => (double)x).ToList();
 
-				Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
+				args[0].Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
 			}
 
 			return factors.Count;
-		}),
-		new("prime", args => Factorizer.IsPrime((BigInteger)args[0].Solve()) ? 1 : 0),
+		}, "If there is only one argument, $name prints to standard output the factors of its first argument. Otherwise, $name creates a list at the pointer represented by its first argument and fills it with the factors of its second argument."),
+		new("prime", args => Factorizer.IsPrime((BigInteger)args[0].Solve()) ? 1 : 0, "Returns 1 if its first argument is prime, and 0 otherwise."),
 		new("primefactor", args =>
 		{
 			List<double> factors;
@@ -596,15 +562,15 @@ internal static class Functions
 			{
 				factors = Factorizer.PrimeFactors((BigInteger)args[0].Solve()).Select(x => (double)x).ToList();
 
-				Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
+				args[0].Solver.WriteLine($"{{ {string.Join(", ", factors)} }}");
 			}
 
 			return factors.Count;
-		}),
+		}, "If there is only one argument, $name prints to standard output the prime factorization of its first argument. Otherwise, $name creates a list at the pointer represented by its first argument and fills it with the prime factorization of its second argument."),
 		#endregion
 
 		#region Programming
-		new("eval", args => args[0].Solve()),
+		new("eval", args => args[0].Solve(), "Evaluates and returns its first argument."),
 		new("assign", args =>
 		{
 			IAssignable assignable;
@@ -619,8 +585,8 @@ internal static class Functions
 			}
 
 			return assignable.Assign(args[1].Solve());
-		}),
-		new("ignore", args => 0),
+		}, "Evaluates its second argument and assigns it to its first argument."),
+		new("ignore", args => 0, "Does nothing."),
 		new("catch", args =>
 		{
 			try
@@ -631,7 +597,7 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		}),
+		}, "Attempts to evaluate and return its first argument. If any exception is thrown, evaluates and returns its second argument instead."),
 		new("catchwc", args =>
 		{
 			try
@@ -642,7 +608,7 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		}),
+		}, "Attempts to evaluate and return its first argument. If a WingCalcException is thrown, evaluates and returns its second argument instead."),
 		new("catchcs", args =>
 		{
 			try
@@ -653,28 +619,28 @@ internal static class Functions
 			{
 				return args[1].Solve();
 			}
-		}),
+		}, "Attempts to evaluate and return its first argument. If any C# exception is thrown, evaluates and returns its second argument instead."),
 		new("throw", args =>
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException($"The first argument of \"throw\" must be a QuoteNode.");
 
 			throw new CustomException(quote.Text);
-		}),
+		}, "Given a quote as its first argument, throws a new CustomException with that quote's text as its message."),
 		#endregion
 
 		#region Random
 		new("rand", args =>
 		{
-			if (args.Count == 0) return _random.NextDouble();
-			else if (args.Count == 1) return _random.Next((int)args[0].Solve());
+			if (args.Count == 1) return _random.Next((int)args[0].Solve());
 			else return _random.Next((int)args[0].Solve(), (int)args[1].Solve());
-		}),
+		}, "If there is one argument, $name generates and returns an integer less than its first argument rounded towards zero. Otherwise, generates and returns a number greater than or equal to its first argument rounded towards zero, but less than its second argument rounded towards zero."),
+		new("drand", args => _random.NextDouble() * args[0].Solve(), "Returns a random number within the range [0.0, 1.0) multiplied by its first argument."),
 		new("srand", args =>
 		{
 			int x = (int)args[0].Solve();
 			_random = new(x);
 			return x;
-		}),
+		}, "Sets the random seed to its first argument and returns the new seed."),
 		#endregion
 
 		#region Write
@@ -685,7 +651,7 @@ internal static class Functions
 			quote.Solver.Write(quote.Text);
 
 			return quote.Text.Length;
-		}),
+		}, "Given a quote node as its first argument, $name prints it to standard output and returns its length."),
 		new("writeline", args =>
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"writeline\" requires a quote node as its first argument.");
@@ -693,7 +659,7 @@ internal static class Functions
 			quote.Solver.WriteLine(quote.Text);
 
 			return quote.Text.Length;
-		}),
+		}, "Given a quote node as its first argument, $name prints it to standard output followed by a newline and returns its length (not including the added newline)."),
 		#endregion
 	}.ToDictionary(x => x.Name, x => x);
 
@@ -725,5 +691,5 @@ internal static class Functions
 		return result;
 	}
 
-	record struct StandardFunction(string Name, Func<List<INode>, double> Function);
+	record struct StandardFunction(string Name, Func<List<INode>, double> Function, string Documentation);
 }

@@ -61,8 +61,6 @@ public class Solver
 
 	public double Solve(string s, bool setAns = true)
 	{
-		Functions.Solver = this; // bleh
-
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
 		INode node = CreateTree(tokens);
@@ -87,7 +85,7 @@ public class Solver
 				{
 					try
 					{
-						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));
+						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text), this));
 					}
 					catch
 					{
@@ -127,7 +125,7 @@ public class Solver
 				{
 					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Empty hex literal found.");
 
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16)));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16), this));
 					isCoefficient = true;
 					break;
 				}
@@ -210,19 +208,19 @@ public class Solver
 				{
 					string unescaped = Regex.Unescape(tokens[i].Text);
 					if (unescaped.Length > 1) throw new WingCalcException($"Character '{tokens[i].Text}' could not be resolved: too many characters found in character literal.");
-					availableNodes.Add(new ConstantNode(unescaped[0]));
+					availableNodes.Add(new ConstantNode(unescaped[0], this));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Binary:
 				{
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2)));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2), this));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Octal:
 				{
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8)));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8), this));
 					isCoefficient = true;
 					break;
 				}
@@ -257,7 +255,7 @@ public class Solver
 						case "-":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new ConstantNode(-1));
+							availableNodes.Insert(i - 1, new ConstantNode(-1, this));
 							availableNodes.Insert(i, new PreOperatorNode("coeff"));
 							availableNodes.Insert(i + 1, numberNode);
 							break;
@@ -277,13 +275,13 @@ public class Solver
 						case "!":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0));
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0, this));
 							break;
 						}
 						case "~":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x));
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x, this));
 							break;
 						}
 						default:
@@ -450,7 +448,7 @@ public class Solver
 
 	internal INode GetMacro(string s)
 	{
-		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0));
+		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0, this));
 
 		return _macros[s];
 	}

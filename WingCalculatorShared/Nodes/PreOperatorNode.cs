@@ -12,4 +12,6 @@ internal class PreOperatorNode : INode
 	public double Solve() => throw new NotImplementedException("Syntax error. PreOperatorNode survived to Solve phase.");
 
 	public int Tier => Operators.GetPrecedence(Text);
+
+	public Solver Solver => throw new NotImplementedException("Syntax error. PreOperatorNode survived to Solve phase.");
 }

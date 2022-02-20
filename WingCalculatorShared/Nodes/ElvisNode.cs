@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record ElvisNode(INode A, INode B) : INode
+internal record ElvisNode(INode A, INode B, Solver Solver) : INode
 {
 	public double Solve()
 	{

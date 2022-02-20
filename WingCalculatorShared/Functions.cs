@@ -287,6 +287,42 @@ internal static class Functions
 
 			return val;
 		}, "From the list at the pointer represented by its first value, $name inserts its third argument into the 0-based index represented by its second argument and returns the inserted value. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
+		new("replace", args =>
+		{
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
+
+			List<double> from, to;
+
+			if (args[1] is PointerNode p1) from = ListHandler.Enumerate(p1).ToList();
+			else if (args[1] is QuoteNode q1) from = q1.Text.Select(x => (double)x).ToList();
+			else throw new WingCalcException("Function \"replace\" requires a pointer node or a quote node as its second argument.");
+
+			if (args[2] is PointerNode p2) to = ListHandler.Enumerate(p2).ToList();
+			else if (args[2] is QuoteNode q2) to = q2.Text.Select(x => (double)x).ToList();
+			else throw new WingCalcException("Function \"replace\" requires a pointer node or a quote node as its third argument.");
+
+			List<double> list = ListHandler.Enumerate(pointer).ToList();
+
+			for (int i = 0; i < list.Count - from.Count + 1; i++)
+			{
+				for (int j = 0; j < from.Count && i + j < list.Count; j++)
+				{
+					if (list[i + j] == from[j])
+					{
+						if (j == from.Count - 1)
+						{
+							list.RemoveRange(i, from.Count);
+							list.InsertRange(i, to);
+							i += to.Count;
+							break;
+						}
+					}
+					else break;
+				}
+			}
+
+			return ListHandler.Allocate(pointer, list);
+		}, "From the list at the pointer represented by the first argument, $name replaces each sequence found that matches the list generated from its second argument (which is a quote or pointer) and replaces it with the list generated from its third argument (which is also a quote or pointer)."),
 		new("indexof", args =>
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");
@@ -316,8 +352,8 @@ internal static class Functions
 			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");
 			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its second argument.");
 			PointerNode c = args.Count >= 3
-								? args[2] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its third argument.")
-								: a;
+				? args[2] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its third argument.")
+				: a;
 
 			return ListHandler.Concat(a, b, c);
 		}, "If there are two arguments, $name adds each element of the list at the pointer represented by the second argument to the list at the pointer represented by the first argument. Otherwise, $name creates a new list at the pointer represented by the third argument and adds each element of the list at the pointer represented by the first argument to it, then adds each element of the list at the pointer represented by the second argument to it. Finally, $name returns the address of the pointer containing the concatenated list."),

@@ -117,6 +117,48 @@ internal static class Functions
 		}, "Returns the mathematical product of its arguments, where its first argument is an assignment of the bound variable to the lower bound of multiplication, its second argument is the upper bound of multiplication, and its third argument is the expression to be multiplied."),
 		#endregion
 
+		#region Polynomial
+		new("quadratic", args =>
+		{
+			List<double> list;
+
+			if (args[0] is PointerNode pointer)
+			{
+				list = Quadratic(args[1].Solve(), args[2].Solve(), args[3].Solve());
+				ListHandler.Allocate(pointer, list);
+			}
+			else
+			{
+				double a = args[0].Solve(), b = args[1].Solve(), c = args[2].Solve();
+
+				list = Quadratic(a, b, c);
+
+				string positive, negative;
+
+				if (double.IsNaN(list[0])) positive = $"({-b} + sqrt({Math.Pow(b, 2) - 4 * a * c}) / {2 * a}";
+				else positive = list[0].ToString();
+
+				if (double.IsNaN(list[1])) negative = $"({-b} - sqrt({Math.Pow(b, 2) - 4 * a * c}) / {2 * a}";
+				else negative = list[1].ToString();
+
+				args[0].Solver.WriteLine($"({positive}, {negative})");
+			}
+
+			return list.Any(x => double.IsNaN(x)) ? 0 : 1;
+
+			static List<double> Quadratic(double a, double b, double c)
+			{
+				double sqrt = Math.Sqrt(Math.Pow(b, 2) - 4 * a * c);
+
+				List<double> list = new();
+				list.Add((-b + sqrt) / (2 * a));
+				list.Add((-b - sqrt) / (2 * a));
+
+				return list;
+			}
+		}, "Finds the roots of an equation ax**2 + bx + c. If its first argument is a pointer, a = its second argument, b = its third argument, and c = its fourth argument, and the result is stored in a new list allocated at the pointer. Otherwise, a = its first argument, b = its second argument, and c = its third argument, and the result is printed to standard output. Finally, $name returns 1 if both computed values are real numbers, and 0 otherwise."),
+		#endregion
+
 		#region Comparison
 		new("equals", args =>
 		{
@@ -174,7 +216,7 @@ internal static class Functions
 				if (args.Count == 1)
 				{
 					modes = ListHandler.Enumerate(pointer).Mode();
-					pointer.Solver.WriteLine(string.Join(", ", modes));
+					pointer.Solver.WriteLine(modes.GetString());
 				}
 				else if (args[1] is PointerNode second)
 				{
@@ -190,7 +232,7 @@ internal static class Functions
 			else
 			{
 				modes = args.Select(x => x.Solve()).Mode();
-				args[0].Solver.WriteLine(string.Join(", ", modes));
+				args[0].Solver.WriteLine(modes.GetString());
 			}
 
 			return modes.Count();
@@ -528,7 +570,7 @@ internal static class Functions
 		{
 			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
 
-			pointer.Solver.WriteLine($"{{ {string.Join(", ", ListHandler.Enumerate(pointer))} }}");
+			pointer.Solver.WriteLine(ListHandler.Enumerate(pointer).GetString());
 
 			return ListHandler.Length(pointer);
 		}, "Given its first argument as a pointer, $name enumerates the list found at the pointer and prints each element within it to standard out. Finally, $name returns the number of values printed."),

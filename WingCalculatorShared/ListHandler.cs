@@ -149,5 +149,7 @@ internal static class ListHandler
 		else return func(args.Select(x => x.Solve()));
 	}
 
+	public static string GetString(this IEnumerable<double> list) => $"{{ {string.Join(", ", list)} }}";
+
 	public static string SolveDocumentation => "Given a list represented by either its first argument as a pointer, or by all of its arguments evaluated as doubles, ";
 }

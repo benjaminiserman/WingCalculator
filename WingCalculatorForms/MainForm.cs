@@ -55,6 +55,7 @@ public partial class MainForm : Form
 		ResetSolver();
 		historyView.Clear();
 		omnibox.Clear();
+		errorLabel.Text = string.Empty;
 	}
 
 	private void frac_button_Click(object sender, EventArgs e) => SendString("::$FRAC");

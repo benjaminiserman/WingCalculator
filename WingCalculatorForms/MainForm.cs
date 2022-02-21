@@ -338,7 +338,7 @@ public partial class MainForm : Form
 
 			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}\n";
 
-			string errorMessage = ex is WingCalcException or CustomException 
+			string errorMessage = ex is WingCalcException or CustomException
 				? ex.Message.Replace("&", "&&")
 				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
 

@@ -589,9 +589,11 @@ internal static class Functions
 
 			return ListHandler.Allocate(pointer, values);
 		}, "If its second argument is a quote, $name allocates each character of that quote to a new list at the pointer represented by its first argument. Otherwise, $name allocates all of its arguments (other than the first) to a new list at the pointer represented by its first argument."),
+		new("calloc", args => ListHandler.Allocate(args[0] as PointerNode ?? throw new WingCalcException("Function \"calloc\" requires a pointer node as its first argument."), new double[10].ToList()), "Interprets its first argument as a pointer and allocates to it a list of zeroes with a length equal to its second argument."),
+		new("malloc", args => args[0].Solver.SetVariable((args[0] as PointerNode ?? throw new WingCalcException("Function \"malloc\" requires a pointer node as its first argument.")).Address.ToString(), args[1].Solve()), "Interprets its first argument as a pointer and allocates to it a list of uninitialized values with a length equal to its second argument."),
 		new("range", args =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
+			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"range\" requires a pointer node as its first argument.");
 
 			double start, end;
 

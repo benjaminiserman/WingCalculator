@@ -30,7 +30,7 @@ internal static class Operators
 	private static readonly Dictionary<string, Operator> _operators = new List<Operator>()
 	{
 		new("?", (a, b, solver) => new PromptNode((IAssignable)a, b, solver), _precedenceTiers["prompt"], PromptNode.Documentation),
-		
+
 		new("**", (a, b, solver) => new BinaryNode(a, b, (x, y) => Math.Pow(x, y), solver), _precedenceTiers["exponential"], "Computes its left-hand operand to the power of its right-hand operand."),
 
 		new("coeff", (a, b, solver) => new BinaryNode(a, b, (x, y) => x * y, solver), _precedenceTiers["coefficient"], "Computes the product of its operands. This operator is added by the interpreter where necessary to ensure expected behavior of coefficients. It cannot be manually added by the user."),

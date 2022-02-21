@@ -41,7 +41,7 @@ internal static class Factorizer
 		{
 			factors.Add(1);
 		}
-		
+
 		if (x != 1)
 		{
 			factors.Add(x);
@@ -66,7 +66,7 @@ internal static class Factorizer
 				factors.Add(x / i);
 			}
 		}
-		
+
 		var list = factors.ToList();
 		list.Sort();
 

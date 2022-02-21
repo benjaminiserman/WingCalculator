@@ -1,35 +1,40 @@
 ﻿namespace WingCalculatorShared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WingCalculatorShared.Nodes;
 
 internal class LocalList
 {
-	private readonly Dictionary<int, INode> _nodes = new();
+	private readonly Dictionary<string, INode> _nodes = new();
+	private readonly Solver _solver;
 
-	public LocalList(ICollection<INode> nodes) => _nodes = nodes.Select((n, i) => (n, i)).ToDictionary(x => x.i, x => x.n);
+	public LocalList(Solver solver) => _solver = solver;
 
-	public INode this[int x]
+	public LocalList(ICollection<INode> nodes, Solver solver)
 	{
-		get => Get(x);
-		set => Set(x, value);
+		_nodes = nodes.Select((n, i) => (n, i)).ToDictionary(x => x.i.ToString(), x => x.n);
+		_solver = solver;
 	}
 
-	public void Set(int x, INode a)
+	public INode this[string name]
 	{
-		if (_nodes.ContainsKey(x)) _nodes[x] = a;
-		else _nodes.Add(x, a);
+		get => Get(name);
+		set => Set(name, value);
 	}
 
-	public INode Get(int x)
+	public void Set(string name, INode a)
 	{
-		if (_nodes.ContainsKey(x)) return _nodes[x];
+		if (_nodes.ContainsKey(name)) _nodes[name] = a;
+		else _nodes.Add(name, a);
+	}
+
+	public INode Get(string name)
+	{
+		if (_nodes.ContainsKey(name)) return _nodes[name];
 		else
 		{
-			_nodes.Add(x, new ConstantNode(0));
-			return _nodes[x];
+			_nodes.Add(name, new ConstantNode(0, _solver));
+			return _nodes[name];
 		}
 	}
 

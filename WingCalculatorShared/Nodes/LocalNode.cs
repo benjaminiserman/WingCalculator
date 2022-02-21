@@ -1,18 +1,18 @@
-﻿namespace WingCalculatorShared;
+﻿namespace WingCalculatorShared.Nodes;
 
-internal record LocalNode(INode A, LocalList Locals) : INode, IAssignable
+internal record LocalNode(INode A, LocalList Locals, Solver Solver) : INode, IAssignable
 {
-	public double Solve() => Locals[(int)A.Solve()].Solve();
+	public double Solve() => Locals[A.Solve().ToString()].Solve();
 
-	public double Assign(INode a)
+	public double Assign(INode b)
 	{
-		Locals[(int)A.Solve()] = a;
+		Locals[A.Solve().ToString()] = b;
 		return 1;
 	}
 
-	public double Assign(double a)
+	public double Assign(double b)
 	{
-		Locals[(int)A.Solve()] = new ConstantNode(a);
+		Locals[A.Solve().ToString()] = new ConstantNode(b, Solver);
 		return 1;
 	}
 }

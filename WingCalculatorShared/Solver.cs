@@ -63,7 +63,7 @@ public class Solver
 	{
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
-		INode node = CreateTree(tokens);
+		INode node = CreateTree(tokens, new(this));
 
 		double solve = node.Solve();
 
@@ -72,7 +72,7 @@ public class Solver
 		return solve;
 	}
 
-	private INode CreateTree(Span<Token> tokens)
+	private INode CreateTree(Span<Token> tokens, LocalList locals)
 	{
 		List<INode> availableNodes = new();
 		bool isCoefficient = false;
@@ -107,7 +107,7 @@ public class Solver
 
 					int end = FindClosing(i + 1, tokens);
 
-					INode tree = new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end]));
+					INode tree = new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end], locals));
 
 					if (isCoefficient)
 					{
@@ -133,7 +133,7 @@ public class Solver
 				{
 					int end = FindClosing(i, tokens);
 
-					INode tree = CreateTree(tokens[(i + 1)..end]);
+					INode tree = CreateTree(tokens[(i + 1)..end], locals);
 
 					if (isCoefficient)
 					{
@@ -174,7 +174,7 @@ public class Solver
 						availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
 						isCoefficient = true;
 					}
-		
+
 					break;
 				}
 				case TokenType.Macro:
@@ -230,7 +230,7 @@ public class Solver
 						availableNodes.Add(new PreOperatorNode("*"));
 					}
 
-					availableNodes.Add(new PreOperatorNode("`"));
+					availableNodes.Add(new PreOperatorNode("#"));
 					isCoefficient = false;
 
 					break;
@@ -295,16 +295,10 @@ public class Solver
 							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x, this));
 							break;
 						}
-						case "`":
+						case "#":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new LocalNode(numberNode, null)); // $$$ replace null with an actual LocalList
-							break;
-						}
-						case "`":
-						{
-							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new LocalNode(numberNode, null)); // $$$ replace null with an actual LocalList
+							availableNodes.Insert(i - 1, new LocalNode(numberNode, null, this)); // $$$ replace null with an actual LocalList
 							break;
 						}
 						default:
@@ -384,7 +378,7 @@ public class Solver
 		else return availableNodes.First();
 	}
 
-	private List<INode> CreateParams(Span<Token> tokens)
+	private List<INode> CreateParams(Span<Token> tokens, LocalList locals)
 	{
 		List<INode> nodes = new();
 		int next = 0;
@@ -408,7 +402,7 @@ public class Solver
 				{
 					if (level == 1)
 					{
-						nodes.Add(CreateTree(tokens[next..i]));
+						nodes.Add(CreateTree(tokens[next..i], locals));
 						next = i + 1;
 					}
 
@@ -417,7 +411,7 @@ public class Solver
 			}
 		}
 
-		nodes.Add(CreateTree(tokens[next..tokens.Length]));
+		nodes.Add(CreateTree(tokens[next..tokens.Length], locals));
 
 		return nodes;
 	}

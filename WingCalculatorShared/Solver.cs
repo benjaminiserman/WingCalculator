@@ -53,6 +53,7 @@ public class Solver
 	};
 
 	private readonly Dictionary<string, INode> _macros = new();
+	private readonly List<LocalList> _callStack = new();
 
 	public Action<string> WriteLine { get; set; } = Console.WriteLine;
 	public Action<string> WriteError { get; set; } = Console.WriteLine;
@@ -63,16 +64,20 @@ public class Solver
 	{
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
-		INode node = CreateTree(tokens, new(this));
+		PushCallStack(new());
+
+		INode node = CreateTree(tokens);
 
 		double solve = node.Solve();
 
 		if (setAns) SetVariable("ANS", solve);
 
+		PopCallStack();
+
 		return solve;
 	}
 
-	private INode CreateTree(Span<Token> tokens, LocalList locals)
+	private INode CreateTree(Span<Token> tokens)
 	{
 		List<INode> availableNodes = new();
 		bool isCoefficient = false;
@@ -103,22 +108,19 @@ public class Solver
 				}
 				case TokenType.Function:
 				{
+					if (isCoefficient)
+					{
+						availableNodes.Add(new PreOperatorNode("coeff"));
+					}
+
 					if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen) throw new WingCalcException($"Function {tokens[i].Text} called but no opening bracket found.");
 
 					int end = FindClosing(i + 1, tokens);
 
-					INode tree = new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end], locals));
-
-					if (isCoefficient)
-					{
-						INode coefficientNode = availableNodes[^1];
-						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(Operators.CreateNode(coefficientNode, new("coeff"), tree));
-					}
-					else availableNodes.Add(tree);
+					availableNodes.Add(new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end])));
 
 					i = end;
-					isCoefficient = false;
+					isCoefficient = true;
 					break;
 				}
 				case TokenType.Hex:
@@ -131,17 +133,16 @@ public class Solver
 				}
 				case TokenType.OpenParen:
 				{
-					int end = FindClosing(i, tokens);
-
-					INode tree = CreateTree(tokens[(i + 1)..end], locals);
-
 					if (isCoefficient)
 					{
-						INode coefficientNode = availableNodes[^1];
-						availableNodes.Remove(coefficientNode);
-						availableNodes.Add(Operators.CreateNode(coefficientNode, new("coeff"), tree));
+						availableNodes.Add(new PreOperatorNode("coeff"));
 					}
-					else availableNodes.Add(tree);
+
+					int end = FindClosing(i, tokens);
+
+					INode tree = CreateTree(tokens[(i + 1)..end]);
+
+					availableNodes.Add(tree);
 
 					if (tree is null) throw new WingCalcException($"Empty brackets {tokens[i].Text}{tokens[end].Text} found.");
 
@@ -186,14 +187,25 @@ public class Solver
 
 					if (tokens[i].Text.Length == 1)
 					{
-						availableNodes.Add(new PreOperatorNode("@"));
+						throw new WingCalcException("'@' found without a macro name. Macro pointers are not supported.");
 					}
 					else
 					{
-						availableNodes.Add(new MacroNode(tokens[i].Text[1..], this));
-					}
+						if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen)
+						{
+							availableNodes.Add(new MacroNode(tokens[i].Text[1..], this, new(), true));
+							isCoefficient = false;
+						}
+						else
+						{
+							int end = FindClosing(i + 1, tokens);
 
-					isCoefficient = false;
+							availableNodes.Add(new MacroNode(tokens[i].Text[1..], this, CreateParams(tokens[(i + 2)..end]), false));
+							isCoefficient = true;
+
+							i = end;
+						}
+					}
 
 					break;
 				}
@@ -277,12 +289,6 @@ public class Solver
 							availableNodes.Insert(i - 1, new PointerNode(numberNode, this));
 							break;
 						}
-						case "@":
-						{
-							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new MacroPointerNode(numberNode, this));
-							break;
-						}
 						case "!":
 						{
 							availableNodes.RemoveAt(i - 1);
@@ -298,7 +304,7 @@ public class Solver
 						case "#":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new LocalNode(numberNode, null, this)); // $$$ replace null with an actual LocalList
+							availableNodes.Insert(i - 1, new LocalNode(numberNode, this));
 							break;
 						}
 						default:
@@ -337,7 +343,6 @@ public class Solver
 						{
 							CheckAndCollapseNode(ref i, x => ++x);
 						}
-
 						break;
 					}
 				}
@@ -378,7 +383,7 @@ public class Solver
 		else return availableNodes.First();
 	}
 
-	private List<INode> CreateParams(Span<Token> tokens, LocalList locals)
+	private LocalList CreateParams(Span<Token> tokens)
 	{
 		List<INode> nodes = new();
 		int next = 0;
@@ -402,7 +407,7 @@ public class Solver
 				{
 					if (level == 1)
 					{
-						nodes.Add(CreateTree(tokens[next..i], locals));
+						nodes.Add(CreateTree(tokens[next..i]));
 						next = i + 1;
 					}
 
@@ -411,9 +416,9 @@ public class Solver
 			}
 		}
 
-		nodes.Add(CreateTree(tokens[next..tokens.Length], locals));
+		nodes.Add(CreateTree(tokens[next..tokens.Length]));
 
-		return nodes;
+		return new(nodes);
 	}
 
 	private int FindClosing(int start, Span<Token> tokens)
@@ -485,4 +490,14 @@ public class Solver
 			yield return (kvp.Key, kvp.Value);
 		}
 	}
+
+	internal void PushCallStack(LocalList list) => _callStack.Add(list);
+	internal LocalList PopCallStack()
+	{
+		LocalList last = _callStack[^1];
+		_callStack.RemoveAt(_callStack.Count - 1);
+		return last;
+	}
+	
+	internal LocalList PeekCallStack(int i = 0) => _callStack[^(i + 1)];
 }

@@ -705,16 +705,7 @@ internal static class Functions
 		new("eval", args => args[0].Solve(), "Evaluates and returns its first argument."),
 		new("assign", args =>
 		{
-			IAssignable assignable;
-
-			try
-			{
-				assignable = ((AssignmentNode)args[0]).A;
-			}
-			catch
-			{
-				throw new WingCalcException($"The first argument of the \"msum\" must be an assignment.");
-			}
+			IAssignable assignable = args[0] as IAssignable ?? throw new WingCalcException($"The first argument of the \"assign\" must be assignable.");
 
 			return assignable.Assign(args[1].Solve());
 		}, "Evaluates its second argument and assigns it to its first argument."),
@@ -854,7 +845,7 @@ internal static class Functions
 
 	}.ToDictionary(x => x.Name, x => x);
 
-	internal static Func<List<INode>, double> Get(string s) => _functions[s].Function;
+	internal static Function Get(string s) => _functions[s].Function;
 
 	private static long FactorialDivision(int x, int y)
 	{
@@ -882,5 +873,6 @@ internal static class Functions
 		return result;
 	}
 
-	record struct StandardFunction(string Name, Func<List<INode>, double> Function, string Documentation);
+	public delegate double Function(List<INode> list);
+	record struct StandardFunction(string Name, Function Function, string Documentation);
 }

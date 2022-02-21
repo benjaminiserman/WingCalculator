@@ -6,7 +6,7 @@ using WingCalculatorShared.Exceptions;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:?";
-	public static readonly string _unaryOperators = "+-$!@~#";
+	public static readonly string _unaryOperators = "+-$!~#";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";

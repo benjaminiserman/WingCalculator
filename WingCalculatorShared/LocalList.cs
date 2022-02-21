@@ -1,19 +1,17 @@
 ﻿namespace WingCalculatorShared;
 using System.Collections.Generic;
 using System.Linq;
-using WingCalculatorShared.Nodes;
+using WingCalculatorShared.Exceptions;
 
 internal class LocalList
 {
 	private readonly Dictionary<string, INode> _nodes = new();
-	private readonly Solver _solver;
 
-	public LocalList(Solver solver) => _solver = solver;
+	public LocalList() { }
 
-	public LocalList(ICollection<INode> nodes, Solver solver)
+	public LocalList(ICollection<INode> nodes)
 	{
 		_nodes = nodes.Select((n, i) => (n, i)).ToDictionary(x => x.i.ToString(), x => x.n);
-		_solver = solver;
 	}
 
 	public INode this[string name]
@@ -21,6 +19,8 @@ internal class LocalList
 		get => Get(name);
 		set => Set(name, value);
 	}
+
+	public INode this[double name] => this[name.ToString()];
 
 	public void Set(string name, INode a)
 	{
@@ -33,9 +33,23 @@ internal class LocalList
 		if (_nodes.ContainsKey(name)) return _nodes[name];
 		else
 		{
-			_nodes.Add(name, new ConstantNode(0, _solver));
-			return _nodes[name];
+			throw new WingCalcException($"LocalList does not contain element #{name}.");
 		}
+	}
+
+	public static explicit operator List<INode>(LocalList x)
+	{
+		List<INode> list = new();
+		for (double i = 0; true; i++)
+		{
+			if (x._nodes.TryGetValue(i.ToString(), out INode node))
+			{
+				list.Add(node);
+			}
+			else break;
+		}
+
+		return list;
 	}
 
 	public int Count => _nodes.Count;

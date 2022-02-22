@@ -61,23 +61,23 @@ public partial class MainForm : Form
 
 	private void e_button_Click(object sender, EventArgs e) => SendString("$E");
 
-	private void sqrt_button_Click(object sender, EventArgs e) => SendString("sqrt(");
+	private void sqrt_button_Click(object sender, EventArgs e) => SendString("sqrt", true);
 
-	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt(");
+	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt", true);
 
 	private void txt_button_Click(object sender, EventArgs e) => SendString("::$TXT");
 
-	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin(");
+	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin", true);
 
-	private void arccos_button_Click(object sender, EventArgs e) => SendString("acos(");
+	private void arccos_button_Click(object sender, EventArgs e) => SendString("acos", true);
 
-	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan(");
+	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan", true);
 
-	private void sin_button_Click(object sender, EventArgs e) => SendString("sin(");
+	private void sin_button_Click(object sender, EventArgs e) => SendString("sin", true);
 
-	private void cos_button_Click(object sender, EventArgs e) => SendString("cos(");
+	private void cos_button_Click(object sender, EventArgs e) => SendString("cos", true);
 
-	private void tan_button_Click(object sender, EventArgs e) => SendString("tan(");
+	private void tan_button_Click(object sender, EventArgs e) => SendString("tan", true);
 
 	private void pow_button_Click(object sender, EventArgs e) => SendString("**");
 
@@ -85,9 +85,9 @@ public partial class MainForm : Form
 
 	private void mac_button_Click(object sender, EventArgs e) => SendString("@");
 
-	private void ln_button_Click(object sender, EventArgs e) => SendString("ln(");
+	private void ln_button_Click(object sender, EventArgs e) => SendString("ln", true);
 
-	private void log_button_Click(object sender, EventArgs e) => SendString("log(");
+	private void log_button_Click(object sender, EventArgs e) => SendString("log", true);
 
 	#endregion
 
@@ -351,7 +351,15 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void SendString(string s) => SendKeys.Send(s[^1] + s[..^1]);
+	private void SendString(string s, bool paren = false)
+	{
+		if (paren)
+		{
+			SendKeys.Send("{(}");
+			SendKeys.Send(s);
+		}
+		else SendKeys.Send(s[^1] + s[..^1]);
+	}
 
 	private void ResetSolver()
 	{

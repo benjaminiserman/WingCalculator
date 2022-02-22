@@ -2,82 +2,42 @@
 
 internal record LocalNode(INode A, Solver Solver) : INode, IAssignable
 {
-	public double Solve() => Solve(0);
+	public double Solve() => GetNonLocal(A).node.Solve();
 
-	private double Solve(int i)
+	public double Assign(INode b)
 	{
-		INode node;
+		if (b is LocalNode gotLocal) b = GetNonLocal(gotLocal.A).node;
 
-		try
-		{
-			node = Solver.PeekCallStack(i)[A.Solve().ToString()];
-		}
-		catch
-		{
-			throw new Exceptions.WingCalcException($"solve {i}: {A}");
-		}
-
-		if (node is LocalNode local) return local.Solve(i + 1);
-		else return node.Solve();
+		Solver.PeekCallStack(0)[A.Solve().ToString()] = b;
+		return 1;
 	}
 
-	public double Assign(INode b) => Assign(b, 0);
+	public double Assign(double b) => Assign(new ConstantNode(b, Solver));
 
-	public double Assign(INode b, int i)
+	private (INode node, int i) GetNonLocal(INode a, int i = 0)
 	{
-		INode node;
-		try
-		{
-			node = Solver.PeekCallStack(i)[A.Solve().ToString()];
-		}
-		catch
-		{
-			throw new Exceptions.WingCalcException($"set {i}: {A}; {b}");
-		}
+		INode node = Solver.PeekCallStack(i)[a.Solve().ToString()];
 
-		try
-		{
-			if (node is LocalNode local) return local.Assign(b, i + 1);
-			else if (node is IAssignable ia) return ia.Assign(b);
-			else
-			{
-				Solver.PeekCallStack()[A.Solve().ToString()] = b;
-				return 1;
-			}
-		}
-		catch
-		{
-			throw new Exceptions.WingCalcException($"{i}: {node} set to {b}");
-		}
+		if (node is LocalNode gotLocal) return GetNonLocal(gotLocal.A, i + 1);
+		else return (node, i);
 	}
 
-	public double Assign(double b) => Assign(b, 0);
-	public double Assign(double b, int i)
+	public double SetLocal(INode b, int i = 0)
 	{
-		INode node;
-		try
-		{
-			node = Solver.PeekCallStack(i)[A.Solve().ToString()];
-		}
-		catch
-		{
-			throw new Exceptions.WingCalcException($"set {i}: {A}; {b}");
-		}
+		if (b is LocalNode gotLocal) b = GetNonLocal(gotLocal.A).node;
 
-		try
+		if (A is LocalNode local) return local.SetLocal(b, i + 1);
+		else
 		{
-			if (node is LocalNode local) return local.Assign(b, i + 1);
-			else if (node is IAssignable ia) return ia.Assign(b);
+			string address = A.Solve().ToString();
+			INode node = Solver.PeekCallStack(i)[address];
+
+			if (node is IAssignable ia) return ia.Assign(b);
 			else
 			{
-				Solver.PeekCallStack()[A.Solve().ToString()] = new ConstantNode(b, Solver);
+				Solver.PeekCallStack(i)[address] = b;
 				return 1;
 			}
-		}
-		catch
-		{
-			throw new Exceptions.WingCalcException($"{i}: {node} set to {b}");
 		}
 	}
 }
-

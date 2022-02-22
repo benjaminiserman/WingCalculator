@@ -33,9 +33,11 @@ internal class LocalList
 		if (_nodes.ContainsKey(name)) return _nodes[name];
 		else
 		{
-			throw new WingCalcException($"LocalList does not contain element #{name}.");
+			throw new Exception($"LocalList does not contain element #{name}.");
 		}
 	}
+
+	public bool Contains(string name) => _nodes.ContainsKey(name);
 
 	public static explicit operator List<INode>(LocalList x)
 	{

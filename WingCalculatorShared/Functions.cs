@@ -705,11 +705,20 @@ internal static class Functions
 		new("eval", args => args[0].Solve(), "Evaluates and returns its first argument."),
 		new("assign", args =>
 		{
-			IAssignable assignable = args[0] as IAssignable ?? throw new WingCalcException($"The first argument of the \"assign\" must be assignable.");
+			IAssignable assignable = args[0] as IAssignable ?? throw new WingCalcException($"The first argument of the \"assign\" function must be assignable.");
 
 			return assignable.Assign(args[1].Solve());
 		}, "Evaluates its second argument and assigns it to its first argument."),
 		new("ignore", args => 0, "Does nothing."),
+		new("setlocal", args =>
+		{
+			LocalNode local = args[0] as LocalNode ?? throw new WingCalcException($"The first argument of the \"setlocal\" function must be a local variable.");
+
+			return local.SetLocal(args[1]);
+		}, "Sets the value at the reference that the local variable given as its first argument points to and returns the result of that variables assignment."),
+		#endregion
+
+		#region ExceptionHandling
 		new("catch", args =>
 		{
 			try

@@ -1,20 +1,9 @@
 ﻿namespace WingCalculatorShared.Nodes;
 using WingCalculatorShared.Exceptions;
 
-internal record MacroNode(string Name, Solver Solver, LocalList Locals, bool Assignable) : INode, IAssignable
+internal record MacroNode(string Name, Solver Solver, LocalList LocalList, bool Assignable) : INode, IAssignable
 {
-	public double Solve()
-	{
-		Solver.PushCallStack(Locals);
-		try
-		{
-			return Solver.GetMacro(Name).Solve();
-		}
-		finally
-		{
-			Solver.PopCallStack();
-		}
-	}
+	public double Solve() => Solver.GetMacro(Name).Solve();
 
 	public double Assign(INode a)
 	{

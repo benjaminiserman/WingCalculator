@@ -707,6 +707,19 @@ internal static class Functions
 		{
 			IAssignable assignable = args[0] as IAssignable ?? throw new WingCalcException($"The first argument of the \"assign\" function must be assignable.");
 
+			if (assignable is LocalNode local)
+			{
+				try
+				{
+					return local.Assign(args[1].Solve());
+					//return (args[0].Solver.PeekCallStack(0)[local.A.Solve().ToString()] as LocalNode).Assign(args[1].Solve());
+				}
+				catch (Exception ex)
+				{
+					throw new WingCalcException(ex.Message);
+				}
+			}
+
 			return assignable.Assign(args[1].Solve());
 		}, "Evaluates its second argument and assigns it to its first argument."),
 		new("ignore", args => 0, "Does nothing."),

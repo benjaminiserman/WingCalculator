@@ -7,7 +7,7 @@ internal record FunctionNode(string Name, Solver Solver, LocalList Locals) : INo
 {
 	public double Solve()
 	{
-		Solver.PushCallStack(Locals);
+		//Solver.PushCallStack(Locals);
 		List<INode> Nodes = (List<INode>)Locals;
 
 		try
@@ -32,7 +32,7 @@ internal record FunctionNode(string Name, Solver Solver, LocalList Locals) : INo
 		}
 		finally
 		{
-			Solver.PopCallStack();
+			//Solver.PopCallStack();
 		}
 	}
 }

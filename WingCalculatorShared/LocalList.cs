@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WingCalculatorShared.Exceptions;
+using WingCalculatorShared.Nodes;
 
 internal class LocalList
 {

@@ -519,6 +519,25 @@ internal static class Functions
 			else return args[0].Solve() != 0 ? args[1].Solve() : args[2].Solve();
 		}, "If its first argument does not evaluate to 0, $name returns its second argument. If its first argument evaluates to 0, if there are two arguments $name returns 0, or otherwise evaluates and returns its third argument."),
 		new("else", args => args[0].Solve() == 0 ? args[1].Solve() : 1, "If its first argument evaluates to 0, $name returns its second argument. Otherwise, it returns 1."),
+		new("switch", args =>
+		{
+			double x = args[0].Solve();
+
+			for (int i = 1; i < args.Count - 1; i += 2)
+			{
+				if (x == args[i].Solve())
+				{
+					return args[i + 1].Solve();
+				}
+			}
+
+			if (args.Count % 2 == 0)
+			{
+				return args[^1].Solve();
+			}
+			else return 0;
+
+		}, "Evaluates its first argument and for each of the following pairs of arguments, $name compares it to the first argument and returns the second if the two are equal. If the value is not equal to the first of any of the pairs, the return value depends on the number of arguments. If there are an even number of arguments, $name returns the last argument. Otherwise, it returns zero."),
 		new("for", args =>
 		{
 			args[0].Solve();

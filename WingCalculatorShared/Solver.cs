@@ -385,8 +385,12 @@ public class Solver
 				{
 					if (level == 1)
 					{
-						nodes.Add(CreateTree(tokens[next..i]));
-						next = i + 1;
+						Span<Token> treeSpan = tokens[next..i];
+						if (treeSpan.Length < 1) throw new WingCalcException("Empty parameters are not allowed.");
+						nodes.Add(CreateTree(treeSpan));
+						next = i == tokens.Length - 1
+							? -1
+							: i + 1;
 					}
 
 					break;
@@ -394,7 +398,10 @@ public class Solver
 			}
 		}
 
-		nodes.Add(CreateTree(tokens[next..tokens.Length]));
+		if (next != -1)
+		{
+			nodes.Add(CreateTree(tokens[next..tokens.Length]));
+		}
 
 		return nodes;
 	}

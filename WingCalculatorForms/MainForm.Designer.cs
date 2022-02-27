@@ -28,6 +28,7 @@ partial class MainForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.omnibox = new System.Windows.Forms.TextBox();
 			this.bin_button = new System.Windows.Forms.Button();
@@ -72,6 +73,7 @@ partial class MainForm
 			// 
 			// omnibox
 			// 
+			this.omnibox.AcceptsReturn = true;
 			this.omnibox.AcceptsTab = true;
 			this.omnibox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.omnibox.Location = new System.Drawing.Point(3, 3);
@@ -353,6 +355,7 @@ partial class MainForm
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
             "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);

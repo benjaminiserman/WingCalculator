@@ -1,6 +1,8 @@
 ﻿namespace WingCalculatorForms;
 
 using System;
+using System.Reflection;
+using System.Windows.Forms;
 
 internal class HistoryView : ListBox
 {
@@ -10,6 +12,7 @@ internal class HistoryView : ListBox
 
 	private int _trackedIndex = -1;
 	private MainForm _mainForm;
+	private readonly ContextMenuStrip _menuStrip;
 
 	public HistoryView()
 	{
@@ -17,6 +20,16 @@ internal class HistoryView : ListBox
 		MeasureItem += OnMeasureItem;
 		DrawItem += OnDrawItem;
 		Items.Add(_emptyEntry);
+		_menuStrip = new();
+		_menuStrip.Items.Add("Insert Above");
+		_menuStrip.Items.Add("Insert Below");
+		_menuStrip.Items.Add("Copy Solution");
+		_menuStrip.Items.Add("Copy Output");
+		_menuStrip.Items.Add("Copy Entry");
+		_menuStrip.Items.Add("Delete Entry");
+		_menuStrip.ItemClicked += _menuStrip_ItemClicked;
+		ContextMenuStrip = _menuStrip;
+		MouseUp += OnClick;
 	}
 
 	public void Connect(MainForm mainForm) => _mainForm = mainForm;
@@ -65,7 +78,7 @@ internal class HistoryView : ListBox
 			_trackedIndex = SelectedIndex;
 		}
 
-		if (GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText))
+		if (omniText is not null && GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText))
 		{
 			Items[SelectedIndex] = omniText;
 		}
@@ -116,6 +129,12 @@ internal class HistoryView : ListBox
 		RefillEntryBuffer();
 	}
 
+	public void InsertEntry(string s, int i)
+	{
+		Items.Insert(i, s);
+		RefillEntryBuffer();
+	}
+
 	public void EditSelected(string s)
 	{
 		Items[SelectedIndex] = s;
@@ -135,7 +154,7 @@ internal class HistoryView : ListBox
 		if (SelectedItem is not null && (string)SelectedItem != _emptyEntry)
 		{
 			int index = SelectedIndex;
-			Items.Remove(SelectedItem);
+			Items.RemoveAt(index);
 
 			return SelectedChange(index < Items.Count ? index : Items.Count - 1, null);
 		}
@@ -188,4 +207,65 @@ internal class HistoryView : ListBox
 		catch { }
 	}
 	#endregion
+
+	private void OnClick(object sender, MouseEventArgs e)
+	{
+		if (e.Button == MouseButtons.Right)
+		{
+			SelectedIndex = IndexFromPoint(e.Location);
+			if (SelectedIndex != -1)
+			{
+				_menuStrip.Show();
+			}
+		}
+	}
+
+	private void _menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+	{
+		string s = SelectedItem.ToString();
+
+		switch (e.ClickedItem.Text)
+		{
+			case "Insert Above":
+			{
+				InsertEntry("$ANS", SelectedIndex);
+				SelectedChange(SelectedIndex, null);
+				break;
+			}
+			case "Insert Below":
+			{
+				InsertEntry("$ANS", SelectedIndex + 1);
+				break;
+			}
+			case "Copy Solution":
+			{
+				int solutionIndex = s.IndexOf("\n> Solution: ");
+				Clipboard.SetText(s[(solutionIndex + "\n> Solution: ".Length)..]);
+				break;
+			}
+			case "Copy Output":
+			{
+				int outputIndex = s.IndexOf("\n> Output: ");
+				int solutionIndex = s.IndexOf("\n> Solution: ");
+
+				if (outputIndex == -1) Clipboard.SetText("(no output)");
+				else
+				{
+					Clipboard.SetText(s[(outputIndex + "\n> Output: ".Length)..solutionIndex].Replace("\n>", "\n"));
+				}
+
+				break;
+			}
+			case "Copy Entry":
+			{
+				Clipboard.SetText(s);
+				break;
+			}
+			case "Delete Entry":
+			{
+				_mainForm.OmniText = DeleteSelected();
+				break;
+			}
+		}
+	}
 }

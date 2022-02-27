@@ -270,7 +270,7 @@ public partial class MainForm : Form
 		_textIndex = 0;
 		ViewerForm.RefreshEntries(_solver);
 		SendCursorRight();
-		historyView.SelectedClear(); // yes, this double set is necessary... it triggers an event iirc
+		historyView.SelectedClear();
 		if (historyView.SelectedChange == null || altMode) historyView.TopIndex = historyView.Items.Count - 1; // send scrollbar to bottom
 		omnibox.Clear();
 	}

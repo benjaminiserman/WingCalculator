@@ -145,7 +145,18 @@ internal class HistoryView : ListBox
 
 	public string GetEntryText(int i) => GetEntryText(Items[i]);
 
-	private static string GetEntryText(object x) => ((string)x).Split('\n')[0];
+	private static string GetEntryText(object x)
+	{
+		string s = x.ToString();
+
+		int outputIndex = s.IndexOf("\n> Output:");
+		int solveIndex = s.IndexOf("\n> Solution:");
+
+		if (outputIndex != -1) return s[..outputIndex];
+		if (solveIndex != -1) return s[..solveIndex];
+
+		return s;
+	}
 
 	public string GetLastNonEmptyEntry() => GetEntryText(Items[^2]);
 

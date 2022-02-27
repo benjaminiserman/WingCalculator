@@ -72,6 +72,7 @@ partial class MainForm
 			// 
 			// omnibox
 			// 
+			this.omnibox.AcceptsTab = true;
 			this.omnibox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.omnibox.Location = new System.Drawing.Point(3, 3);
 			this.omnibox.Multiline = true;
@@ -352,6 +353,7 @@ partial class MainForm
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";

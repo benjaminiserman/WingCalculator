@@ -1,7 +1,5 @@
 ﻿namespace WingCalculatorForms;
-
 using System;
-using System.Reflection;
 using System.Windows.Forms;
 
 internal class HistoryView : ListBox

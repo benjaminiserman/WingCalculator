@@ -536,7 +536,6 @@ internal static class Functions
 				return args[^1].Solve();
 			}
 			else return 0;
-
 		}, "Evaluates its first argument and for each of the following pairs of arguments, $name compares it to the first argument and returns the second if the two are equal. If the value is not equal to the first of any of the pairs, the return value depends on the number of arguments. If there are an even number of arguments, $name returns the last argument. Otherwise, it returns zero."),
 		new("for", args =>
 		{

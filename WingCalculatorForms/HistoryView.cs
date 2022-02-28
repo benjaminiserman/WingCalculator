@@ -104,7 +104,6 @@ internal class HistoryView : ListBox
 		else if (SelectedIndex == -1) return;
 		else
 		{
-			_mainForm.Error($"{_trackedIndex} ");
 			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
 
 			if (_trackedIndex < Items.Count && GetEntryText(Items[_trackedIndex]) != _mainForm.OmniText

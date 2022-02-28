@@ -169,9 +169,11 @@ internal class HistoryView : ListBox
 
 		int outputIndex = s.IndexOf("\n> Output:");
 		int solveIndex = s.IndexOf("\n> Solution:");
+		int errorIndex = s.IndexOf("\n> Error:");
 
 		if (outputIndex != -1) return s[..outputIndex];
 		if (solveIndex != -1) return s[..solveIndex];
+		if (errorIndex != -1) return s[..errorIndex];
 
 		return s;
 	}

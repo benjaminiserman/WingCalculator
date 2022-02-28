@@ -303,11 +303,11 @@ public partial class MainForm : Form
 		}
 		catch (WingCalcException ex)
 		{
-			historyView.Items[i] = $"{historyView.Items[i]}\n{ex.Message}";
+			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.Message}";
 		}
 		catch (Exception ex)
 		{
-			historyView.Items[i] = $"{historyView.Items[i]}\n{ex.GetType()}: {ex.Message}";
+			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.GetType()}: {ex.Message}";
 		}
 	}
 	#endregion

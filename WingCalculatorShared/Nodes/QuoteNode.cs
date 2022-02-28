@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record QuoteNode(string Text, Solver Solver) : INode
+internal record QuoteNode(string Text) : INode
 {
-	public double Solve() => Text.Length;
+	public double Solve(Scope scope) => Text.Length;
 }

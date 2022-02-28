@@ -1,12 +1,12 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record ElvisNode(INode A, INode B, Solver Solver) : INode
+internal record ElvisNode(INode A, INode B) : INode
 {
-	public double Solve()
+	public double Solve(Scope scope)
 	{
-		double a = A.Solve();
+		double a = A.Solve(scope);
 
 		if (a != 0) return a;
-		else return B.Solve();
+		else return B.Solve(scope);
 	}
 }

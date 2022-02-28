@@ -6,10 +6,10 @@ using WingCalculatorShared.Nodes;
 
 internal static class ListHandler
 {
-	public static double Allocate(PointerNode pointer, IList<double> values)
+	public static double Allocate(PointerNode pointer, IList<double> values, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		solver.SetVariable(address.ToString(), values.Count);
 
@@ -21,10 +21,10 @@ internal static class ListHandler
 		return address;
 	}
 
-	public static double StringAllocate(PointerNode pointer, IList<double> values)
+	public static double StringAllocate(PointerNode pointer, IList<double> values, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		for (int i = 0; i < values.Count; i++)
 		{
@@ -36,24 +36,24 @@ internal static class ListHandler
 		return address;
 	}
 
-	public static double Length(PointerNode pointer) => pointer.Solver.GetVariable(pointer.Address.ToString());
+	public static double Length(PointerNode pointer, Scope scope) => scope.Solver.GetVariable(pointer.Address(scope).ToString());
 
-	public static double Get(PointerNode pointer, double i)
+	public static double Get(PointerNode pointer, double i, Scope scope)
 	{
-		if (i < 0) i = Length(pointer) + i;
-		return pointer.Solver.GetVariable((pointer.Address + i + 1).ToString());
+		if (i < 0) i = Length(pointer, scope) + i;
+		return scope.Solver.GetVariable((pointer.Address(scope) + i + 1).ToString());
 	}
 
-	public static double Set(PointerNode pointer, double i, double x)
+	public static double Set(PointerNode pointer, double i, double x, Scope scope)
 	{
-		if (i < 0) i = Length(pointer) + i;
-		return pointer.Solver.SetVariable((pointer.Address + i + 1).ToString(), x);
+		if (i < 0) i = Length(pointer, scope) + i;
+		return scope.Solver.SetVariable((pointer.Address(scope) + i + 1).ToString(), x);
 	}
 
-	public static double Add(PointerNode pointer, double x)
+	public static double Add(PointerNode pointer, double x, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		double length = solver.GetVariable(address.ToString()) + 1;
 		solver.SetVariable(address.ToString(), length);
@@ -62,14 +62,14 @@ internal static class ListHandler
 		return x;
 	}
 
-	public static double IndexOf(PointerNode pointer, double x)
+	public static double IndexOf(PointerNode pointer, double x, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		try
 		{
-			return Enumerate(pointer).Select((x, i) => (x, i)).First(y => y.x == x).i;
+			return Enumerate(pointer, scope).Select((x, i) => (x, i)).First(y => y.x == x).i;
 		}
 		catch
 		{
@@ -77,34 +77,34 @@ internal static class ListHandler
 		}
 	}
 
-	public static double Remove(PointerNode pointer, double x)
+	public static double Remove(PointerNode pointer, double x, Scope scope)
 	{
-		var list = Enumerate(pointer).ToList();
+		var list = Enumerate(pointer, scope).ToList();
 		if (!list.Contains(x)) return 0;
 		else
 		{
 			list.Remove(x);
-			Allocate(pointer, list);
+			Allocate(pointer, list, scope);
 			return 1;
 		}
 	}
 
-	public static double Clear(PointerNode pointer) => Allocate(pointer, new List<double>());
+	public static double Clear(PointerNode pointer, Scope scope) => Allocate(pointer, new List<double>(), scope);
 
-	public static double Concat(PointerNode a, PointerNode b, PointerNode c) => Allocate(c, Enumerate(a).Concat(Enumerate(b)).ToList());
+	public static double Concat(PointerNode a, PointerNode b, PointerNode c, Scope scope) => Allocate(c, Enumerate(a, scope).Concat(Enumerate(b, scope)).ToList(), scope);
 
-	public static double Copy(PointerNode a, PointerNode b) => Allocate(b, Enumerate(a).ToList());
+	public static double Copy(PointerNode a, PointerNode b, Scope scope) => Allocate(b, Enumerate(a, scope).ToList(), scope);
 
-	public static double Setify(PointerNode a) => Allocate(a, Enumerate(a).ToHashSet().ToList());
+	public static double Setify(PointerNode a, Scope scope) => Allocate(a, Enumerate(a, scope).ToHashSet().ToList(), scope);
 
-	public static double Listify(PointerNode a) => Allocate(a, StringEnumerate(a).ToList());
+	public static double Listify(PointerNode a, Scope scope) => Allocate(a, StringEnumerate(a, scope).ToList(), scope);
 
-	public static double Stringify(PointerNode a) => StringAllocate(a, Enumerate(a).ToList());
+	public static double Stringify(PointerNode a, Scope scope) => StringAllocate(a, Enumerate(a, scope).ToList(), scope);
 
-	public static IEnumerable<double> Enumerate(PointerNode pointer)
+	public static IEnumerable<double> Enumerate(PointerNode pointer, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		double length = solver.GetVariable(address.ToString());
 
@@ -114,10 +114,10 @@ internal static class ListHandler
 		}
 	}
 
-	public static IEnumerable<double> StringEnumerate(PointerNode pointer)
+	public static IEnumerable<double> StringEnumerate(PointerNode pointer, Scope scope)
 	{
-		Solver solver = pointer.Solver;
-		double address = pointer.Address;
+		Solver solver = scope.Solver;
+		double address = pointer.Address(scope);
 
 		for (int i = 0; true; i++)
 		{
@@ -143,10 +143,10 @@ internal static class ListHandler
 
 	public static double GeometricMean(this IEnumerable<double> list) => Math.Pow(list.Product(), 1.0 / list.Count());
 
-	public static double Solve(IList<INode> args, Func<IEnumerable<double>, double> func)
+	public static double Solve(IList<INode> args, Func<IEnumerable<double>, double> func, Scope scope)
 	{
-		if (args[0] is PointerNode pointer) return func(Enumerate(pointer));
-		else return func(args.Select(x => x.Solve()));
+		if (args[0] is PointerNode pointer) return func(Enumerate(pointer, scope));
+		else return func(args.Select(x => x.Solve(scope)));
 	}
 
 	public static string GetString(this IEnumerable<double> list) => $"{{ {string.Join(", ", list)} }}";

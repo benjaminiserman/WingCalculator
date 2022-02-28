@@ -1,43 +1,36 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record LocalNode(INode A, Solver Solver, LocalList LocalList) : INode, IAssignable
+internal record LocalNode(INode A) : INode, IAssignable
 {
-	public double Solve() => GetNonLocal(A).Solve();
+	public double Solve(Scope scope) => scope.LocalList[A.Solve(scope).ToString()].Solve(scope.ParentScope);
 
-	public double Assign(INode b)
+	public double Assign(INode b, Scope scope)
 	{
-		if (b is LocalNode gotLocal) b = GetNonLocal(gotLocal.A);
+		if (b is LocalNode local) (b, _) = local.GetNonLocal(scope);
 
-		LocalList[A.Solve().ToString()] = b;
+		scope.LocalList[A.Solve(scope).ToString()] = b;
 		return 1;
 	}
 
-	public double Assign(double b) => Assign(new ConstantNode(b, Solver));
-
-	private INode GetNonLocal(INode a)
+	private (INode, Scope) GetNonLocal(Scope scope)
 	{
-		INode node = LocalList[a.Solve().ToString()];
+		INode node = scope.LocalList[A.Solve(scope).ToString()];
 
-		if (node is LocalNode gotLocal) return GetNonLocal(gotLocal.A);
-		else return node;
+		if (node is LocalNode gotLocal) return gotLocal.GetNonLocal(scope.ParentScope);
+		else return (node, scope);
 	}
 
-	public double SetLocal(INode b)
+	public double DeepAssign(INode b, Scope scope)
 	{
-		if (b is LocalNode gotLocal) b = GetNonLocal(gotLocal.A);
+		string address = A.Solve(scope).ToString();
+		INode a = scope.LocalList[address];
+		if (b is LocalNode gotLocal) (b, _) = gotLocal.GetNonLocal(scope);
 
-		if (A is LocalNode local) return local.SetLocal(b);
+		if (a is IAssignable ia) return ia.DeepAssign(b, a is LocalNode ? scope.ParentScope : scope);
 		else
 		{
-			string address = A.Solve().ToString();
-			INode node = LocalList[address];
-
-			if (node is IAssignable ia) return ia.Assign(b);
-			else
-			{
-				LocalList[address] = b;
-				return 1;
-			}
+			scope.LocalList[address] = b;
+			return 1;
 		}
 	}
 }

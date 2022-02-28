@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record AssignmentNode(IAssignable A, INode B, Solver Solver) : INode
+internal record AssignmentNode(IAssignable A, INode B) : INode
 {
-	public double Solve() => A.Assign(B);
+	public double Solve(Scope scope) => A.Assign(B, scope);
 }

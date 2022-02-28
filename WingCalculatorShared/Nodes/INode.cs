@@ -2,7 +2,5 @@
 
 internal interface INode
 {
-	double Solve();
-
-	Solver Solver { get; }
+	double Solve(Scope scope);
 }

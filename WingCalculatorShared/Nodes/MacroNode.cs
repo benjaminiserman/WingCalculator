@@ -1,19 +1,13 @@
 ﻿namespace WingCalculatorShared.Nodes;
 using WingCalculatorShared.Exceptions;
 
-internal record MacroNode(string Name, Solver Solver, LocalList LocalList, bool Assignable) : INode, IAssignable
+internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : INode, IAssignable
 {
-	public double Solve() => Solver.GetMacro(Name).Solve();
+	public double Solve(Scope scope) => scope.Solver.GetMacro(Name).Solve(new(LocalList, scope, scope.Solver));
 
-	public double Assign(INode a)
+	public double Assign(INode a, Scope scope)
 	{
-		if (Assignable) return Solver.SetMacro(Name, a);
-		else throw new WingCalcException("Macros with arguments cannot be set.");
-	}
-
-	public double Assign(double a)
-	{
-		if (Assignable) return Solver.SetMacro(Name, new ConstantNode(a, Solver));
+		if (Assignable) return scope.Solver.SetMacro(Name, a);
 		else throw new WingCalcException("Macros with arguments cannot be set.");
 	}
 }

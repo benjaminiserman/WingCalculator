@@ -66,16 +66,18 @@ public class Solver
 
 		LocalList localScope = new();
 
-		INode node = CreateTree(tokens, localScope);
+		INode node = CreateTree(tokens);
 
-		double solve = node.Solve();
+		Scope scope = new(localScope, null, this);
+
+		double solve = node.Solve(scope);
 
 		if (setAns) SetVariable("ANS", solve);
 
 		return solve;
 	}
 
-	private INode CreateTree(Span<Token> tokens, LocalList localScope)
+	private INode CreateTree(Span<Token> tokens)
 	{
 		List<INode> availableNodes = new();
 		bool isCoefficient = false;
@@ -88,7 +90,7 @@ public class Solver
 				{
 					try
 					{
-						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text), this));
+						availableNodes.Add(new ConstantNode(double.Parse(tokens[i].Text)));
 					}
 					catch
 					{
@@ -115,7 +117,7 @@ public class Solver
 
 					int end = FindClosing(i + 1, tokens);
 
-					availableNodes.Add(new FunctionNode(tokens[i].Text, this, CreateParams(tokens[(i + 2)..end], localScope)));
+					availableNodes.Add(new FunctionNode(tokens[i].Text, CreateParams(tokens[(i + 2)..end])));
 
 					i = end;
 					isCoefficient = true;
@@ -125,7 +127,7 @@ public class Solver
 				{
 					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Empty hex literal found.");
 
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16), this));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16)));
 					isCoefficient = true;
 					break;
 				}
@@ -138,7 +140,7 @@ public class Solver
 
 					int end = FindClosing(i, tokens);
 
-					INode tree = CreateTree(tokens[(i + 1)..end], localScope);
+					INode tree = CreateTree(tokens[(i + 1)..end]);
 
 					availableNodes.Add(tree);
 
@@ -170,7 +172,7 @@ public class Solver
 					}
 					else
 					{
-						availableNodes.Add(new VariableNode(tokens[i].Text[1..], this));
+						availableNodes.Add(new VariableNode(tokens[i].Text[1..]));
 						isCoefficient = true;
 					}
 
@@ -191,15 +193,14 @@ public class Solver
 					{
 						if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen)
 						{
-							availableNodes.Add(new MacroNode(tokens[i].Text[1..], this, new(), true));
+							availableNodes.Add(new MacroNode(tokens[i].Text[1..], new(), true));
 							isCoefficient = false;
 						}
 						else
 						{
 							int end = FindClosing(i + 1, tokens);
 
-							
-							availableNodes.Add(new MacroNode(tokens[i].Text[1..], this, CreateParams(tokens[(i + 2)..end], new()), false));
+							availableNodes.Add(new MacroNode(tokens[i].Text[1..], CreateParams(tokens[(i + 2)..end]), false));
 							isCoefficient = true;
 
 							i = end;
@@ -210,7 +211,7 @@ public class Solver
 				}
 				case TokenType.Quote:
 				{
-					availableNodes.Add(new QuoteNode(Regex.Unescape(tokens[i].Text), this));
+					availableNodes.Add(new QuoteNode(Regex.Unescape(tokens[i].Text)));
 					isCoefficient = true;
 					break;
 				}
@@ -218,19 +219,19 @@ public class Solver
 				{
 					string unescaped = Regex.Unescape(tokens[i].Text);
 					if (unescaped.Length > 1) throw new WingCalcException($"Character '{tokens[i].Text}' could not be resolved: too many characters found in character literal.");
-					availableNodes.Add(new ConstantNode(unescaped[0], this));
+					availableNodes.Add(new ConstantNode(unescaped[0]));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Binary:
 				{
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2), this));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2)));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Octal:
 				{
-					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8), this));
+					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8)));
 					isCoefficient = true;
 					break;
 				}
@@ -252,7 +253,7 @@ public class Solver
 		if (availableNodes.Count == 0) return null;
 		if (availableNodes[0] is PreOperatorNode firstNode && firstNode.Text.Length >= 2)
 		{
-			availableNodes.Insert(0, new VariableNode("ANS", this)); // add $ANS at when start with binary operator
+			availableNodes.Insert(0, new VariableNode("ANS")); // add $ANS at when start with binary operator
 		}
 
 		if (availableNodes.Count > 0 && availableNodes[^1] is PreOperatorNode semiNode && semiNode.Text == ";") availableNodes.RemoveAt(availableNodes.Count - 1); // remove trailing semicolons
@@ -277,7 +278,7 @@ public class Solver
 						case "-":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new ConstantNode(-1, this));
+							availableNodes.Insert(i - 1, new ConstantNode(-1));
 							availableNodes.Insert(i, new PreOperatorNode("coeff"));
 							availableNodes.Insert(i + 1, numberNode);
 							break;
@@ -285,25 +286,25 @@ public class Solver
 						case "$":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new PointerNode(numberNode, this));
+							availableNodes.Insert(i - 1, new PointerNode(numberNode));
 							break;
 						}
 						case "!":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0, this));
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => x == 0 ? 1 : 0));
 							break;
 						}
 						case "~":
 						{
 							availableNodes.RemoveAt(i - 1);
-							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x, this));
+							availableNodes.Insert(i - 1, new UnaryNode(numberNode, x => ~(int)x));
 							break;
 						}
 						case "#":
 						{
 							availableNodes.RemoveAt(i - 1);
-							LocalNode local = new(numberNode, this, localScope);
+							LocalNode local = new(numberNode);
 							availableNodes.Insert(i - 1, local);
 							break;
 						}
@@ -363,7 +364,7 @@ public class Solver
 							throw new WingCalcException($"Operator {node.Text} is missing a right-hand operand.");
 						}
 
-						var binaryNode = Operators.CreateNode(availableNodes[i - 1], node, availableNodes[i + 1], this);
+						var binaryNode = Operators.CreateNode(availableNodes[i - 1], node, availableNodes[i + 1]);
 
 						availableNodes.RemoveAt(i - 1);
 						availableNodes.RemoveAt(i - 1);
@@ -384,7 +385,7 @@ public class Solver
 		else return availableNodes.First();
 	}
 
-	private LocalList CreateParams(Span<Token> tokens, LocalList localScope)
+	private LocalList CreateParams(Span<Token> tokens)
 	{
 		List<INode> nodes = new();
 		int next = 0;
@@ -408,7 +409,7 @@ public class Solver
 				{
 					if (level == 1)
 					{
-						nodes.Add(CreateTree(tokens[next..i], localScope));
+						nodes.Add(CreateTree(tokens[next..i]));
 						next = i + 1;
 					}
 
@@ -417,7 +418,7 @@ public class Solver
 			}
 		}
 
-		nodes.Add(CreateTree(tokens[next..tokens.Length], localScope));
+		nodes.Add(CreateTree(tokens[next..tokens.Length]));
 
 		return new(nodes);
 	}
@@ -471,7 +472,7 @@ public class Solver
 
 	internal INode GetMacro(string s)
 	{
-		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0, this));
+		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0));
 
 		return _macros[s];
 	}

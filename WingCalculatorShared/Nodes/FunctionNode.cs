@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using WingCalculatorShared.Exceptions;
 
-internal record FunctionNode(string Name, Solver Solver, LocalList Locals) : INode
+internal record FunctionNode(string Name, LocalList Locals) : INode
 {
-	public double Solve()
+	public double Solve(Scope scope)
 	{
-		//Solver.PushCallStack(Locals);
+		//scope.Solver.PushCallStack(Locals);
 		List<INode> Nodes = (List<INode>)Locals;
 
 		try
 		{
-			return Functions.Get(Name)(Nodes);
+			return Functions.Get(Name)(Nodes, scope);
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -32,7 +32,7 @@ internal record FunctionNode(string Name, Solver Solver, LocalList Locals) : INo
 		}
 		finally
 		{
-			//Solver.PopCallStack();
+			//scope.Solver.PopCallStack();
 		}
 	}
 }

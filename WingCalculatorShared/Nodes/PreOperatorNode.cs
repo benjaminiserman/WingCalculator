@@ -9,7 +9,7 @@ internal class PreOperatorNode : INode
 
 	public PreOperatorNode(string s) => Text = s;
 
-	public double Solve() => throw new NotImplementedException("Syntax error. PreOperatorNode survived to Solve phase.");
+	public double Solve(Scope scope) => throw new NotImplementedException("Syntax error. PreOperatorNode survived to Solve phase.");
 
 	public int Tier => Operators.GetPrecedence(Text);
 

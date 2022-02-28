@@ -1,15 +1,15 @@
 ﻿namespace WingCalculatorShared.Nodes;
 using System;
 
-internal record PrintNode(INode A, INode B, Solver Solver, bool Newline) : INode
+internal record PrintNode(INode A, INode B, bool Newline) : INode
 {
-	public double Solve()
+	public double Solve(Scope scope)
 	{
-		double a = A.Solve();
-		double b = B.Solve();
+		double a = A.Solve(scope);
+		double b = B.Solve(scope);
 
-		if (Newline) Solver.WriteLine(GetPrint(a, b));
-		else Solver.Write(GetPrint(a, b));
+		if (Newline) scope.Solver.WriteLine(GetPrint(a, b));
+		else scope.Solver.Write(GetPrint(a, b));
 
 		return a;
 	}

@@ -104,19 +104,21 @@ internal class HistoryView : ListBox
 		else if (SelectedIndex == -1) return;
 		else
 		{
+			_mainForm.Error($"{_trackedIndex} ");
 			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
 
-			if (_trackedIndex < Items.Count && (GetEntryText(Items[_trackedIndex]) != _mainForm.OmniText
-				&& !string.IsNullOrWhiteSpace(_mainForm.OmniText)))
+			if (_trackedIndex < Items.Count && GetEntryText(Items[_trackedIndex]) != _mainForm.OmniText
+				&& !string.IsNullOrWhiteSpace(_mainForm.OmniText))
 			{
-				SelectHandled = true;
-				Items[SelectedIndex] = _mainForm.OmniText;
+				Items[_trackedIndex] = _mainForm.OmniText;
 			}
 
 			_trackedIndex = SelectedIndex;
 
 			_mainForm.OmniText = GetEntryText(Items[SelectedIndex]);
 			_mainForm.SelectOmnibox();
+
+			RefillEntryBuffer();
 		}
 	}
 

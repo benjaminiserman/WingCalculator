@@ -8,7 +8,7 @@ internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : I
 	public double Assign(INode a, Scope scope)
 	{
 		if (Assignable) return scope.Solver.SetMacro(Name, a);
-		else throw new WingCalcException("Macros with arguments cannot be set.");
+		else throw new WingCalcException("Macros with arguments cannot be assigned to.");
 	}
 
 	public double DeepAssign(INode a, Scope scope)

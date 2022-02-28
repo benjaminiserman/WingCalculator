@@ -304,7 +304,7 @@ public class Solver
 						case "#":
 						{
 							availableNodes.RemoveAt(i - 1);
-							LocalNode local = new(numberNode);
+							LocalPointerNode local = new(numberNode);
 							availableNodes.Insert(i - 1, local);
 							break;
 						}

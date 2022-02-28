@@ -127,7 +127,7 @@ internal static class Functions
 		{
 			List<double> list;
 
-			if (args[0] is PointerNode pointer)
+			if (args[0] is IPointer pointer)
 			{
 				list = Quadratic(args[1].Solve(scope), args[2].Solve(scope), args[3].Solve(scope));
 				ListHandler.Allocate(pointer, list, scope);
@@ -216,14 +216,14 @@ internal static class Functions
 		new("mode", (args, scope) =>
 		{
 			IEnumerable<double> modes;
-			if (args[0] is PointerNode pointer)
+			if (args[0] is IPointer pointer)
 			{
 				if (args.Count == 1)
 				{
 					modes = ListHandler.Enumerate(pointer, scope).Mode();
 					scope.Solver.WriteLine(modes.GetString());
 				}
-				else if (args[1] is PointerNode second)
+				else if (args[1] is IPointer second)
 				{
 					modes = ListHandler.Enumerate(second, scope).Mode();
 					ListHandler.Allocate(pointer, modes.ToList(), scope);
@@ -247,31 +247,31 @@ internal static class Functions
 		#region ListMemory
 		new("len", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"len\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"len\" requires a pointer node as its first argument.");
 
 			return ListHandler.Length(pointer, scope);
 		}, "Returns the length of the list at the pointer described by its first argument."),
 		new("get", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"get\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"get\" requires a pointer node as its first argument.");
 
 			return ListHandler.Get(pointer, args[1].Solve(scope), scope);
 		}, "From the list at the pointer represented by its first value, $name returns the element at the 0-based index represented by its second argument. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("set", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"set\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"set\" requires a pointer node as its first argument.");
 
 			return ListHandler.Set(pointer, args[1].Solve(scope), args[2].Solve(scope), scope);
 		}, "From the list at the pointer represented by its first value, $name sets the element at the 0-based index represented by its second argument to its third argument and returns its third argument. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("add", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"add\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"add\" requires a pointer node as its first argument.");
 
 			return ListHandler.Add(pointer, args[1].Solve(scope), scope);
 		}, "Adds and returns the value represented by its second argument to the end of the list at the pointer represented by its first argument."),
 		new("insert", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
 
 			List<double> made = ListHandler.Enumerate(pointer, scope).ToList(); // Yes, this is particularly inefficient. If you have a problem with it, ope n a github issue about it and I'll fix it.
 
@@ -294,15 +294,15 @@ internal static class Functions
 		}, "From the list at the pointer represented by its first value, $name inserts its third argument into the 0-based index represented by its second argument and returns the inserted value. Negative indexes are interpreted as taking from the end of the list, with the index -1 referring the last element of the list."),
 		new("replace", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"insert\" requires a pointer node as its first argument.");
 
 			List<double> from, to;
 
-			if (args[1] is PointerNode p1) from = ListHandler.Enumerate(p1, scope).ToList();
+			if (args[1] is IPointer p1) from = ListHandler.Enumerate(p1, scope).ToList();
 			else if (args[1] is QuoteNode q1) from = q1.Text.Select(x => (double)x).ToList();
 			else throw new WingCalcException("Function \"replace\" requires a pointer node or a quote node as its second argument.");
 
-			if (args[2] is PointerNode p2) to = ListHandler.Enumerate(p2, scope).ToList();
+			if (args[2] is IPointer p2) to = ListHandler.Enumerate(p2, scope).ToList();
 			else if (args[2] is QuoteNode q2) to = q2.Text.Select(x => (double)x).ToList();
 			else throw new WingCalcException("Function \"replace\" requires a pointer node or a quote node as its third argument.");
 
@@ -330,60 +330,60 @@ internal static class Functions
 		}, "From the list at the pointer represented by the first argument, $name replaces each sequence found that matches the list generated from its second argument (which is a quote or pointer) and replaces it with the list generated from its third argument (which is also a quote or pointer)."),
 		new("indexof", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"indexof\" requires a pointer node as its first argument.");
 
 			return ListHandler.IndexOf(pointer, args[1].Solve(scope), scope);
 		}, "Returns the 0-based index of its second argument as found within the list at the pointer represented by its first argument, or -1 if that list does not contain the second argument of indexof."),
 		new("remove", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"remove\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"remove\" requires a pointer node as its first argument.");
 
 			return ListHandler.Remove(pointer, args[1].Solve(scope), scope);
 		}, "If the value represented by its second argument can be found within the list at the pointer represented by its first argument, $name removes the first occurence of that value and returns 1. Otherwise, remove returns 0."),
 		new("clear", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"clear\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"clear\" requires a pointer node as its first argument.");
 
 			return ListHandler.Clear(pointer, scope);
 		}, "Clears the list at the pointer represented by its first argument and returns the address of the pointer."),
 		new("contains", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"contains\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"contains\" requires a pointer node as its first argument.");
 
 			return ListHandler.Enumerate(pointer, scope).Contains(args[1].Solve(scope)) ? 1 : 0;
 		}, "Returns 1 if its second argument is contained within the list at the pointer represented by the first argument, otherwise returns 0."),
 		new("concat", (args, scope) =>
 		{
-			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");
-			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its second argument.");
-			PointerNode c = args.Count >= 3
-				? args[2] as PointerNode ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its third argument.")
+			IPointer a = args[0] as IPointer ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its first argument.");
+			IPointer b = args[1] as IPointer ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its second argument.");
+			IPointer c = args.Count >= 3
+				? args[2] as IPointer ?? throw new WingCalcException("Function \"concat\" requires a pointer node as its third argument.")
 				: a;
 
 			return ListHandler.Concat(a, b, c, scope);
 		}, "If there are two arguments, $name adds each element of the list at the pointer represented by the second argument to the list at the pointer represented by the first argument. Otherwise, $name creates a new list at the pointer represented by the third argument and adds each element of the list at the pointer represented by the first argument to it, then adds each element of the list at the pointer represented by the second argument to it. Finally, $name returns the address of the pointer containing the concatenated list."),
 		new("copy", (args, scope) =>
 		{
-			PointerNode a = args[0] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its first argument.");
-			PointerNode b = args[1] as PointerNode ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its second argument.");
+			IPointer a = args[0] as IPointer ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its first argument.");
+			IPointer b = args[1] as IPointer ?? throw new WingCalcException("Function \"copy\" requires a pointer node as its second argument.");
 
 			return ListHandler.Copy(a, b, scope);
 		}, "Creates a copy of the list at the pointer represented by the first argument to the pointer represented by the second argument and returns the address of the pointer the list was copied to."),
 		new("setify", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"setify\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"setify\" requires a pointer node as its first argument.");
 
 			return ListHandler.Setify(pointer, scope);
 		}, "Removes all duplicate elements from the list at the pointer represented by the first argument and returns the address of the pointer."),
 		new("sort", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"sort\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"sort\" requires a pointer node as its first argument.");
 
 			return ListHandler.Allocate(pointer, ListHandler.Enumerate(pointer, scope).OrderBy(x => x).ToList(), scope);
 		}, "Sorts the list at the pointer represented by the first argument and returns the address of the pointer."),
 		new("iter", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"iter\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"iter\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"iter\" requires an assignable node as its second argument.");
 
 			if (args.Count >= 4)
@@ -409,7 +409,7 @@ internal static class Functions
 		}, "Enumerates through the list at the pointer represented by its first argument, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. Finally, $name returns the number of elements contained within the list."),
 		new("filter", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"filter\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"filter\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"filter\" requires an assignable node as its second argument.");
 
 			List<double> filtered = new();
@@ -447,7 +447,7 @@ internal static class Functions
 		}, "Enumerates through the list at the pointer represented by its first argument, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. For each element in the list, if the expression evaluated to 0, that element is removed from the list. Finally, $name returns address of the pointer represented by its first argument."),
 		new("any", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"any\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"any\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"any\" requires an assignable node as its second argument.");
 
 			if (args.Count >= 4)
@@ -481,7 +481,7 @@ internal static class Functions
 		}, "Enumerates through the list at the pointer represented by its first argument until the given expression doesn't evaluate to 0, or until the end of the list is found, assigning each value found to the assignable node represented by its second argument. If there are three arguments, $name evaluates the expression represented by its third argument for each element of the list. Otherwise, $name assigns the index of each value found to the assignable node represented by the second argument, and evaluates the expression represented by its fourth argument for each element of the list. Finally, $name returns 1 if an element matching the expression was found, and 0 otherwise."),
 		new("count", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"count\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"count\" requires a pointer node as its first argument.");
 			IAssignable lambdaVar = args[1] as IAssignable ?? throw new WingCalcException("Function \"count\" requires an assignable node as its second argument.");
 
 			int count = 0;
@@ -579,7 +579,7 @@ internal static class Functions
 		#region Memory
 		new("alloc", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"alloc\" requires a pointer node as its first argument.");
 
 			List<double> values;
 
@@ -594,11 +594,11 @@ internal static class Functions
 
 			return ListHandler.Allocate(pointer, values, scope);
 		}, "If its second argument is a quote, $name allocates each character of that quote to a new list at the pointer represented by its first argument. Otherwise, $name allocates all of its arguments (other than the first) to a new list at the pointer represented by its first argument."),
-		new("calloc", (args, scope) => ListHandler.Allocate(args[0] as PointerNode ?? throw new WingCalcException("Function \"calloc\" requires a pointer node as its first argument."), new double[10].ToList(), scope), "Interprets its first argument as a pointer and allocates to it a list of zeroes with a length equal to its second argument."),
-		new("malloc", (args, scope) => scope.Solver.SetVariable((args[0] as PointerNode ?? throw new WingCalcException("Function \"malloc\" requires a pointer node as its first argument.")).Address(scope).ToString(), args[1].Solve(scope)), "Interprets its first argument as a pointer and allocates to it a list of uninitialized values with a length equal to its second argument."),
+		new("calloc", (args, scope) => ListHandler.Allocate(args[0] as IPointer ?? throw new WingCalcException("Function \"calloc\" requires a pointer node as its first argument."), new double[10].ToList(), scope), "Interprets its first argument as a pointer and allocates to it a list of zeroes with a length equal to its second argument."),
+		new("malloc", (args, scope) => scope.Solver.SetVariable((args[0] as IPointer ?? throw new WingCalcException("Function \"malloc\" requires a pointer node as its first argument.")).Address(scope).ToString(), args[1].Solve(scope)), "Interprets its first argument as a pointer and allocates to it a list of uninitialized values with a length equal to its second argument."),
 		new("range", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"range\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"range\" requires a pointer node as its first argument.");
 
 			double start, end;
 
@@ -623,7 +623,7 @@ internal static class Functions
 		}, "If there are two parameters, $range allocates each integer in the range [0, second argument) to a list at the pointer represented by its first argument. Otherwise, $range allocates each integer in the range [second argument, third argument) to a list at the pointer represented by its first argument."),
 		new("memprint", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"memprint\" requires a pointer node as its first argument.");
 
 			Solver solver = scope.Solver;
 			double address = pointer.Address(scope);
@@ -634,7 +634,7 @@ internal static class Functions
 		}, "Given its first argument as a pointer, $name prints the address of the pointer and the value at the pointer to standard output. Finally, $name returns the value at the pointer."),
 		new("print", (args, scope) =>
 		{
-			PointerNode pointer = args[0] as PointerNode ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
+			IPointer pointer = args[0] as IPointer ?? throw new WingCalcException("Function \"print\" requires a pointer node as its first argument.");
 
 			scope.Solver.WriteLine(ListHandler.Enumerate(pointer, scope).GetString());
 
@@ -645,7 +645,7 @@ internal static class Functions
 		#region Strings
 		new("exec", (args, scope) =>
 		{
-			if (args[0] is PointerNode pointer)
+			if (args[0] is IPointer pointer)
 			{
 				StringBuilder sb = new();
 				foreach (double x in ListHandler.Enumerate(pointer, scope)) sb.Append((char)x);
@@ -669,7 +669,7 @@ internal static class Functions
 		{
 			List<double> factors;
 
-			if (args[0] is PointerNode pointer)
+			if (args[0] is IPointer pointer)
 			{
 				factors = Factorizer.Factors((BigInteger)args[1].Solve(scope)).Select(x => (double)x).ToList();
 
@@ -689,7 +689,7 @@ internal static class Functions
 		{
 			List<double> factors;
 
-			if (args[0] is PointerNode pointer)
+			if (args[0] is IPointer pointer)
 			{
 				factors = Factorizer.PrimeFactors((BigInteger)args[1].Solve(scope)).Select(x => (double)x).ToList();
 
@@ -795,7 +795,7 @@ internal static class Functions
 
 				return quote.Text.Length;
 			}
-			else if (args[0] is PointerNode pointer)
+			else if (args[0] is IPointer pointer)
 			{
 				string text = new(ListHandler.Enumerate(pointer, scope).Select(x => (char)x).ToArray());
 				scope.Solver.Write(text);
@@ -815,7 +815,7 @@ internal static class Functions
 
 				return quote.Text.Length;
 			}
-			else if (args[0] is PointerNode pointer)
+			else if (args[0] is IPointer pointer)
 			{
 				string text = new(ListHandler.Enumerate(pointer, scope).Select(x => (char)x).ToArray());
 				scope.Solver.WriteLine(text);

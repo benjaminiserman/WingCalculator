@@ -23,10 +23,12 @@ internal class LocalList
 
 	public INode this[double name] => this[name.ToString()];
 
-	public void Set(string name, INode a)
+	public double Set(string name, INode a)
 	{
 		if (_nodes.ContainsKey(name)) _nodes[name] = a;
 		else _nodes.Add(name, a);
+
+		return 1;
 	}
 
 	public INode Get(string name)
@@ -34,7 +36,7 @@ internal class LocalList
 		if (_nodes.ContainsKey(name)) return _nodes[name];
 		else
 		{
-			throw new Exception($"LocalList does not contain element #{name}.");
+			throw new WingCalcException($"LocalList does not contain element #{name}.");
 		}
 	}
 

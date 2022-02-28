@@ -523,26 +523,26 @@ internal static class Functions
 			if (args.Count == 2) return args[0].Solve(scope) != 0 ? args[1].Solve(scope) : 0;
 			else return args[0].Solve(scope) != 0 ? args[1].Solve(scope) : args[2].Solve(scope);
 		}, "If its first argument does not evaluate to 0, $name returns its second argument. If its first argument evaluates to 0, if there are two arguments $name returns 0, or otherwise evaluates and returns its third argument."),
-		new("else", args => args[0].Solve() == 0 ? args[1].Solve() : 1, "If its first argument evaluates to 0, $name returns its second argument. Otherwise, it returns 1."),
-		new("switch", args =>
+		new("else", (args, scope) => args[0].Solve(scope) == 0 ? args[1].Solve(scope) : 1, "If its first argument evaluates to 0, $name returns its second argument. Otherwise, it returns 1."),
+		new("switch", (args, scope) =>
 		{
-			double x = args[0].Solve();
+			double x = args[0].Solve(scope);
 
 			for (int i = 1; i < args.Count - 1; i += 2)
 			{
-				if (x == args[i].Solve())
+				if (x == args[i].Solve(scope))
 				{
-					return args[i + 1].Solve();
+					return args[i + 1].Solve(scope);
 				}
 			}
 
 			if (args.Count % 2 == 0)
 			{
-				return args[^1].Solve();
+				return args[^1].Solve(scope);
 			}
 			else return 0;
 		}, "Evaluates its first argument and for each of the following pairs of arguments, $name compares it to the first argument and returns the second if the two are equal. If the value is not equal to the first of any of the pairs, the return value depends on the number of arguments. If there are an even number of arguments, $name returns the last argument. Otherwise, it returns zero."),
-		new("for", args =>
+		new("for", (args, scope) =>
 		{
 			args[0].Solve(scope);
 			int count = 0;
@@ -848,16 +848,16 @@ internal static class Functions
 		#endregion
 
 		#region Flush/Clear
-		new("clearout", args =>
+		new("clearout", (args, scope) =>
 		{
-			args[0].Solver.Clear();
+			scope.Solver.Clear();
 			return 1;
-		}, "Takes one argument, clears standard output, and returns 1."),
-		new("flush", args =>
+		}, "Clears standard output and returns 1."),
+		new("flush", (args, scope) =>
 		{
-			args[0].Solver.Flush();
+			scope.Solver.Flush();
 			return 1;
-		}, "Takes one argument, flushes any buffered data from standard output, and returns 1."),
+		}, "Flushes any buffered data from standard output and returns 1."),
 		#endregion
 
 		#region Meta
@@ -878,20 +878,10 @@ internal static class Functions
 		}, "Given a quote representing a function name as its first argument, $name prints the documentation of the function to standard output. Finally, $name returns 42."),
 		new("stdlist", (args, scope) =>
 		{
-			double i = args[0].Solve(scope);
-
-			List<string> names = new();
-
-			foreach (string name in _functions.Keys)
-			{
-				names.Add(name);
-				if (--i == 0) break;
-			}
-
-			scope.Solver.WriteLine($"{{ {string.Join(", ", names)} }}");
+			scope.Solver.WriteLine($"{{ {string.Join(", ", _functions.Keys)} }}");
 
 			return _functions.Count;
-		}, "Prints to standard output a number of function names from the standard library equal to its first argument. If its first argument is less than or equal to 0, $name prints every function name in the standard library. Finally, $name returns the number of functions in the standard library."),
+		}, "Prints every function name in the standard library and returns the number of functions in the standard library."),
 		#endregion
 
 	}.ToDictionary(x => x.Name, x => x);

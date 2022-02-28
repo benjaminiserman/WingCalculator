@@ -835,7 +835,7 @@ internal static class Functions
 		#endregion
 
 		#region Flush/Clear
-		new("clear", args =>
+		new("clearout", args =>
 		{
 			args[0].Solver.Clear();
 			return 1;

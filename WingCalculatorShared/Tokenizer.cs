@@ -6,7 +6,7 @@ using WingCalculatorShared.Exceptions;
 internal static class Tokenizer
 {
 	private static readonly string _operatorCharacters = "~!%^&*-+=|<>/;:?";
-	public static readonly string _unaryOperators = "+-$!@~";
+	public static readonly string _unaryOperators = "+-$!~#";
 	private static readonly string _hexCharacters = "ABCDEFabcdef";
 	private static readonly string _openParenCharacters = "([{";
 	private static readonly string _closeParenCharacters = ")]}";
@@ -132,7 +132,7 @@ internal static class Tokenizer
 
 		for (int i = 0; i < tokens.Count - 2; i++)
 		{
-			if (tokens[i].Text == "**" && tokens[i + 1].Text == "-"  && tokens[i + 2].TokenType != TokenType.OpenParen)
+			if (tokens[i].Text == "**" && tokens[i + 1].Text == "-" && tokens[i + 2].TokenType != TokenType.OpenParen)
 			{
 				tokens.Insert(i + 1, new Token(TokenType.OpenParen, "("));
 				tokens.Insert(i + 4, new Token(TokenType.CloseParen, ")"));
@@ -168,6 +168,7 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Quote => false,
 		TokenType.Char => false,
+		TokenType.Local => char.IsLetter(c),
 
 		_ when c is '.' => throw new WingCalcException($"Unexpected character '{c}' found!"),
 
@@ -186,7 +187,7 @@ internal static class Tokenizer
 		if (char.IsDigit(c) || ".".Contains(c)) return TokenType.Number;
 		else if (_operatorCharacters.Contains(c)) return TokenType.Operator;
 		else if (char.IsLetter(c)) return TokenType.Function;
-		else if (c == '#') return TokenType.Hex;
+		else if (c == '#') return TokenType.Local;
 		else if (_openParenCharacters.Contains(c)) return TokenType.OpenParen;
 		else if (_closeParenCharacters.Contains(c)) return TokenType.CloseParen;
 		else if (c == ',') return TokenType.Comma;
@@ -200,5 +201,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal, Local
 }

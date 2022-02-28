@@ -1,10 +1,10 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record VariableNode(string Name, Solver Solver) : INode, IAssignable
+internal record VariableNode(string Name) : INode, IAssignable
 {
-	public double Solve() => Solver.GetVariable(Name);
+	public double Solve(Scope scope) => scope.Solver.GetVariable(Name);
 
-	public double Assign(INode a) => Solver.SetVariable(Name, a.Solve());
+	public double Assign(INode a, Scope scope) => scope.Solver.SetVariable(Name, a.Solve(scope));
 
-	public double Assign(double a) => Solver.SetVariable(Name, a);
+	public double Assign(double a, Scope scope) => scope.Solver.SetVariable(Name, a);
 }

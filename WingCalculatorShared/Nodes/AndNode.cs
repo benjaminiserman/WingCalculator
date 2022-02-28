@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record AndNode(INode A, INode B, Solver Solver) : INode
+internal record AndNode(INode A, INode B) : INode
 {
-	public double Solve() => A.Solve() != 0 && B.Solve() != 0 ? 1 : 0;
+	public double Solve(Scope scope) => A.Solve(scope) != 0 && B.Solve(scope) != 0 ? 1 : 0;
 }

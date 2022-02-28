@@ -2,7 +2,7 @@
 
 internal interface INode
 {
-	double Solve();
+	double Solve(Scope scope);
 
-	Solver Solver { get; }
+	INode GetAssign(Scope scope) => this;
 }

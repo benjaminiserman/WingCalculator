@@ -3,13 +3,16 @@ using System;
 using System.Collections.Generic;
 using WingCalculatorShared.Exceptions;
 
-internal record FunctionNode(string Name, Solver Solver, List<INode> Nodes) : INode
+internal record FunctionNode(string Name, LocalList Locals) : INode
 {
-	public double Solve()
+	public double Solve(Scope scope)
 	{
+		//scope.Solver.PushCallStack(Locals);
+		List<INode> Nodes = (List<INode>)Locals;
+
 		try
 		{
-			return Functions.Get(Name)(Nodes);
+			return Functions.Get(Name)(Nodes, scope);
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -26,6 +29,10 @@ internal record FunctionNode(string Name, Solver Solver, List<INode> Nodes) : IN
 		catch (KeyNotFoundException)
 		{
 			throw new WingCalcException($"Function \"{Name}\" does not exist.");
+		}
+		finally
+		{
+			//scope.Solver.PopCallStack();
 		}
 	}
 }

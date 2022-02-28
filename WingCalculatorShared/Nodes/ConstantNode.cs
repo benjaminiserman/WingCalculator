@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record ConstantNode(double Value, Solver Solver) : INode
+internal record ConstantNode(double Value) : INode
 {
-	public double Solve() => Value;
+	public double Solve(Scope scope) => Value;
 }

@@ -188,14 +188,20 @@ public partial class MainForm : Form
 		if (e.KeyCode == Keys.Return && e.Alt)
 		{
 			Execute();
+			e.Handled = true;
+			e.SuppressKeyPress = true;
 		}
 		else if (e.KeyCode == Keys.Back && e.Alt)
 		{
 			omnibox.Text = historyView.DeleteSelected();
+			e.Handled = true;
+			e.SuppressKeyPress = true;
 		}
 		else if (e.KeyCode == Keys.Delete && e.Alt)
 		{
 			ac_button_Click(this, e);
+			e.Handled = true;
+			e.SuppressKeyPress = true;
 		}
 		else base.OnKeyDown(e);
 	}

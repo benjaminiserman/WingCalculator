@@ -79,6 +79,7 @@ partial class MainForm
 			this.omnibox.Location = new System.Drawing.Point(3, 3);
 			this.omnibox.Multiline = true;
 			this.omnibox.Name = "omnibox";
+			this.omnibox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.omnibox.Size = new System.Drawing.Size(355, 44);
 			this.omnibox.TabIndex = 0;
 			this.omnibox.TextChanged += new System.EventHandler(this.omnibox_TextChanged);
@@ -355,6 +356,7 @@ partial class MainForm
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
             "\n\n",
             "\n\n",
             "\n\n"});

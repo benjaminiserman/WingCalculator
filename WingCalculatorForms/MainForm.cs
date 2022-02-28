@@ -114,6 +114,8 @@ public partial class MainForm : Form
 		{
 			ViewerForm.Show();
 		}
+
+		ViewerForm.Select();
 	}
 
 	#endregion
@@ -368,6 +370,8 @@ public partial class MainForm : Form
 		_solver.Write = Write;
 		_solver.WriteError = WriteError;
 		_solver.ReadLine = ReadLine;
+		_solver.Flush = Flush;
+		_solver.Clear = Clear;
 
 		ViewerForm.RefreshEntries(_solver);
 	}
@@ -377,7 +381,9 @@ public partial class MainForm : Form
 	private void WriteError(string s) => errorLabel.Text = s;
 	private void WriteLine(string s) => _stdout.AppendLine(s);
 	private void Write(string s) => _stdout.Append(s);
-	private static string ReadLine() => throw new PlatformNotSupportedException("Prompting is not available in the WinForms app.");
+	private void Flush() => Clear();
+	private void Clear() => _stdout.Clear();
+	private static string ReadLine() => throw new PlatformNotSupportedException("Prompting is not supported by WingCalculator");
 
 	#endregion
 

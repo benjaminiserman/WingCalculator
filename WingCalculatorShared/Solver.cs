@@ -356,7 +356,7 @@ public class Solver
 
 		if (availableNodes.Count > 1)
 		{
-			throw new WingCalcException($"{availableNodes.Count - 1} extra nodes found, expression tree could not be made.");
+			throw new WingCalcException($"Extra node {availableNodes[1]} found, expression tree could not be made.");
 		}
 		else return availableNodes.First();
 	}

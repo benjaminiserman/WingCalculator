@@ -1,36 +1,64 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record LocalNode(INode A) : INode, IAssignable
+using WingCalculatorShared.Exceptions;
+
+internal record LocalNode(string Name) : INode, IAssignable, IPointer, ILocal
 {
-	public double Solve(Scope scope) => scope.LocalList[A.Solve(scope).ToString()].Solve(scope.ParentScope);
+	public double Solve(Scope scope) => scope.LocalList[Name].Solve(scope.ParentScope);
+
+	public string GetName(Scope scope) => Name;
 
 	public double Assign(INode b, Scope scope)
 	{
-		if (b is LocalNode local) (b, _) = local.GetNonLocal(scope);
+		if (b is ILocal local) (b, _) = local.GetNonLocal(scope);
 
-		scope.LocalList[A.Solve(scope).ToString()] = b;
+		scope.LocalList[Name] = b;
 		return 1;
-	}
-
-	private (INode, Scope) GetNonLocal(Scope scope)
-	{
-		INode node = scope.LocalList[A.Solve(scope).ToString()];
-
-		if (node is LocalNode gotLocal) return gotLocal.GetNonLocal(scope.ParentScope);
-		else return (node, scope);
 	}
 
 	public double DeepAssign(INode b, Scope scope)
 	{
-		string address = A.Solve(scope).ToString();
+		string address = Name;
 		INode a = scope.LocalList[address];
-		if (b is LocalNode gotLocal) (b, _) = gotLocal.GetNonLocal(scope);
+		if (b is ILocal local) (b, _) = local.GetNonLocal(scope);
 
-		if (a is IAssignable ia) return ia.DeepAssign(b, a is LocalNode ? scope.ParentScope : scope);
+		if (a is IAssignable ia) return ia.DeepAssign(b, a is ILocal ? scope.ParentScope : scope);
 		else
 		{
 			scope.LocalList[address] = b;
 			return 1;
 		}
 	}
+
+	public double Address(Scope scope)
+	{
+		INode node = scope.LocalList[Name];
+
+		if (node is IPointer pointer and not ILocal) return pointer.Address(scope);
+		else throw new WingCalcException($"#{Name} could not be interpreted as a pointer.");
+	}
+
+	public double Set(string address, INode a, Scope scope)
+	{
+		string myAddress = Address(scope).ToString();
+
+		if (scope.LocalList.Contains(myAddress))
+		{
+			INode node = scope.LocalList[myAddress];
+
+			if (node is IPointer pointer and not ILocal) return pointer.Set(address, a, scope);
+			else throw new WingCalcException($"#{Name} could not be interpreted as a pointer.");
+		}
+		else throw new WingCalcException($"#{Name} could not be interpreted as a pointer.");
+	}
+
+	public double Get(string address, Scope scope)
+	{
+		INode node = scope.LocalList[Address(scope)];
+
+		if (node is IPointer pointer and not ILocal) return pointer.Get(address, scope);
+		else throw new WingCalcException($"#{Name} could not be interpreted as a pointer.");
+	}
+
+	public INode GetAssign(Scope scope) => scope.LocalList[GetName(scope)];
 }

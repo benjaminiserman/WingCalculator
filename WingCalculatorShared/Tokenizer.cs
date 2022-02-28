@@ -168,7 +168,7 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Quote => false,
 		TokenType.Char => false,
-		TokenType.Local => false,
+		TokenType.Local => char.IsLetter(c),
 
 		_ when c is '.' => throw new WingCalcException($"Unexpected character '{c}' found!"),
 

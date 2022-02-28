@@ -16,6 +16,6 @@ internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : I
 		INode node = scope.Solver.GetMacro(Name);
 
 		if (node is IAssignable ia) return ia.DeepAssign(a, scope);
-		else return Assign(a, scope);
+		else return Assign(a.GetAssign(scope), scope);
 	}
 }

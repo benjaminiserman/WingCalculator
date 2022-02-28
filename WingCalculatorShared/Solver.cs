@@ -242,8 +242,16 @@ public class Solver
 						availableNodes.Add(new PreOperatorNode("*"));
 					}
 
-					availableNodes.Add(new PreOperatorNode("#"));
-					isCoefficient = false;
+					if (tokens[i].Text.Length == 1)
+					{
+						availableNodes.Add(new PreOperatorNode("#"));
+						isCoefficient = false;
+					}
+					else
+					{
+						availableNodes.Add(new LocalNode(tokens[i].Text[1..]));
+						isCoefficient = true;
+					}
 
 					break;
 				}

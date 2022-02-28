@@ -58,6 +58,8 @@ public class Solver
 	public Action<string> WriteError { get; set; } = Console.WriteLine;
 	public Action<string> Write { get; set; } = Console.Write;
 	public Func<string> ReadLine { get; set; } = Console.ReadLine;
+	public Action Flush { get; set; } = Console.Clear;
+	public Action Clear { get; set; } = Console.Clear;
 
 	public double Solve(string s, bool setAns = true)
 	{

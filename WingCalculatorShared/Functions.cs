@@ -834,6 +834,19 @@ internal static class Functions
 		}, "Given a quote as its first argument, $name prints the text of the quote to standard output followed by a newline. Or, given a pointer as its first argument, $name interprets the list at the pointer as text and prints it to standard output followed by a newline. Finally, $name returns the number of characters printed to standard output (not including the added newline)."),
 		#endregion
 
+		#region Flush/Clear
+		new("clear", args =>
+		{
+			args[0].Solver.Clear();
+			return 1;
+		}, "Takes one argument, clears standard output, and returns 1."),
+		new("flush", args =>
+		{
+			args[0].Solver.Flush();
+			return 1;
+		}, "Takes one argument, flushes any buffered data from standard output, and returns 1."),
+		#endregion
+
 		#region Meta
 		new("help", args =>
 		{

@@ -11,7 +11,7 @@ internal record LocalNode(string Name) : INode, IAssignable, IPointer, ILocal, I
 
 	public double Assign(INode b, Scope scope)
 	{
-		if (b is ILocal local) (b, _) = local.GetNonLocal(scope);
+		if (b is ILocal local) b = local.GetNonLocal(scope);
 
 		scope.LocalList[Name] = b;
 		return 1;
@@ -21,7 +21,7 @@ internal record LocalNode(string Name) : INode, IAssignable, IPointer, ILocal, I
 	{
 		string address = Name;
 		INode a = scope.LocalList[address];
-		if (b is ILocal local) (b, _) = local.GetNonLocal(scope);
+		if (b is ILocal local) b = local.GetNonLocal(scope);
 
 		if (a is IAssignable ia) return ia.DeepAssign(b, a is ILocal ? scope.ParentScope : scope);
 		else

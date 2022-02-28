@@ -189,7 +189,19 @@ public class Solver
 
 					if (tokens[i].Text.Length == 1)
 					{
-						throw new WingCalcException("'@' found without a macro name. Macro pointers are not supported.");
+						if (i == tokens.Length - 1 || tokens[i + 1].TokenType != TokenType.OpenParen)
+						{
+							throw new WingCalcException("'@' found without a macro name and without an opening parenthesis.");
+						}
+						else
+						{
+							int end = FindClosing(i + 1, tokens);
+
+							availableNodes.Add(new LambdaNode(CreateTree(tokens[(i + 2)..end]), false));
+							isCoefficient = true;
+
+							i = end;
+						}
 					}
 					else
 					{

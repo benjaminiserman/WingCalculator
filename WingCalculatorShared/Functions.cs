@@ -726,6 +726,13 @@ internal static class Functions
 
 		#region Programming
 		new("eval", (args, scope) => args[0].Solve(scope), "Evaluates and returns its first argument."),
+		new("call", (args, scope) =>
+		{
+			ICallable callable = args[0] as ICallable ?? throw new WingCalcException($"The first argument of the \"call\" function must be callable.");
+
+			if (args.Count == 1) return callable.Call(scope, new());
+			else return callable.Call(scope, new(args.GetRange(1, args.Count - 1)));
+		}, ""),
 		new("val", (args, scope) =>
 		{
 			IAssignable assignable = args[0] as IAssignable ?? throw new WingCalcException($"The first argument of the \"val\" function must be assignable.");

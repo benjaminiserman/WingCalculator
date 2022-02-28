@@ -1,6 +1,9 @@
 ﻿namespace WingCalculatorShared.Nodes;
 
-internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal
+using System.Xml.Linq;
+using WingCalculatorShared.Exceptions;
+
+internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal, ICallable
 {
 	public double Solve(Scope scope) => scope.LocalList[A.Solve(scope).ToString()].Solve(scope.ParentScope);
 
@@ -52,4 +55,12 @@ internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal
 	}
 
 	public INode GetAssign(Scope scope) => scope.LocalList[GetName(scope)];
+
+	public double Call(Scope scope, LocalList list)
+	{
+		INode node = scope.LocalList[Address(scope)];
+
+		if (node is ICallable callable and not ILocal) return callable.Call(scope, list);
+		else throw new WingCalcException($"#{GetName(scope)} could not be interpreted as callable.");
+	}
 }

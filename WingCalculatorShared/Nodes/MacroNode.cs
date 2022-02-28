@@ -1,7 +1,7 @@
 ﻿namespace WingCalculatorShared.Nodes;
 using WingCalculatorShared.Exceptions;
 
-internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : INode, IAssignable
+internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : INode, IAssignable, ICallable
 {
 	public double Solve(Scope scope) => scope.Solver.GetMacro(Name).Solve(new(LocalList, scope, scope.Solver));
 
@@ -18,4 +18,8 @@ internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : I
 		if (node is IAssignable ia) return ia.DeepAssign(a, scope);
 		else return Assign(a.GetAssign(scope), scope);
 	}
+
+	//public INode GetAssign(Scope scope) => scope.Solver.GetMacro(Name);
+
+	public double Call(Scope scope, LocalList list) => scope.Solver.GetMacro(Name).Solve(new(list, scope, scope.Solver));
 }

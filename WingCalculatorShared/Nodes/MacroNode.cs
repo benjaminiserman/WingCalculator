@@ -10,4 +10,12 @@ internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : I
 		if (Assignable) return scope.Solver.SetMacro(Name, a);
 		else throw new WingCalcException("Macros with arguments cannot be set.");
 	}
+
+	public double DeepAssign(INode a, Scope scope)
+	{
+		INode node = scope.Solver.GetMacro(Name);
+
+		if (node is IAssignable ia) return ia.DeepAssign(a, scope);
+		else return Assign(a, scope);
+	}
 }

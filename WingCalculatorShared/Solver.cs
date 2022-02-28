@@ -489,7 +489,7 @@ public class Solver
 
 	internal INode GetMacro(string s)
 	{
-		if (!_macros.ContainsKey(s)) _macros.Add(s, new ConstantNode(0));
+		if (!_macros.ContainsKey(s)) throw new WingCalcException($"Macro {s} does not exist.");
 
 		return _macros[s];
 	}

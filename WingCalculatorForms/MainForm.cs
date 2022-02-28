@@ -54,6 +54,7 @@ public partial class MainForm : Form
 		ResetSolver();
 		historyView.Clear();
 		omnibox.Clear();
+		errorLabel.Text = string.Empty;
 	}
 
 	private void frac_button_Click(object sender, EventArgs e) => SendString("::$FRAC");
@@ -345,7 +346,7 @@ public partial class MainForm : Form
 
 			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}\n";
 
-			string errorMessage = ex is WingCalcException or CustomException 
+			string errorMessage = ex is WingCalcException or CustomException
 				? ex.Message.Replace("&", "&&")
 				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
 

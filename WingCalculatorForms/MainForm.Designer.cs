@@ -30,7 +30,7 @@ partial class MainForm
 	{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.omnibox = new System.Windows.Forms.TextBox();
+			this.omnibox = new Omnibox();
 			this.bin_button = new System.Windows.Forms.Button();
 			this.pi_button = new System.Windows.Forms.Button();
 			this.clr_button = new System.Windows.Forms.Button();
@@ -76,6 +76,7 @@ partial class MainForm
 			this.omnibox.AcceptsReturn = true;
 			this.omnibox.AcceptsTab = true;
 			this.omnibox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.omnibox.HideSelection = false;
 			this.omnibox.Location = new System.Drawing.Point(3, 3);
 			this.omnibox.Multiline = true;
 			this.omnibox.Name = "omnibox";
@@ -359,6 +360,7 @@ partial class MainForm
             "\n\n",
             "\n\n",
             "\n\n",
+            "\n\n",
             "\n\n"});
 			this.historyView.Location = new System.Drawing.Point(3, 3);
 			this.historyView.Name = "historyView";
@@ -531,7 +533,7 @@ partial class MainForm
 
 	#endregion
 
-	private TextBox omnibox;
+	private Omnibox omnibox;
 	private Button bin_button;
 	private Button pi_button;
 	private Button clr_button;

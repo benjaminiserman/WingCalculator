@@ -94,6 +94,7 @@ internal static class Tokenizer
 						'b' => TokenType.Binary,
 						'x' => TokenType.Hex,
 						'o' => TokenType.Octal,
+						'r' => TokenType.Roman,
 
 						_ => throw new WingCalcException($"0{s[i]} is not a recognized numeric literal.")
 					};
@@ -177,16 +178,17 @@ internal static class Tokenizer
 		TokenType.Comma => false,
 		TokenType.Quote => false,
 		TokenType.Char => false,
-		TokenType.Local => char.IsLetter(c),
 
 		_ when c is '.' => throw new WingCalcException($"Unexpected character '{c}' found!"),
 
+		TokenType.Local => char.IsLetter(c),
 		TokenType.Function => char.IsLetter(c),
 		TokenType.Hex => char.IsDigit(c) || _hexCharacters.Contains(c),
 		TokenType.Variable => char.IsLetter(c),
 		TokenType.Macro => char.IsLetter(c),
 		TokenType.Binary => c is '1' or '0',
 		TokenType.Octal => char.IsDigit(c) && (c - '0') < 8,
+		TokenType.Roman => RomanNumeralConverter.IsNumeral(c) || c == '̅',
 
 		_ => false
 	};
@@ -210,5 +212,5 @@ internal record Token(TokenType TokenType, string Text);
 
 internal enum TokenType
 {
-	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal, Local
+	Number, Operator, Function, Hex, OpenParen, CloseParen, Comma, Variable, Macro, Quote, Char, Binary, Octal, Local, Roman
 }

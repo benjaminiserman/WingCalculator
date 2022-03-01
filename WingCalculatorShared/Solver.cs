@@ -115,6 +115,11 @@ public class Solver
 				{
 					if (isCoefficient)
 					{
+						if (tokens[i - 1].TokenType is TokenType.Hex or TokenType.Roman)
+						{
+							throw new WingCalcException($"Tokens of type {tokens[i - 1].TokenType} may not serve as function coefficients. Try adding parentheses around the function call.");
+						}
+
 						availableNodes.Add(new PreOperatorNode("coeff"));
 					}
 
@@ -130,7 +135,7 @@ public class Solver
 				}
 				case TokenType.Hex:
 				{
-					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Empty hex literal found.");
+					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Hex literals cannot be empty.");
 
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text[1..], 16)));
 					isCoefficient = true;
@@ -242,12 +247,16 @@ public class Solver
 				}
 				case TokenType.Binary:
 				{
+					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Binary literals cannot be empty.");
+
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 2)));
 					isCoefficient = true;
 					break;
 				}
 				case TokenType.Octal:
 				{
+					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Octal literals cannot be empty.");
+
 					availableNodes.Add(new ConstantNode(Convert.ToInt32(tokens[i].Text, 8)));
 					isCoefficient = true;
 					break;
@@ -271,6 +280,18 @@ public class Solver
 					}
 
 					break;
+				}
+				case TokenType.Roman:
+				{
+					if (tokens[i].Text.Length <= 1) throw new WingCalcException("Roman numeral literals cannot be empty.");
+
+					availableNodes.Add(new ConstantNode(RomanNumeralConverter.GetValue(tokens[i].Text[1..])));
+					isCoefficient = true;
+					break;
+				}
+				default:
+				{
+					throw new NotImplementedException($"Token type {tokens[i].TokenType} is not implemented.");
 				}
 			}
 		}

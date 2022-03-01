@@ -27,7 +27,6 @@ public partial class MainForm : Form
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
 
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
-
 		ResizeEnd += (_, _) => historyView.RefreshEntries();
 
 		ResetSolver();
@@ -368,12 +367,13 @@ public partial class MainForm : Form
 
 	private void SendString(string s, bool paren = false)
 	{
+		omnibox.Select();
+		omnibox.ResetSelection();
+		SendKeys.Send(s);
 		if (paren)
 		{
 			SendKeys.Send("{(}");
-			SendKeys.Send(s);
 		}
-		else SendKeys.Send(s[^1] + s[..^1]);
 	}
 
 	private void ResetSolver()

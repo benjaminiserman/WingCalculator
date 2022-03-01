@@ -17,11 +17,20 @@ internal static class Tokenizer
 
 		bool apostrophed = false;
 		bool quoted = false;
+		bool commented = false;
 		TokenType? currentType = null;
 		StringBuilder sb = new();
-		foreach (char c in s)
+		for (int i = 0; i < s.Length; i++)
 		{
-			if (c == '\'' && !quoted)
+			if ((i == 0 || s[i - 1] != '\\') && s[i] == '`')
+			{
+				commented = !commented;
+				continue;
+			}
+
+			if (commented) continue;
+
+			if ((i == 0 || s[i - 1] != '\\') && s[i] == '\'' && !quoted)
 			{
 				if (apostrophed)
 				{
@@ -35,7 +44,7 @@ internal static class Tokenizer
 
 				apostrophed = !apostrophed;
 			}
-			else if (c == '\"' && !apostrophed)
+			else if ((i == 0 || s[i - 1] != '\\') && s[i] == '\"' && !apostrophed)
 			{
 				if (quoted)
 				{
@@ -50,55 +59,55 @@ internal static class Tokenizer
 				quoted = !quoted;
 
 			}
-			else if (quoted || apostrophed) sb.Append(c);
-			else if (c == '_') continue;
-			else if (char.IsWhiteSpace(c))
+			else if (quoted || apostrophed) sb.Append(s[i]);
+			else if (s[i] == '_') continue;
+			else if (char.IsWhiteSpace(s[i]))
 			{
 				PushCurrent();
 			}
-			else if (c == ',')
+			else if (s[i] == ',')
 			{
 				PushCurrent();
-				Push(TokenType.Comma, c.ToString());
+				Push(TokenType.Comma, s[i].ToString());
 			}
-			else if (_openParenCharacters.Contains(c))
+			else if (_openParenCharacters.Contains(s[i]))
 			{
 				PushCurrent();
-				Push(TokenType.OpenParen, c.ToString());
+				Push(TokenType.OpenParen, s[i].ToString());
 			}
-			else if (_closeParenCharacters.Contains(c))
+			else if (_closeParenCharacters.Contains(s[i]))
 			{
 				PushCurrent();
-				Push(TokenType.CloseParen, c.ToString());
+				Push(TokenType.CloseParen, s[i].ToString());
 			}
 			else if (currentType is not TokenType gotType)
 			{
-				sb.Append(c);
-				currentType = GetTokenType(c);
+				sb.Append(s[i]);
+				currentType = GetTokenType(s[i]);
 			}
 			else
 			{
-				if (gotType == TokenType.Number && sb.ToString() == "0" && char.IsLetter(c))
+				if (gotType == TokenType.Number && sb.ToString() == "0" && char.IsLetter(s[i]))
 				{
-					currentType = char.ToLowerInvariant(c) switch
+					currentType = char.ToLowerInvariant(s[i]) switch
 					{
 						'b' => TokenType.Binary,
 						'x' => TokenType.Hex,
 						'o' => TokenType.Octal,
 
-						_ => throw new WingCalcException($"0{c} is not a recognized numeric literal.")
+						_ => throw new WingCalcException($"0{s[i]} is not a recognized numeric literal.")
 					};
 				}
-				else if (Matches(gotType, c, sb))
+				else if (Matches(gotType, s[i], sb))
 				{
-					sb.Append(c);
+					sb.Append(s[i]);
 				}
 				else
 				{
 					PushCurrent();
 
-					sb.Append(c);
-					currentType = GetTokenType(c);
+					sb.Append(s[i]);
+					currentType = GetTokenType(s[i]);
 				}
 			}
 		}

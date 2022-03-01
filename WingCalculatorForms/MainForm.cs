@@ -308,7 +308,7 @@ public partial class MainForm : Form
 		catch (WingCalcException ex)
 		{
 			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.Message}";
-			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Stack Trace: {ex.StackTrace}";
+			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.Items[i]}\n> Stack Trace: {ex.StackTrace}";
 		}
 		catch (Exception ex)
 		{
@@ -349,16 +349,16 @@ public partial class MainForm : Form
 			string _stdoutGot = _stdout.ToString();
 			_stdout.Clear();
 
-			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}\n";
+			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
 
-			string errorMessage = ex is WingCalcException or CustomException
+			string errorMessage = "Error: " + (ex is WingCalcException or CustomException
 				? ex.Message.Replace("&", "&&")
-				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
+				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&"));
 
-			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\n> Stack Trace: {wx.StackTrace}";
+			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\nStack Trace: {wx.StackTrace}";
 
 #if DEBUG
-			errorMessage += $"{errorLabel.Text}\n{ex.StackTrace.Replace("&", "&&")}";
+			errorMessage += $"\n{ex.StackTrace.Replace("&", "&&")}";
 #endif
 
 			errorLabel.Text = errorMessage;

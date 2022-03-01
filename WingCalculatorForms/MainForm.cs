@@ -124,11 +124,6 @@ public partial class MainForm : Form
 
 	#endregion
 
-	private void omnibox_TextChanged(object sender, EventArgs e) // remove leading \r\n
-	{
-		if (omnibox.Text.Length >= 2 && omnibox.Text[0..2] == "\r\n") omnibox.Text = omnibox.Text[2..];
-	}
-
 	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
 	{
 		if (ModifierKeys.HasFlag(Keys.Control))
@@ -331,7 +326,26 @@ public partial class MainForm : Form
 	{
 		try
 		{
-			double solve = _solver.Solve(s);
+			double solve = _solver.Solve(s, out bool impliedAns);
+
+			s = s.Trim();
+			if (impliedAns)
+			{
+				for (int i = 0; i < s.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
+				{
+					if ("~!%^&*-+=|<>/;:?".Contains(s[i])) continue;
+					else if (s[i] == ' ')
+					{
+						s = $"$ANS {s}";
+					}
+					else
+					{
+						s = $"$ANS{s}";
+					}
+
+					break;
+				}
+			}
 
 			_stdout.Replace("\n", "\n>");
 			string _stdoutGot = _stdout.ToString();

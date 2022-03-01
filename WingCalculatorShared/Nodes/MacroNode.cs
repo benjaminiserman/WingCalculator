@@ -3,12 +3,12 @@ using WingCalculatorShared.Exceptions;
 
 internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : INode, IAssignable, ICallable
 {
-	public double Solve(Scope scope) => scope.Solver.GetMacro(Name).Solve(new(LocalList, scope, scope.Solver));
+	public double Solve(Scope scope) => scope.Solver.GetMacro(Name).Solve(new(LocalList, scope, scope.Solver, Name));
 
 	public double Assign(INode a, Scope scope)
 	{
 		if (Assignable) return scope.Solver.SetMacro(Name, a);
-		else throw new WingCalcException("Macros with arguments cannot be assigned to.");
+		else throw new WingCalcException("Macros with arguments cannot be assigned to.", scope);
 	}
 
 	public double DeepAssign(INode a, Scope scope)
@@ -21,5 +21,5 @@ internal record MacroNode(string Name, LocalList LocalList, bool Assignable) : I
 
 	public INode GetAssign(Scope scope) => scope.Solver.GetMacro(Name);
 
-	public double Call(Scope scope, LocalList list) => scope.Solver.GetMacro(Name).Solve(new(list, scope, scope.Solver));
+	public double Call(Scope scope, LocalList list) => scope.Solver.GetMacro(Name).Solve(new(list, scope, scope.Solver, Name));
 }

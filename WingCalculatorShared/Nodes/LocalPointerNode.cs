@@ -1,11 +1,9 @@
 ﻿namespace WingCalculatorShared.Nodes;
-
-using System.Xml.Linq;
 using WingCalculatorShared.Exceptions;
 
 internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal, ICallable
 {
-	public double Solve(Scope scope) => scope.LocalList[A.Solve(scope).ToString()].Solve(scope.ParentScope);
+	public double Solve(Scope scope) => scope.LocalList[A.Solve(scope).ToString(), scope].Solve(scope.ParentScope);
 
 	public string GetName(Scope scope) => A.Solve(scope).ToString();
 
@@ -13,20 +11,20 @@ internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal
 	{
 		if (b is ILocal local) b = local.GetNonLocal(scope);
 
-		scope.LocalList[A.Solve(scope).ToString()] = b;
+		scope.LocalList[A.Solve(scope).ToString(), scope] = b;
 		return 1;
 	}
 
 	public double DeepAssign(INode b, Scope scope)
 	{
 		string address = A.Solve(scope).ToString();
-		INode a = scope.LocalList[address];
+		INode a = scope.LocalList[address, scope];
 		if (b is ILocal local) b = local.GetNonLocal(scope);
 
 		if (a is IAssignable ia) return ia.DeepAssign(b, a is ILocal ? scope.ParentScope : scope);
 		else
 		{
-			scope.LocalList[address] = b;
+			scope.LocalList[address, scope] = b;
 			return 1;
 		}
 	}
@@ -38,7 +36,7 @@ internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal
 
 		if (scope.LocalList.Contains(myAddress))
 		{
-			INode node = scope.LocalList[myAddress];
+			INode node = scope.LocalList[myAddress, scope];
 
 			if (node is IPointer pointer and not ILocal) return pointer.Set(address, a, scope);
 			else return scope.LocalList.Set(address, a);
@@ -48,19 +46,19 @@ internal record LocalPointerNode(INode A) : INode, IAssignable, IPointer, ILocal
 
 	public double Get(string address, Scope scope)
 	{
-		INode node = scope.LocalList[Address(scope)];
+		INode node = scope.LocalList[Address(scope), scope];
 
 		if (node is IPointer pointer and not ILocal) return pointer.Get(address, scope);
-		else return scope.LocalList.Get(address).Solve(scope);
+		else return scope.LocalList[address, scope].Solve(scope);
 	}
 
-	public INode GetAssign(Scope scope) => scope.LocalList[GetName(scope)];
+	public INode GetAssign(Scope scope) => scope.LocalList[GetName(scope), scope];
 
 	public double Call(Scope scope, LocalList list)
 	{
-		INode node = scope.LocalList[Address(scope)];
+		INode node = scope.LocalList[Address(scope), scope];
 
 		if (node is ICallable callable and not ILocal) return callable.Call(scope, list);
-		else throw new WingCalcException($"#{GetName(scope)} could not be interpreted as callable.");
+		else throw new WingCalcException($"#{GetName(scope)} could not be interpreted as callable.", scope);
 	}
 }

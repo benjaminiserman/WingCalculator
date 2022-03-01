@@ -16,19 +16,19 @@ internal record FunctionNode(string Name, LocalList Locals) : INode
 		}
 		catch (ArgumentOutOfRangeException)
 		{
-			throw new WingCalcException($"Function \"{Name}\" expects more than {Nodes.Count} parameters.");
+			throw new WingCalcException($"Function \"{Name}\" expects more than {Nodes.Count} parameters.", scope);
 		}
 		catch (NullReferenceException)
 		{
-			throw new WingCalcException($"Function \"{Name}\" cannot be called without parameters.");
+			throw new WingCalcException($"Function \"{Name}\" cannot be called without parameters.", scope);
 		}
 		catch (InvalidCastException)
 		{
-			throw new WingCalcException($"Function \"{Name}\" was unable to cast some parameter(s).");
+			throw new WingCalcException($"Function \"{Name}\" was unable to cast some parameters.", scope);
 		}
 		catch (KeyNotFoundException)
 		{
-			throw new WingCalcException($"Function \"{Name}\" does not exist.");
+			throw new WingCalcException($"Function \"{Name}\" does not exist.", scope);
 		}
 		finally
 		{

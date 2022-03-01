@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
@@ -70,7 +69,7 @@ public class Solver
 
 		INode node = CreateTree(tokens);
 
-		Scope scope = new(localScope, null, this);
+		Scope scope = new(localScope, null, this, "Main");
 
 		double solve = node.Solve(scope);
 

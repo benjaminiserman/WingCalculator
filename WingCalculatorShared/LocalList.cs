@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using WingCalculatorShared.Exceptions;
-using WingCalculatorShared.Nodes;
 
 internal class LocalList
 {
@@ -15,13 +14,13 @@ internal class LocalList
 		_nodes = nodes.Select((n, i) => (n, i)).ToDictionary(x => x.i.ToString(), x => x.n);
 	}
 
-	public INode this[string name]
+	public INode this[string name, Scope scope]
 	{
-		get => Get(name);
+		get => Get(name, scope);
 		set => Set(name, value);
 	}
 
-	public INode this[double name] => this[name.ToString()];
+	public INode this[double name, Scope scope] => this[name.ToString(), scope];
 
 	public double Set(string name, INode a)
 	{
@@ -31,12 +30,12 @@ internal class LocalList
 		return 1;
 	}
 
-	public INode Get(string name)
+	public INode Get(string name, Scope scope)
 	{
 		if (_nodes.ContainsKey(name)) return _nodes[name];
 		else
 		{
-			throw new WingCalcException($"LocalList does not contain element #{name}.");
+			throw new WingCalcException($"LocalList does not contain element #{name}.", scope);
 		}
 	}
 

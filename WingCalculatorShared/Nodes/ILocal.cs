@@ -6,7 +6,7 @@ internal interface ILocal : IAssignable, INode
 
 	INode GetNonLocal(Scope scope)
 	{
-		INode node = scope.LocalList[GetName(scope)];
+		INode node = scope.LocalList[GetName(scope), scope];
 
 		if (node is ILocal gotLocal) return gotLocal.GetNonLocal(scope.ParentScope);
 		else return node;

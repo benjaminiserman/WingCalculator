@@ -35,15 +35,19 @@ public partial class MainForm : Form
 
 #pragma warning disable IDE1006 // Naming Styles
 	#region CalculatorButtons
-	private void bin_button_Click(object sender, EventArgs e) => SendString("::2");
+	private void bin_button_Click(object sender, EventArgs e) => SendString("::$BIN");
 
 	private void pi_button_Click(object sender, EventArgs e) => SendString("$PI");
 
-	private void clr_button_Click(object sender, EventArgs e) => omnibox.Clear();
+	private void clr_button_Click(object sender, EventArgs e)
+	{
+		omnibox.Clear();
+		errorLabel.Text = string.Empty;
+	}
 
 	private void exe_button_Click(object sender, EventArgs e) => Execute();
 
-	private void hex_button_Click(object sender, EventArgs e) => SendString("::16");
+	private void hex_button_Click(object sender, EventArgs e) => SendString("::$HEX");
 
 	private void tau_button_Click(object sender, EventArgs e) => SendString("$TAU");
 
@@ -304,6 +308,7 @@ public partial class MainForm : Form
 		catch (WingCalcException ex)
 		{
 			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.Message}";
+			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Stack Trace: {ex.StackTrace}";
 		}
 		catch (Exception ex)
 		{
@@ -350,8 +355,10 @@ public partial class MainForm : Form
 				? ex.Message.Replace("&", "&&")
 				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&");
 
+			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\n> Stack Trace: {wx.StackTrace}";
+
 #if DEBUG
-			if (ex is not WingCalcException and not CustomException) errorMessage += $"{errorLabel.Text} @ {ex.StackTrace.Replace("&", "&&")}";
+			errorMessage += $"{errorLabel.Text}\n{ex.StackTrace.Replace("&", "&&")}";
 #endif
 
 			errorLabel.Text = errorMessage;

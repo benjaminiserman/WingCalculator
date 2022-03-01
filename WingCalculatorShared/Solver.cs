@@ -61,13 +61,15 @@ public class Solver
 	public Action Flush { get; set; } = Console.Clear;
 	public Action Clear { get; set; } = Console.Clear;
 
-	public double Solve(string s, bool setAns = true)
+	public double Solve(string s, bool setAns = true) => Solve(s, out _, setAns);
+
+	public double Solve(string s, out bool impliedAns, bool setAns = true)
 	{
 		var tokens = Tokenizer.Tokenize(s).ToArray();
 
 		LocalList localScope = new();
 
-		INode node = CreateTree(tokens);
+		INode node = CreateTree(tokens, out impliedAns, true);
 
 		Scope scope = new(localScope, null, this, "Main");
 
@@ -78,10 +80,12 @@ public class Solver
 		return solve;
 	}
 
-	private INode CreateTree(Span<Token> tokens)
+	private INode CreateTree(Span<Token> tokens, bool mayImplyAns = false) => CreateTree(tokens, out _, mayImplyAns);
+	private INode CreateTree(Span<Token> tokens, out bool impliedAns, bool mayImplyAns = false)
 	{
 		List<INode> availableNodes = new();
 		bool isCoefficient = false;
+		impliedAns = false;
 
 		for (int i = 0; i < tokens.Length; i++)
 		{
@@ -272,8 +276,9 @@ public class Solver
 		}
 
 		if (availableNodes.Count == 0) return null;
-		if (availableNodes[0] is PreOperatorNode firstNode && firstNode.Text.Length >= 2)
+		if (mayImplyAns && availableNodes[0] is PreOperatorNode firstNode && firstNode.Text.Length >= 2)
 		{
+			impliedAns = true;
 			availableNodes.Insert(0, new VariableNode("ANS")); // add $ANS at when start with binary operator
 		}
 

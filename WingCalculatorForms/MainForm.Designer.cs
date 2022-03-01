@@ -83,7 +83,6 @@ partial class MainForm
 			this.omnibox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.omnibox.Size = new System.Drawing.Size(355, 44);
 			this.omnibox.TabIndex = 0;
-			this.omnibox.TextChanged += new System.EventHandler(this.omnibox_TextChanged);
 			// 
 			// bin_button
 			// 

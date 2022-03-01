@@ -102,7 +102,7 @@ internal class HistoryView : ListBox
 	{
 		if (SelectHandled) SelectHandled = false;
 		else if (SelectedIndex == -1) return;
-		else
+		else // mouse click
 		{
 			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
 
@@ -136,7 +136,14 @@ internal class HistoryView : ListBox
 
 	public void EditSelected(string s)
 	{
-		Items[SelectedIndex] = s;
+		int index = SelectedIndex;
+		SelectHandled = true;
+		Items.Insert(index, s);
+		Items.RemoveAt(index + 1);
+		SelectHandled = true;
+		SelectedIndex = -1;
+		SelectHandled = true;
+		SelectedIndex = index; // this is not my fault, WinForms is extremely broke.
 		RefillEntryBuffer();
 	}
 
@@ -175,7 +182,7 @@ internal class HistoryView : ListBox
 		if (solveIndex != -1) return s[..solveIndex];
 		if (errorIndex != -1) return s[..errorIndex];
 
-		return s;
+		return s.Trim();
 	}
 
 	public string GetLastNonEmptyEntry() => GetEntryText(Items[^2]);

@@ -85,6 +85,11 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			mf.helpButton.BackgroundImage = HelpButtonImage;
 			mf.settingsButton.BackgroundImage = SettingsButtonImage;
 
+			foreach (var popout in mf.historyView.popouts)
+			{
+				Apply(popout.Controls, popout);
+			}
+
 			Apply(mf.ViewerForm.Controls, mf.ViewerForm);
 		}
 	}

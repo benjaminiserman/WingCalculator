@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 internal class HistoryView : ListBox
 {
-	private static readonly string _emptyEntry = "\n\n";
+	private static readonly string _emptyEntry = "\r\n\r\n";
 
 	public bool SelectHandled { get; set; } = false;
 
@@ -12,15 +12,20 @@ internal class HistoryView : ListBox
 	private MainForm _mainForm;
 	private readonly ContextMenuStrip _menuStrip;
 
+	public readonly List<PopoutEntry> popouts = new();
+
 	public HistoryView()
 	{
 		DrawMode = DrawMode.OwnerDrawVariable;
 		MeasureItem += OnMeasureItem;
 		DrawItem += OnDrawItem;
+		HorizontalScrollbar = false;
 		Items.Add(_emptyEntry);
 		_menuStrip = new();
 		_menuStrip.Items.Add("Insert Above");
 		_menuStrip.Items.Add("Insert Below");
+		_menuStrip.Items.Add("Pop Out");
+		_menuStrip.Items.Add("Pop Out Last");
 		_menuStrip.Items.Add("Copy Solution");
 		_menuStrip.Items.Add("Copy Output");
 		_menuStrip.Items.Add("Copy Entry");
@@ -174,9 +179,9 @@ internal class HistoryView : ListBox
 	{
 		string s = x.ToString();
 
-		int outputIndex = s.IndexOf("\n> Output:");
-		int solveIndex = s.IndexOf("\n> Solution:");
-		int errorIndex = s.IndexOf("\n> Error:");
+		int outputIndex = s.IndexOf("\r\n> Output:");
+		int solveIndex = s.IndexOf("\r\n> Solution:");
+		int errorIndex = s.IndexOf("\r\n> Error:");
 
 		if (outputIndex != -1) return s[..outputIndex];
 		if (solveIndex != -1) return s[..solveIndex];
@@ -199,6 +204,25 @@ internal class HistoryView : ListBox
 		}
 
 		if (Items.Count == 0 || (string)Items[^1] != _emptyEntry) Items.Add(_emptyEntry); // add empty buffer entry
+
+		for (int i = 0; i < Items.Count; i++)
+		{
+			foreach (var popout in popouts)
+			{
+				if (popout.Index == i)
+				{
+					popout.Update(Items[i].ToString());
+				}
+			}
+		}
+
+		foreach (var popout in popouts)
+		{
+			if (popout.Index == -1)
+			{
+				popout.Update(Items[Items.Count > 1 ? ^2 : ^1].ToString());
+			}
+		}
 	}
 
 	#region HistoryViewDrawing
@@ -247,19 +271,33 @@ internal class HistoryView : ListBox
 			}
 			case "Copy Solution":
 			{
-				int solutionIndex = s.IndexOf("\n> Solution: ");
-				Clipboard.SetText(s[(solutionIndex + "\n> Solution: ".Length)..]);
+				int solutionIndex = s.IndexOf("\r\n> Solution: ");
+				Clipboard.SetText(s[(solutionIndex + "\r\n> Solution: ".Length)..]);
+				break;
+			}
+			case "Pop Out":
+			{
+				PopoutEntry popout = new(s, SelectedIndex, _mainForm.CurrentStyle);
+				popouts.Add(popout);
+				popout.Show();
+				break;
+			}
+			case "Pop Out Last":
+			{
+				PopoutEntry popout = new(s, -1, _mainForm.CurrentStyle);
+				popouts.Add(popout);
+				popout.Show();
 				break;
 			}
 			case "Copy Output":
 			{
-				int outputIndex = s.IndexOf("\n> Output: ");
-				int solutionIndex = s.IndexOf("\n> Solution: ");
+				int outputIndex = s.IndexOf("\r\n> Output: ");
+				int solutionIndex = s.IndexOf("\r\n> Solution: ");
 
 				if (outputIndex == -1) Clipboard.SetText("(no output)");
 				else
 				{
-					Clipboard.SetText(s[(outputIndex + "\n> Output: ".Length)..solutionIndex].Replace("\n>", "\n"));
+					Clipboard.SetText(s[(outputIndex + "\r\n> Output: ".Length)..solutionIndex].Replace("\r\n>", "\r\n"));
 				}
 
 				break;

@@ -351,11 +351,11 @@ partial class MainForm
 			// historyView
 			// 
 			this.historyView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.historyView.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.historyView.FormattingEnabled = true;
-			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
+            "\n\n",
             "\n\n",
             "\n\n",
             "\n\n",
@@ -429,10 +429,10 @@ partial class MainForm
 			this.mainTableLayout.ColumnCount = 2;
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.43525F));
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 369F));
+			this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
 			this.mainTableLayout.Controls.Add(this.menuPanel, 1, 1);
 			this.mainTableLayout.Controls.Add(this.calculatorTableLayout, 1, 0);
 			this.mainTableLayout.Controls.Add(this.errorLabel, 0, 1);
-			this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
 			this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
 			this.mainTableLayout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -558,7 +558,7 @@ partial class MainForm
 	private Button var_button;
 	private Button arcsin_button;
 	private Button pow_button;
-	private HistoryView historyView;
+	internal HistoryView historyView;
 	private Label errorLabel;
 	public Button darkModeButton;
 	private Panel buttonPanel;

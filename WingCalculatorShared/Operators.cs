@@ -72,13 +72,13 @@ internal static class Operators
 		new("/=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "/", b), _precedenceTiers["assignment"], "Computes the / of its operands, and assigns that value to its left-hand operand and returns it."),
 		new("%=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "%", b), _precedenceTiers["assignment"], "Computes the % of its operands, and assigns that value to its left-hand operand and returns it."),
 		new("//=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "//", b), _precedenceTiers["assignment"], "Computes the // of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("+=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "+", b), _precedenceTiers["assignment"], "Computes the += of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("-=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "-", b), _precedenceTiers["assignment"], "Computes the -= of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("<<=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "<<", b), _precedenceTiers["assignment"], "Computes the <<= of its operands, and assigns that value to its left-hand operand and returns it."),
-		new(">>=", (a, b) => new CompoundAssignmentNode((IAssignable)a, ">>", b), _precedenceTiers["assignment"], "Computes the >>= of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("&=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "&", b), _precedenceTiers["assignment"], "Computes the &= of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("^=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "^", b), _precedenceTiers["assignment"], "Computes the ^= of its operands, and assigns that value to its left-hand operand and returns it."),
-		new("|=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "|", b), _precedenceTiers["assignment"], "Computes the |= of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("+=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "+", b), _precedenceTiers["assignment"], "Computes the + of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("-=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "-", b), _precedenceTiers["assignment"], "Computes the - of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("<<=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "<<", b), _precedenceTiers["assignment"], "Computes the << of its operands, and assigns that value to its left-hand operand and returns it."),
+		new(">>=", (a, b) => new CompoundAssignmentNode((IAssignable)a, ">>", b), _precedenceTiers["assignment"], "Computes the >> of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("&=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "&", b), _precedenceTiers["assignment"], "Computes the & of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("^=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "^", b), _precedenceTiers["assignment"], "Computes the ^ of its operands, and assigns that value to its left-hand operand and returns it."),
+		new("|=", (a, b) => new CompoundAssignmentNode((IAssignable)a, "|", b), _precedenceTiers["assignment"], "Computes the | of its operands, and assigns that value to its left-hand operand and returns it."),
 
 		new("?=", (a, b) => new ElvisAssignmentNode((IAssignable)a, b), _precedenceTiers["assignment"], "Computes the ?: of its operands, and assigns that value to its left-hand operand and returns it."),
 		new("=", (a, b) => new AssignmentNode((IAssignable)a, b), _precedenceTiers["assignment"], "Assigns its right-hand operand to its left-hand operand."),
@@ -144,9 +144,25 @@ internal static class Operators
 
 	public static Func<double, double, double> GetOperatorFunction(string symbol) => _operations[symbol];
 
-	record struct Operator(string Symbol, Func<INode, INode, INode> Construct, int Precedence, string Prompt);
+	record struct Operator(string Symbol, Func<INode, INode, INode> Construct, int Precedence, string Documentation);
 
 	public static Associativity GetTierAssociativity(int tier) => tier == _precedenceTiers["assignment"] || tier == _precedenceTiers["elvis"] || tier == _precedenceTiers["exponential"] ? Associativity.Right : Associativity.Left;
+
+	public static bool GetDocumentation(string op, out string result)
+	{
+		if (_operators.ContainsKey(op))
+		{
+			result = _operators[op].Documentation;
+			return true;
+		}
+		else
+		{
+			result = null;
+			return false;
+		}
+	}
+
+	public static string ListOperators() => string.Join(", ", _operators.Keys);
 
 	public enum Associativity { Left, Right }
 }

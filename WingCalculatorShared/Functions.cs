@@ -872,23 +872,35 @@ internal static class Functions
 		{
 			QuoteNode quote = args[0] as QuoteNode ?? throw new WingCalcException("Function \"help\" requires a quote node as its first argument.", scope);
 
-			try
+			string text = quote.Text.Trim().ToLower();
+
+			if (_functions.ContainsKey(text))
 			{
 				scope.Solver.WriteLine($"Documentation for {quote.Text}: {_functions[quote.Text].Documentation.Replace("$name", quote.Text)}");
 			}
-			catch
+			else if (Operators.GetDocumentation(text, out string opDocs))
 			{
-				throw new WingCalcException($"Function \"{quote.Text}\" does not exist.", scope);
+				scope.Solver.WriteLine($"Documentation for {quote.Text}: {opDocs}");
+			}
+			else
+			{
+				throw new WingCalcException($"Function or operator \"{quote.Text}\" does not exist.", scope);
 			}
 
 			return 42;
-		}, "Given a quote representing a function name as its first argument, $name prints the documentation of the function to standard output. Finally, $name returns 42."),
+		}, "Given a quote representing a function name or operator as its first argument, $name prints the documentation of the function or operator to standard output. Finally, $name returns 42."),
 		new("stdlist", (args, scope) =>
 		{
 			scope.Solver.WriteLine($"{{ {string.Join(", ", _functions.Keys)} }}");
 
 			return _functions.Count;
 		}, "Prints every function name in the standard library and returns the number of functions in the standard library."),
+		new("oplist", (args, scope) =>
+		{
+			scope.Solver.WriteLine($"{{ {Operators.ListOperators()} }}");
+
+			return _functions.Count;
+		}, "Prints every the symbols of each operator in WingCalc, then returns the number of operators in WingCalc."),
 		#endregion
 
 	}.ToDictionary(x => x.Name, x => x);

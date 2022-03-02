@@ -30,7 +30,7 @@ partial class MainForm
 	{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.omnibox = new Omnibox();
+			this.omnibox = new WingCalculatorForms.Omnibox();
 			this.bin_button = new System.Windows.Forms.Button();
 			this.pi_button = new System.Windows.Forms.Button();
 			this.clr_button = new System.Windows.Forms.Button();
@@ -252,7 +252,7 @@ partial class MainForm
 			// pow_button
 			// 
 			this.pow_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.pow_button.Location = new System.Drawing.Point(267, 67);
+			this.pow_button.Location = new System.Drawing.Point(0, 68);
 			this.pow_button.Name = "pow_button";
 			this.pow_button.Size = new System.Drawing.Size(83, 58);
 			this.pow_button.TabIndex = 20;
@@ -263,7 +263,7 @@ partial class MainForm
 			// tan_button
 			// 
 			this.tan_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tan_button.Location = new System.Drawing.Point(179, 67);
+			this.tan_button.Location = new System.Drawing.Point(267, 67);
 			this.tan_button.Name = "tan_button";
 			this.tan_button.Size = new System.Drawing.Size(83, 58);
 			this.tan_button.TabIndex = 19;
@@ -274,7 +274,7 @@ partial class MainForm
 			// cos_button
 			// 
 			this.cos_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cos_button.Location = new System.Drawing.Point(89, 67);
+			this.cos_button.Location = new System.Drawing.Point(178, 67);
 			this.cos_button.Name = "cos_button";
 			this.cos_button.Size = new System.Drawing.Size(83, 58);
 			this.cos_button.TabIndex = 18;
@@ -285,7 +285,7 @@ partial class MainForm
 			// sin_button
 			// 
 			this.sin_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.sin_button.Location = new System.Drawing.Point(0, 67);
+			this.sin_button.Location = new System.Drawing.Point(89, 67);
 			this.sin_button.Name = "sin_button";
 			this.sin_button.Size = new System.Drawing.Size(83, 58);
 			this.sin_button.TabIndex = 17;
@@ -307,7 +307,7 @@ partial class MainForm
 			// ln_button
 			// 
 			this.ln_button.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ln_button.Location = new System.Drawing.Point(179, 3);
+			this.ln_button.Location = new System.Drawing.Point(178, 3);
 			this.ln_button.Name = "ln_button";
 			this.ln_button.Size = new System.Drawing.Size(83, 58);
 			this.ln_button.TabIndex = 23;
@@ -356,6 +356,7 @@ partial class MainForm
 			this.historyView.HorizontalScrollbar = true;
 			this.historyView.ItemHeight = 25;
 			this.historyView.Items.AddRange(new object[] {
+            "\n\n",
             "\n\n",
             "\n\n",
             "\n\n",

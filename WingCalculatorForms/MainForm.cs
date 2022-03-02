@@ -270,7 +270,7 @@ public partial class MainForm : Form
 		else
 		{
 			historyView.AddEntry(solveString);
-			historyView.TopIndex = historyView.Items.Count - 1;
+			historyView.TopIndex = historyView.Items.Count - (historyView.Items.Count > 1 ? 2 : 1);
 		}
 
 		_textIndex = 0;
@@ -301,12 +301,12 @@ public partial class MainForm : Form
 		}
 		catch (WingCalcException ex)
 		{
-			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.Message}";
-			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.Items[i]}\n> Stack Trace: {ex.StackTrace}";
+			historyView.Items[i] = $"{historyView.GetEntryText(i)}\r\n> Error: {ex.Message}";
+			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.Items[i]}\r\n> Stack Trace: {ex.StackTrace}";
 		}
 		catch (Exception ex)
 		{
-			historyView.Items[i] = $"{historyView.GetEntryText(i)}\n> Error: {ex.GetType()}: {ex.Message}";
+			historyView.Items[i] = $"{historyView.GetEntryText(i)}\r\n> Error: {ex.GetType()}: {ex.Message}";
 		}
 	}
 	#endregion
@@ -354,7 +354,7 @@ public partial class MainForm : Form
 			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
 			else _stdoutGot = ">";
 
-			return $"{s}\n{_stdoutGot} Solution: {solve}";
+			return $"{s}\r\n{_stdoutGot} Solution: {solve}";
 		}
 		catch (Exception ex)
 		{
@@ -368,10 +368,10 @@ public partial class MainForm : Form
 				? ex.Message.Replace("&", "&&")
 				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&"));
 
-			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\nStack Trace: {wx.StackTrace}";
+			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\r\nStack Trace: {wx.StackTrace}";
 
 #if DEBUG
-			errorMessage += $"\n{ex.StackTrace.Replace("&", "&&")}";
+			errorMessage += $"\r\n{ex.StackTrace.Replace("&", "&&")}";
 #endif
 
 			errorLabel.Text = errorMessage;
@@ -442,6 +442,8 @@ public partial class MainForm : Form
 		omnibox.Select();
 		SendCursorRight();
 	}
+
+	internal WindowStyle CurrentStyle => _darkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
 
 #if DEBUG
 	public void Error(string s) => errorLabel.Text += s;

@@ -1,7 +1,6 @@
 ﻿namespace WingCalculatorShared;
 using System;
 using System.Linq;
-using System.Numerics;
 using WingCalculatorShared.Exceptions;
 using WingCalculatorShared.Nodes;
 

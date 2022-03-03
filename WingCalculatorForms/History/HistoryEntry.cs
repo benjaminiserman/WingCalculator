@@ -6,9 +6,9 @@ using WingCalculatorShared.Exceptions;
 internal class HistoryEntry
 {
 	private string _expression;
-	public string Expression 
-	{ 
-		get => _expression; 
+	public string Expression
+	{
+		get => _expression;
 		set
 		{
 			_expression = value.Trim();

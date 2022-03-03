@@ -1,8 +1,8 @@
 ﻿namespace WingCalculatorForms;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using WingCalculatorForms.Properties;
 using WingCalculatorForms.History;
+using WingCalculatorForms.Properties;
 
 
 internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont, Bitmap DarkModeButtonImage, Bitmap ViewerButtonImage, Bitmap HelpButtonImage, Bitmap SettingsButtonImage)

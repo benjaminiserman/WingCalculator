@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorForms.History;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 internal partial class PopoutEntry : Form
 {
@@ -50,7 +50,7 @@ internal partial class PopoutEntry : Form
 		{
 			using Graphics g = CreateGraphics();
 			SizeF size = g.MeasureString(s, Font);
-			
+
 			int guessWidth = (int)Math.Ceiling(size.Width);
 			Width = guessWidth;
 

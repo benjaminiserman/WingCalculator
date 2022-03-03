@@ -4,7 +4,6 @@ using System.Text;
 using System.Windows.Forms;
 using WingCalculatorForms.Properties;
 using WingCalculatorShared;
-using WingCalculatorShared.Exceptions;
 
 public partial class MainForm : Form
 {

@@ -1,8 +1,6 @@
 ﻿namespace WingCalculatorForms.History;
 using System;
-using System.Text;
 using System.Windows.Forms;
-using WingCalculatorShared;
 
 internal class HistoryView : ListBox
 {
@@ -304,7 +302,7 @@ internal class HistoryView : ListBox
 			case "Copy Output":
 			{
 				Clipboard.SetText(entry.Output);
-				
+
 				break;
 			}
 			case "Copy Entry":

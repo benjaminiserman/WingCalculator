@@ -2,7 +2,7 @@
 
 internal interface IPointer : IAssignable, INode
 {
-	double Address(Scope scope); 
+	double Address(Scope scope);
 
 	double Set(string address, INode a, Scope scope);
 	double Set(string address, double x, Scope scope) => Set(address, new ConstantNode(x), scope);

@@ -1,6 +1,6 @@
 ﻿namespace WingCalculatorShared;
 
-internal record Scope(LocalList LocalList, Scope ParentScope, Solver Solver, string Name) 
+internal record Scope(LocalList LocalList, Scope ParentScope, Solver Solver, string Name)
 {
 	public string Trace()
 	{

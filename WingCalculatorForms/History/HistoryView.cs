@@ -230,6 +230,7 @@ internal class HistoryView : ListBox
 
 		if (Items.Count == 0 || Get(^1).Expression != _emptyEntry) Items.Add(new HistoryEntry() { Expression = _emptyEntry }); // add empty buffer entry
 
+		RefreshEntries();
 		UpdateLast?.Invoke();
 	}
 

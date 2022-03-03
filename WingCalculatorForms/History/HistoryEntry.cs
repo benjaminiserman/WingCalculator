@@ -29,7 +29,6 @@ internal class HistoryEntry
 	{
 		ClearAllOutput();
 		bool impliedAns = false;
-		
 
 		if (string.IsNullOrWhiteSpace(Expression)) return true;
 
@@ -72,6 +71,8 @@ internal class HistoryEntry
 		Output = stdout.ToString();
 		stdout.Clear();
 
+		EntryChanged?.Invoke();
+
 		return Error == string.Empty;
 	}
 
@@ -87,7 +88,13 @@ internal class HistoryEntry
 
 			sb.AppendLine(Expression);
 
-			if (Output != string.Empty) sb.AppendLine($"Output: {Output}");
+			if (Output != string.Empty)
+			{
+				if (Output.EndsWith("\r\n")) sb.AppendLine($"Output: {Output[..^2]}");
+				else if (Output.EndsWith("\n")) sb.AppendLine($"Output: {Output[..^1]}");
+				else sb.AppendLine($"Output: {Output}");
+			}
+
 			if (Solution != string.Empty) sb.AppendLine($"Solution: {Solution}");
 			if (Error != string.Empty) sb.AppendLine($"Error: {Error}");
 			if (StackTrace != string.Empty) sb.AppendLine($"StackTrace: {StackTrace}");
@@ -96,7 +103,7 @@ internal class HistoryEntry
 
 			string s = sb.ToString();
 
-			if (s.Length > 3 && s[^2..] == "> ") s = s[..^3];
+			if (s.Length >= 2 && s[^2..] == "> ") s = s[..^3];
 
 			return s;
 		}

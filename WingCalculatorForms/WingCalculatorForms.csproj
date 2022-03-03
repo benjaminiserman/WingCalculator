@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WingCalculatorShared\WingCalculatorShared.csproj" />
+    <Reference Include="WingCalc">
+      <HintPath>..\..\WingCalc\WingCalc\bin\Release\net6.0\WingCalc.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

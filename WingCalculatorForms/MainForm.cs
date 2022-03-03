@@ -8,10 +8,10 @@ using WingCalculatorShared.Exceptions;
 
 public partial class MainForm : Form
 {
-	private Solver _solver;
+	public Solver Solver { get; private set; }
 	public ViewerForm ViewerForm { get; } = new();
 
-	private readonly StringBuilder _stdout = new();
+	public StringBuilder Stdout { get; private set; } = new();
 	private bool _darkMode = false;
 	private int _textIndex;
 	private float _currentFontSize = 9;
@@ -229,10 +229,11 @@ public partial class MainForm : Form
 	private void Execute()
 	{
 		bool altMode = false; // if true, *do not* modify current entry, even if selected
+		errorLabel.Text = string.Empty;
 
 		if (string.IsNullOrWhiteSpace(omnibox.Text))
 		{
-			if (historyView.Items.Count < 2) return;
+			if (historyView.Items.Count <= 1) return;
 			else
 			{
 				omnibox.Text = historyView.GetLastNonEmptyEntry();  // for duplicating last entry if omnibox empty
@@ -242,14 +243,46 @@ public partial class MainForm : Form
 		else if (ModifierKeys.HasFlag(Keys.Alt) && historyView.SelectedItem != null) altMode = true;
 
 		string solveString;
+		string errorText;
 
-		try
+		if (historyView.SelectedItem != null && !altMode)
 		{
-			solveString = GetSolve(omnibox.Text);
-			errorLabel.Text = string.Empty;
+			if (historyView.EditSelected(omnibox.Text, out errorText))
+			{
+				RecalculateEntries(historyView.SelectedIndex + 1);
+				OmniboxSuccess();
+			}
+			else
+			{
+				OmniboxError(errorText, altMode);
+			}
 		}
-		catch
+		else
 		{
+			if (historyView.AddEntry(omnibox.Text, out errorText))
+			{
+				historyView.TopIndex = historyView.Items.Count - (historyView.Items.Count > 1 ? 2 : 1);
+				OmniboxSuccess();
+			}
+			else
+			{
+				OmniboxError(errorText, altMode);
+			}
+		}
+
+		_textIndex = 0;
+		ViewerForm.RefreshEntries(Solver);
+
+		void OmniboxSuccess()
+		{
+			historyView.SelectedClear();
+			SendCursorRight();
+			omnibox.Clear();
+		}
+
+		void OmniboxError(string errorText, bool altMode)
+		{
+			errorLabel.Text = errorText;
 			SendKeys.Send("{BACKSPACE}");
 			omnibox.SelectionStart = omnibox.Text.Length;
 			_textIndex = omnibox.SelectionStart;
@@ -258,58 +291,19 @@ public partial class MainForm : Form
 			{
 				historyView.Items[historyView.SelectedIndex] = omnibox.Text;
 			}
-
-			return;
 		}
-
-		if (historyView.SelectedItem != null && !altMode)
-		{
-			historyView.EditSelected(solveString);
-			CalculateEntries(historyView.SelectedIndex + 1);
-		}
-		else
-		{
-			historyView.AddEntry(solveString);
-			historyView.TopIndex = historyView.Items.Count - (historyView.Items.Count > 1 ? 2 : 1);
-		}
-
-		_textIndex = 0;
-		ViewerForm.RefreshEntries(_solver);
-		SendCursorRight();
-		historyView.SelectedClear();
-		if (historyView.SelectedChange == null || altMode) historyView.TopIndex = historyView.Items.Count - 1; // send scrollbar to bottom
-		omnibox.Clear();
 	}
 
-	#region Recalculate
-	private void CalculateEntries(int start)
+	private void RecalculateEntries(int start)
 	{
 		for (int i = start; i < historyView.Items.Count; i++)
 		{
-			Calculate(i);
-		}
-	}
-
-	private void Calculate(int i)
-	{
-		try
-		{
-			if (!string.IsNullOrWhiteSpace((string)historyView.Items[i]))
+			if (historyView.Get(i).Expression != string.Empty)
 			{
-				historyView.EditAt(i, GetSolve(historyView.GetEntryText(i)));
+				historyView.Recalculate(i);
 			}
 		}
-		catch (WingCalcException ex)
-		{
-			historyView.Items[i] = $"{historyView.GetEntryText(i)}\r\n> Error: {ex.Message}";
-			if (ex.StackTrace != null) historyView.Items[i] = $"{historyView.Items[i]}\r\n> Stack Trace: {ex.StackTrace}";
-		}
-		catch (Exception ex)
-		{
-			historyView.Items[i] = $"{historyView.GetEntryText(i)}\r\n> Error: {ex.GetType()}: {ex.Message}";
-		}
 	}
-	#endregion
 
 	private void SendCursorRight()
 	{
@@ -321,63 +315,6 @@ public partial class MainForm : Form
 	}
 
 	public string OmniText { get => omnibox.Text; set => omnibox.Text = value; }
-
-	private string GetSolve(string s)
-	{
-		try
-		{
-			double solve = _solver.Solve(s, out bool impliedAns);
-
-			s = s.Trim();
-			if (impliedAns)
-			{
-				for (int i = 0; i < s.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
-				{
-					if ("~!%^&*-+=|<>/;:?".Contains(s[i])) continue;
-					else if (s[i] == ' ')
-					{
-						s = $"$ANS {s}";
-					}
-					else
-					{
-						s = $"$ANS{s}";
-					}
-
-					break;
-				}
-			}
-
-			_stdout.Replace("\n", "\n>");
-			string _stdoutGot = _stdout.ToString();
-			_stdout.Clear();
-
-			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
-			else _stdoutGot = ">";
-
-			return $"{s}\r\n{_stdoutGot} Solution: {solve}";
-		}
-		catch (Exception ex)
-		{
-			_stdout.Replace("\n", "\n>");
-			string _stdoutGot = _stdout.ToString();
-			_stdout.Clear();
-
-			if (_stdoutGot != string.Empty) _stdoutGot = $"> Output: {_stdoutGot}";
-
-			string errorMessage = "Error: " + (ex is WingCalcException or CustomException
-				? ex.Message.Replace("&", "&&")
-				: $"{ex.GetType()}: {ex.Message}".Replace("&", "&&"));
-
-			if (ex is WingCalcException wx && wx.StackTrace != null) errorMessage += $"\r\nStack Trace: {wx.StackTrace}";
-
-#if DEBUG
-			errorMessage += $"\r\n{ex.StackTrace.Replace("&", "&&")}";
-#endif
-
-			errorLabel.Text = errorMessage;
-			throw;
-		}
-	}
 
 	private void SendString(string s, bool paren = false)
 	{
@@ -392,25 +329,25 @@ public partial class MainForm : Form
 
 	private void ResetSolver()
 	{
-		_solver = new();
+		Solver = new();
 
-		_solver.WriteLine = WriteLine;
-		_solver.Write = Write;
-		_solver.WriteError = WriteError;
-		_solver.ReadLine = ReadLine;
-		_solver.Flush = Flush;
-		_solver.Clear = Clear;
+		Solver.WriteLine = WriteLine;
+		Solver.Write = Write;
+		Solver.WriteError = WriteError;
+		Solver.ReadLine = ReadLine;
+		Solver.Flush = Flush;
+		Solver.Clear = Clear;
 
-		ViewerForm.RefreshEntries(_solver);
+		ViewerForm.RefreshEntries(Solver);
 	}
 
 	#region IOHooks
 
 	private void WriteError(string s) => errorLabel.Text = s;
-	private void WriteLine(string s) => _stdout.AppendLine(s);
-	private void Write(string s) => _stdout.Append(s);
+	private void WriteLine(string s) => Stdout.AppendLine(s);
+	private void Write(string s) => Stdout.Append(s);
 	private void Flush() => Clear();
-	private void Clear() => _stdout.Clear();
+	private void Clear() => Stdout.Clear();
 	private static string ReadLine() => throw new PlatformNotSupportedException("Prompting is not supported by WingCalculator");
 
 	#endregion

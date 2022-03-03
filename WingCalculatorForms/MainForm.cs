@@ -242,7 +242,6 @@ public partial class MainForm : Form
 		}
 		else if (ModifierKeys.HasFlag(Keys.Alt) && historyView.SelectedItem != null) altMode = true;
 
-		string solveString;
 		string errorText;
 
 		if (historyView.SelectedItem != null && !altMode)

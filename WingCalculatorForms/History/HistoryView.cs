@@ -1,6 +1,8 @@
-﻿namespace WingCalculatorForms;
+﻿namespace WingCalculatorForms.History;
 using System;
+using System.Text;
 using System.Windows.Forms;
+using WingCalculatorShared;
 
 internal class HistoryView : ListBox
 {
@@ -14,13 +16,14 @@ internal class HistoryView : ListBox
 
 	public readonly List<PopoutEntry> popouts = new();
 
+	public event Action UpdateLast;
+
 	public HistoryView()
 	{
 		DrawMode = DrawMode.OwnerDrawVariable;
 		MeasureItem += OnMeasureItem;
 		DrawItem += OnDrawItem;
 		HorizontalScrollbar = false;
-		Items.Add(_emptyEntry);
 		_menuStrip = new();
 		_menuStrip.Items.Add("Insert Above");
 		_menuStrip.Items.Add("Insert Below");
@@ -33,6 +36,8 @@ internal class HistoryView : ListBox
 		_menuStrip.ItemClicked += _menuStrip_ItemClicked;
 		ContextMenuStrip = _menuStrip;
 		MouseUp += OnClick;
+
+		OnChange();
 	}
 
 	public void Connect(MainForm mainForm) => _mainForm = mainForm;
@@ -81,16 +86,17 @@ internal class HistoryView : ListBox
 			_trackedIndex = SelectedIndex;
 		}
 
-		if (omniText is not null && GetEntryText(Items[SelectedIndex]) != omniText && !string.IsNullOrWhiteSpace(omniText))
+		if (omniText is not null && Get(SelectedIndex).Expression != omniText && !string.IsNullOrWhiteSpace(omniText))
 		{
-			Items[SelectedIndex] = omniText;
+			Get(SelectedIndex).Expression = omniText;
 		}
 
 		SelectHandled = true;
 		SelectedIndex = i;
 		_trackedIndex = SelectedIndex;
+		OnChange();
 
-		return GetEntryText(i);
+		return Get(i).Expression;
 	}
 
 	public void SelectedClear()
@@ -111,60 +117,96 @@ internal class HistoryView : ListBox
 		{
 			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
 
-			if (_trackedIndex < Items.Count && GetEntryText(Items[_trackedIndex]) != _mainForm.OmniText
+			if (_trackedIndex < Items.Count && Get(_trackedIndex).Expression != _mainForm.OmniText
 				&& !string.IsNullOrWhiteSpace(_mainForm.OmniText))
 			{
-				Items[_trackedIndex] = _mainForm.OmniText;
+				Get(_trackedIndex).Expression = _mainForm.OmniText;
 			}
 
 			_trackedIndex = SelectedIndex;
 
-			_mainForm.OmniText = GetEntryText(Items[SelectedIndex]);
+			_mainForm.OmniText = Get(SelectedIndex).Expression;
 			_mainForm.SelectOmnibox();
 
-			RefillEntryBuffer();
+			OnChange();
 		}
 	}
 
-	public void AddEntry(string s)
+	public bool AddEntry(string s, out string error)
 	{
 		SelectedClear();
-		Items[^1] = s;
-		RefillEntryBuffer();
+		HistoryEntry entry = new() { Expression = s };
+		if (entry.Solve(_mainForm.Solver, _mainForm.Stdout))
+		{
+			Items.Insert(Items.Count - 1, entry);
+			OnChange();
+			error = string.Empty;
+			return true;
+		}
+		else
+		{
+			error = entry.FullError;
+			return false;
+		}
 	}
 
 	public void InsertEntry(string s, int i)
 	{
-		Items.Insert(i, s);
-		RefillEntryBuffer();
+		HistoryEntry entry = new() { Expression = s };
+		entry.Solve(_mainForm.Solver, _mainForm.Stdout);
+		Items.Insert(i, entry);
+		OnChange();
 	}
 
-	public void EditSelected(string s)
+	public bool EditSelected(string s, out string error)
 	{
-		int index = SelectedIndex;
+		/*int index = SelectedIndex;
 		SelectHandled = true;
 		Items.Insert(index, s);
 		Items.RemoveAt(index + 1);
 		SelectHandled = true;
 		SelectedIndex = -1;
 		SelectHandled = true;
-		SelectedIndex = index; // this is not my fault, WinForms is extremely broke.
-		RefillEntryBuffer();
+		SelectedIndex = index; // this is not my fault, WinForms is extremely broke.*/
+		return EditAt(SelectedIndex, s, out error);
 	}
 
-	public void EditAt(int i, string s) => Items[i] = s;
+	public bool EditAt(int i, string s, out string error)
+	{
+		try
+		{
+			Get(i).Expression = s;
+			if (Get(i).Solve(_mainForm.Solver, _mainForm.Stdout))
+			{
+				error = string.Empty;
+				return true;
+			}
+			else
+			{
+				error = Get(i).FullError;
+				return false;
+			}
+		}
+		finally
+		{
+			OnChange();
+		}
+	}
+
+	public void Recalculate(int i) => Get(i).Solve(_mainForm.Solver, _mainForm.Stdout);
 
 	public void Clear()
 	{
 		Items.Clear();
-		RefillEntryBuffer();
+		OnChange();
 	}
 
 	public string DeleteSelected()
 	{
-		if (SelectedItem is not null && (string)SelectedItem != _emptyEntry)
+		if (SelectedItem is not null && !string.IsNullOrWhiteSpace(GetSelected().Expression))
 		{
 			int index = SelectedIndex;
+			GetSelected().Delete();
 			Items.RemoveAt(index);
 
 			return SelectedChange(index < Items.Count ? index : Items.Count - 1, null);
@@ -173,60 +215,26 @@ internal class HistoryView : ListBox
 		return null;
 	}
 
-	public string GetEntryText(int i) => GetEntryText(Items[i]);
+	public string GetLastNonEmptyEntry() => Get(^2).Expression;
 
-	private static string GetEntryText(object x)
-	{
-		string s = x.ToString();
-
-		int outputIndex = s.IndexOf("\r\n> Output:");
-		int solveIndex = s.IndexOf("\r\n> Solution:");
-		int errorIndex = s.IndexOf("\r\n> Error:");
-
-		if (outputIndex != -1) return s[..outputIndex];
-		if (solveIndex != -1) return s[..solveIndex];
-		if (errorIndex != -1) return s[..errorIndex];
-
-		return s.Trim();
-	}
-
-	public string GetLastNonEmptyEntry() => GetEntryText(Items[^2]);
-
-	private void RefillEntryBuffer()
+	private void OnChange()
 	{
 		for (int i = 0; i < Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{
-			if (string.IsNullOrWhiteSpace((string)Items[i]))
+			if (string.IsNullOrWhiteSpace(Get(i).Expression))
 			{
 				Items.RemoveAt(i);
 				i--;
 			}
 		}
 
-		if (Items.Count == 0 || (string)Items[^1] != _emptyEntry) Items.Add(_emptyEntry); // add empty buffer entry
+		if (Items.Count == 0 || Get(^1).Expression != _emptyEntry) Items.Add(new HistoryEntry() { Expression = _emptyEntry }); // add empty buffer entry
 
-		for (int i = 0; i < Items.Count; i++)
-		{
-			foreach (var popout in popouts)
-			{
-				if (popout.Index == i)
-				{
-					popout.Update(Items[i].ToString());
-				}
-			}
-		}
-
-		foreach (var popout in popouts)
-		{
-			if (popout.Index == -1)
-			{
-				popout.Update(Items[Items.Count > 1 ? ^2 : ^1].ToString());
-			}
-		}
+		UpdateLast?.Invoke();
 	}
 
 	#region HistoryViewDrawing
-	private void OnMeasureItem(object sender, MeasureItemEventArgs e) => e.ItemHeight = (int)e.Graphics.MeasureString(Items[e.Index].ToString(), Font, Width).Height;
+	private void OnMeasureItem(object sender, MeasureItemEventArgs e) => e.ItemHeight = (int)e.Graphics.MeasureString(Get(e.Index).Entry, Font, Width).Height;
 
 	private void OnDrawItem(object sender, DrawItemEventArgs e)
 	{
@@ -234,7 +242,7 @@ internal class HistoryView : ListBox
 		{
 			e.DrawBackground();
 			e.DrawFocusRectangle();
-			e.Graphics.DrawString(Items[e.Index].ToString(), e.Font, new SolidBrush(e.ForeColor), e.Bounds);
+			e.Graphics.DrawString(Get(e.Index).Entry, e.Font, new SolidBrush(e.ForeColor), e.Bounds);
 		}
 		catch { }
 	}
@@ -252,9 +260,13 @@ internal class HistoryView : ListBox
 		}
 	}
 
+	public HistoryEntry Get(Index i) => (HistoryEntry)Items[i];
+	public HistoryEntry GetSelected() => Get(SelectedIndex);
+	public HistoryEntry GetLast() => Items.Count > 1 ? Get(^2) : Get(^1);
+
 	private void _menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
 	{
-		string s = SelectedItem.ToString();
+		HistoryEntry entry = GetSelected();
 
 		switch (e.ClickedItem.Text)
 		{
@@ -271,40 +283,32 @@ internal class HistoryView : ListBox
 			}
 			case "Copy Solution":
 			{
-				int solutionIndex = s.IndexOf("\r\n> Solution: ");
-				Clipboard.SetText(s[(solutionIndex + "\r\n> Solution: ".Length)..]);
+				Clipboard.SetText(entry.Solution);
 				break;
 			}
 			case "Pop Out":
 			{
-				PopoutEntry popout = new(s, SelectedIndex, _mainForm.CurrentStyle);
+				PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle);
 				popouts.Add(popout);
 				popout.Show();
 				break;
 			}
 			case "Pop Out Last":
 			{
-				PopoutEntry popout = new(s, -1, _mainForm.CurrentStyle);
+				PopoutEntry popout = new(this, _mainForm.CurrentStyle);
 				popouts.Add(popout);
 				popout.Show();
 				break;
 			}
 			case "Copy Output":
 			{
-				int outputIndex = s.IndexOf("\r\n> Output: ");
-				int solutionIndex = s.IndexOf("\r\n> Solution: ");
-
-				if (outputIndex == -1) Clipboard.SetText("(no output)");
-				else
-				{
-					Clipboard.SetText(s[(outputIndex + "\r\n> Output: ".Length)..solutionIndex].Replace("\r\n>", "\r\n"));
-				}
-
+				Clipboard.SetText(entry.Output);
+				
 				break;
 			}
 			case "Copy Entry":
 			{
-				Clipboard.SetText(s);
+				Clipboard.SetText(entry.Entry);
 				break;
 			}
 			case "Delete Entry":

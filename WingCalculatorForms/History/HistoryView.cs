@@ -10,7 +10,7 @@ internal class HistoryView : ListBox
 
 	private int _trackedIndex = -1;
 	private MainForm _mainForm;
-	private readonly ContextMenuStrip _menuStrip;
+	private readonly ContextMenuStrip _menuStrip, _copyStrip;
 
 	public readonly List<PopoutEntry> popouts = new();
 
@@ -22,16 +22,24 @@ internal class HistoryView : ListBox
 		MeasureItem += OnMeasureItem;
 		DrawItem += OnDrawItem;
 		HorizontalScrollbar = false;
+
+		_copyStrip = new();
+		_copyStrip.Items.Add("Copy Expression");
+		_copyStrip.Items.Add("Copy Output");
+		_copyStrip.Items.Add("Copy Solution");
+		_copyStrip.Items.Add("Copy Error");
+		_copyStrip.Items.Add("Copy Stack Trace");
+		_copyStrip.Items.Add("Copy Entire Entry");
+		_copyStrip.ItemClicked += CopyStripItemClicked;
+
 		_menuStrip = new();
 		_menuStrip.Items.Add("Insert Above");
 		_menuStrip.Items.Add("Insert Below");
 		_menuStrip.Items.Add("Pop Out");
 		_menuStrip.Items.Add("Pop Out Last");
-		_menuStrip.Items.Add("Copy Solution");
-		_menuStrip.Items.Add("Copy Output");
-		_menuStrip.Items.Add("Copy Entry");
+		_menuStrip.Items.Add("Copy...");
 		_menuStrip.Items.Add("Delete Entry");
-		_menuStrip.ItemClicked += _menuStrip_ItemClicked;
+		_menuStrip.ItemClicked += MenuStripItemClicked;
 		ContextMenuStrip = _menuStrip;
 		MouseUp += OnClick;
 
@@ -156,18 +164,7 @@ internal class HistoryView : ListBox
 		OnChange();
 	}
 
-	public bool EditSelected(string s, out string error)
-	{
-		/*int index = SelectedIndex;
-		SelectHandled = true;
-		Items.Insert(index, s);
-		Items.RemoveAt(index + 1);
-		SelectHandled = true;
-		SelectedIndex = -1;
-		SelectHandled = true;
-		SelectedIndex = index; */// this is not my fault, WinForms is extremely broke.
-		return EditAt(SelectedIndex, s, out error);
-	}
+	public bool EditSelected(string s, out string error) => EditAt(SelectedIndex, s, out error);
 
 	public bool EditAt(int i, string s, out string error)
 	{
@@ -263,10 +260,8 @@ internal class HistoryView : ListBox
 	public HistoryEntry GetSelected() => Get(SelectedIndex);
 	public HistoryEntry GetLast() => Items.Count > 1 ? Get(^2) : Get(^1);
 
-	private void _menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+	private void MenuStripItemClicked(object sender, ToolStripItemClickedEventArgs e)
 	{
-		HistoryEntry entry = GetSelected();
-
 		switch (e.ClickedItem.Text)
 		{
 			case "Insert Above":
@@ -278,11 +273,6 @@ internal class HistoryView : ListBox
 			case "Insert Below":
 			{
 				InsertEntry("$ANS", SelectedIndex + 1);
-				break;
-			}
-			case "Copy Solution":
-			{
-				Clipboard.SetText(entry.Solution);
 				break;
 			}
 			case "Pop Out":
@@ -299,15 +289,9 @@ internal class HistoryView : ListBox
 				popout.Show();
 				break;
 			}
-			case "Copy Output":
+			case "Copy...":
 			{
-				Clipboard.SetText(entry.Output);
-
-				break;
-			}
-			case "Copy Entry":
-			{
-				Clipboard.SetText(entry.Entry);
+				_copyStrip.Show(MousePosition);
 				break;
 			}
 			case "Delete Entry":
@@ -316,5 +300,25 @@ internal class HistoryView : ListBox
 				break;
 			}
 		}
+	}
+
+	private void CopyStripItemClicked(object sender, ToolStripItemClickedEventArgs e)
+	{
+		HistoryEntry entry = GetSelected();
+
+		string s = e.ClickedItem.Text switch
+		{
+			"Copy Expression" => entry.Expression,
+			"Copy Output" => entry.Output,
+			"Copy Solution" => entry.Solution,
+			"Copy Error" => entry.Error,
+			"Copy Stack Trace" => entry.StackTrace,
+			"Copy Entire Entry" => entry.Entry,
+			_ => throw new NotImplementedException()
+		};
+
+		if (string.IsNullOrEmpty(s)) s = " ";
+
+		Clipboard.SetText(s);
 	}
 }

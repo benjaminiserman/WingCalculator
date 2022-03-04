@@ -64,21 +64,21 @@
   </PropertyGroup>
 
   <Choose>
-	<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\last_day.txt'))">
+	<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(MSBuildProjectName)\Properties\last_day.txt'))">
 	  <PropertyGroup>
 		<Num>0</Num>
 	  </PropertyGroup>
 	</When>
-	<When Condition="$(Day) == $([System.IO.File]::ReadAllText('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\last_day.txt').Trim())">
+	<When Condition="$(Day) == $([System.IO.File]::ReadAllText('$(SolutionDir)$(MSBuildProjectName)\Properties\last_day.txt').Trim())">
 	  <Choose>
-		<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))">
+		<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(MSBuildProjectName)\Properties\build_number.txt'))">
 		  <PropertyGroup>
 			<Num>0</Num>
 		  </PropertyGroup>
 		</When>
-		<When Condition="$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))">
+		<When Condition="$([System.IO.File]::Exists('$(SolutionDir)$(MSBuildProjectName)\Properties\build_number.txt'))">
 		  <PropertyGroup>
-			<ReadText>$([System.IO.File]::ReadAllText('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))</ReadText>
+			<ReadText>$([System.IO.File]::ReadAllText('$(SolutionDir)$(MSBuildProjectName)\Properties\build_number.txt'))</ReadText>
 		  </PropertyGroup>
 		  <Choose>
 			<When Condition="$([System.String]::IsNullOrWhitespace($(ReadText)))">

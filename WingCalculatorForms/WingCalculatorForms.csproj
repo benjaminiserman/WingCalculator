@@ -7,7 +7,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <AssemblyVersion>v0.2.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,4 +47,65 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <PropertyGroup>
+	<MajorVersion>0</MajorVersion>
+	<MinorVersion>2</MinorVersion>
+	<VersionRelease>02MAR2022</VersionRelease>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	<Now>$([System.DateTime]::Now.Ticks)</Now>
+	<First>$([System.DateTime]::Parse($(VersionRelease)).Ticks)</First>
+	<Diff>$([MSBuild]::Subtract($(Now), $(First)))</Diff>
+	<Div>$([MSBuild]::Divide($(Diff), 864000000000))</Div>
+	<Day>$([System.Math]::Floor($(Div)))</Day>
+	<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+	<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+  </PropertyGroup>
+
+  <Choose>
+	<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\last_day.txt'))">
+	  <PropertyGroup>
+		<Num>0</Num>
+	  </PropertyGroup>
+	</When>
+	<When Condition="$(Day) == $([System.IO.File]::ReadAllText('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\last_day.txt').Trim())">
+	  <Choose>
+		<When Condition="!$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))">
+		  <PropertyGroup>
+			<Num>0</Num>
+		  </PropertyGroup>
+		</When>
+		<When Condition="$([System.IO.File]::Exists('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))">
+		  <PropertyGroup>
+			<ReadText>$([System.IO.File]::ReadAllText('$(SolutionDir)$(SolutionName)$(ProjectName)\Properties\build_number.txt'))</ReadText>
+		  </PropertyGroup>
+		  <Choose>
+			<When Condition="$([System.String]::IsNullOrWhitespace($(ReadText)))">
+			  <PropertyGroup>
+				<Num>0</Num>
+			  </PropertyGroup>
+			</When>
+			<When Condition="!$([System.String]::IsNullOrWhitespace($(ReadText)))">
+			  <PropertyGroup>
+				<Num>$([MSBuild]::Add($(ReadText), 1))</Num>
+			  </PropertyGroup>
+			</When>
+		  </Choose>
+		</When>
+	  </Choose>
+	</When>
+  </Choose>
+
+  <PropertyGroup>
+	<AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyFileVersion("$(MajorVersion).$(MinorVersion).$(Day).$(Num)")]</AssemblyFileVersionAttribute>
+	<AssemblyVersionAttribute>[assembly:System.Reflection.AssemblyVersion("$(MajorVersion).$(MinorVersion).0.0")]</AssemblyVersionAttribute>
+  </PropertyGroup>
+
+  <Target Name="Version" BeforeTargets="PreBuildEvent">
+	<WriteLinesToFile File="Properties\VersionInfo.cs" Lines="$(AssemblyFileVersionAttribute)" Overwrite="true" />
+	<WriteLinesToFile File="Properties\VersionInfo.cs" Lines="$(AssemblyVersionAttribute)" Overwrite="false" />
+	<WriteLinesToFile File="Properties\last_day.txt" Lines="$(Day)" Overwrite="true" />
+	<WriteLinesToFile File="Properties\build_number.txt" Lines="$(Num)" Overwrite="true" />
+  </Target>
 </Project>

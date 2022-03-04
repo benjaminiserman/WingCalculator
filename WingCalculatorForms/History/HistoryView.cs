@@ -165,7 +165,7 @@ internal class HistoryView : ListBox
 		SelectHandled = true;
 		SelectedIndex = -1;
 		SelectHandled = true;
-		SelectedIndex = index; // this is not my fault, WinForms is extremely broke.*/
+		SelectedIndex = index; */// this is not my fault, WinForms is extremely broke.
 		return EditAt(SelectedIndex, s, out error);
 	}
 

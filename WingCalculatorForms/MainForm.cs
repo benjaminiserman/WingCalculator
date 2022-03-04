@@ -252,7 +252,7 @@ public partial class MainForm : Form
 			}
 			else
 			{
-				OmniboxError(errorText, altMode);
+				OmniboxError(errorText);
 			}
 		}
 		else
@@ -264,7 +264,7 @@ public partial class MainForm : Form
 			}
 			else
 			{
-				OmniboxError(errorText, altMode);
+				OmniboxError(errorText);
 			}
 		}
 
@@ -278,17 +278,12 @@ public partial class MainForm : Form
 			omnibox.Clear();
 		}
 
-		void OmniboxError(string errorText, bool altMode)
+		void OmniboxError(string errorText)
 		{
 			errorLabel.Text = errorText;
 			SendKeys.Send("{BACKSPACE}");
 			omnibox.SelectionStart = omnibox.Text.Length;
 			_textIndex = omnibox.SelectionStart;
-
-			if (historyView.SelectedItem != null && !altMode)
-			{
-				historyView.Items[historyView.SelectedIndex] = omnibox.Text;
-			}
 		}
 	}
 

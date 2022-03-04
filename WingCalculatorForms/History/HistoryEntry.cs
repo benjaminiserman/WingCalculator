@@ -17,10 +17,10 @@ internal class HistoryEntry
 		}
 	}
 
-	public string Output { get; private set; }
-	public string Solution { get; private set; }
-	public string Error { get; private set; }
-	public string StackTrace { get; private set; }
+	public string Output { get; private set; } = string.Empty;
+	public string Solution { get; private set; } = string.Empty;
+	public string Error { get; private set; } = string.Empty;
+	public string StackTrace { get; private set; } = string.Empty;
 
 	public event Action EntryChanged;
 	public event Action EntryDeleted;

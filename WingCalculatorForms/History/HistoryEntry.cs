@@ -90,16 +90,14 @@ internal class HistoryEntry
 
 			if (Output != string.Empty)
 			{
-				if (Output.EndsWith("\r\n")) sb.AppendLine($"Output: {Output[..^2]}");
-				else if (Output.EndsWith("\n")) sb.AppendLine($"Output: {Output[..^1]}");
-				else sb.AppendLine($"Output: {Output}");
+				if (Output.EndsWith("\r\n")) sb.AppendLine($"> Output: {Output[..^2].Replace("\n", "\n> ")}");
+				else if (Output.EndsWith("\n")) sb.AppendLine($"> Output: {Output[..^1].Replace("\n", "\n> ")}");
+				else sb.AppendLine($"> Output: {Output.Replace("\n", "\n> ")}");
 			}
 
-			if (Solution != string.Empty) sb.AppendLine($"Solution: {Solution}");
-			if (Error != string.Empty) sb.AppendLine($"Error: {Error}");
-			if (StackTrace != string.Empty) sb.AppendLine($"StackTrace: {StackTrace}");
-
-			sb = sb.Replace("\n", "\n> ");
+			if (Solution != string.Empty) sb.AppendLine($"> Solution: {Solution}");
+			if (Error != string.Empty) sb.AppendLine($"> Error: {Error.Replace("\n", "\n> ")}");
+			if (StackTrace != string.Empty) sb.AppendLine($"> StackTrace: {StackTrace.Replace("\n", "\n> ")}");
 
 			string s = sb.ToString();
 

@@ -373,6 +373,8 @@ public partial class MainForm : Form
 		SendCursorRight();
 	}
 
+	public void RegisterOmniboxChanged(Action action) => omnibox.TextChanged += (_, _) => action();
+
 	internal WindowStyle CurrentStyle => _darkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
 
 #if DEBUG

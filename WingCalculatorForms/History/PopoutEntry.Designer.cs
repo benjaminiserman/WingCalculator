@@ -59,6 +59,8 @@ partial class PopoutEntry
 			this.omniBox.Location = new System.Drawing.Point(3, 3);
 			this.omniBox.Multiline = true;
 			this.omniBox.Name = "omniBox";
+			this.omniBox.ReadOnly = true;
+			this.omniBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.omniBox.Size = new System.Drawing.Size(372, 98);
 			this.omniBox.TabIndex = 0;
 			// 
@@ -117,10 +119,9 @@ partial class PopoutEntry
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(378, 144);
 			this.Controls.Add(this.tableLayout);
-			this.MinimumSize = new System.Drawing.Size(350, 100);
+			this.MinimumSize = new System.Drawing.Size(350, 150);
 			this.Name = "PopoutEntry";
 			this.ShowIcon = false;
 			this.Text = "PopoutEntry";

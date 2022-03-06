@@ -17,9 +17,10 @@ public partial class MainForm : Form
 
 	public MainForm()
 	{
+		ResetSolver();
+
 		InitializeComponent();
 
-		historyView.Connect(this);
 		historyView.Clear();
 
 		KeyPreview = true;
@@ -27,8 +28,6 @@ public partial class MainForm : Form
 
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 		ResizeEnd += (_, _) => historyView.RefreshEntries();
-
-		ResetSolver();
 	}
 
 #pragma warning disable IDE1006 // Naming Styles
@@ -143,8 +142,8 @@ public partial class MainForm : Form
 			}
 		}
 
-		if (e.KeyCode == Keys.PageUp) omnibox.Text = historyView.SelectedChange(0, omnibox.Text);
-		if (e.KeyCode == Keys.PageDown) omnibox.Text = historyView.SelectedChange(historyView.Items.Count - 1, omnibox.Text);
+		if (e.KeyCode == Keys.PageUp) OmniText = historyView.SelectedChange(0, OmniText);
+		if (e.KeyCode == Keys.PageDown) OmniText = historyView.SelectedChange(historyView.Items.Count - 1, OmniText);
 
 		switch (e.KeyCode)
 		{
@@ -156,7 +155,7 @@ public partial class MainForm : Form
 				}
 				else
 				{
-					omnibox.Text = historyView.SelectedUp(omnibox.Text);
+					OmniText = historyView.SelectedUp(OmniText);
 					SendCursorRight();
 				}
 
@@ -170,7 +169,7 @@ public partial class MainForm : Form
 				}
 				else
 				{
-					omnibox.Text = historyView.SelectedDown(omnibox.Text);
+					OmniText = historyView.SelectedDown(OmniText);
 					SendCursorRight();
 				}
 
@@ -183,7 +182,7 @@ public partial class MainForm : Form
 
 	protected override void OnKeyDown(KeyEventArgs e)
 	{
-		if (e.KeyCode == Keys.Return && e.Alt)
+		if (e.KeyCode == Keys.Return && !e.Shift)
 		{
 			Execute();
 			e.Handled = true;
@@ -191,7 +190,7 @@ public partial class MainForm : Form
 		}
 		else if (e.KeyCode == Keys.Back && e.Alt)
 		{
-			omnibox.Text = historyView.DeleteSelected();
+			OmniText = historyView.DeleteSelected();
 			e.Handled = true;
 			e.SuppressKeyPress = true;
 		}
@@ -230,13 +229,13 @@ public partial class MainForm : Form
 		bool altMode = false; // if true, *do not* modify current entry, even if selected
 		errorLabel.Text = string.Empty;
 
-		if (string.IsNullOrWhiteSpace(omnibox.Text))
+		if (string.IsNullOrWhiteSpace(OmniText))
 		{
 			if (historyView.Items.Count <= 1) return;
 			else
 			{
-				omnibox.Text = historyView.GetLastNonEmptyEntry();  // for duplicating last entry if omnibox empty
-				if (string.IsNullOrWhiteSpace(omnibox.Text)) return;
+				OmniText = historyView.GetLastNonEmptyEntry();  // for duplicating last entry if omnibox empty
+				if (string.IsNullOrWhiteSpace(OmniText)) return;
 			}
 		}
 		else if (ModifierKeys.HasFlag(Keys.Alt) && historyView.SelectedItem != null) altMode = true;
@@ -245,9 +244,8 @@ public partial class MainForm : Form
 
 		if (historyView.SelectedItem != null && !altMode)
 		{
-			if (historyView.EditSelected(omnibox.Text, out errorText))
+			if (historyView.EditSelected(OmniText, out errorText))
 			{
-				RecalculateEntries(historyView.SelectedIndex + 1);
 				OmniboxSuccess();
 			}
 			else
@@ -257,7 +255,7 @@ public partial class MainForm : Form
 		}
 		else
 		{
-			if (historyView.AddEntry(omnibox.Text, out errorText))
+			if (historyView.AddEntry(OmniText, out errorText))
 			{
 				historyView.TopIndex = historyView.Items.Count - (historyView.Items.Count > 1 ? 2 : 1);
 				OmniboxSuccess();
@@ -281,33 +279,21 @@ public partial class MainForm : Form
 		void OmniboxError(string errorText)
 		{
 			errorLabel.Text = errorText;
-			SendKeys.Send("{BACKSPACE}");
-			omnibox.SelectionStart = omnibox.Text.Length;
+			omnibox.SelectionStart = OmniText.Length;
 			_textIndex = omnibox.SelectionStart;
-		}
-	}
-
-	private void RecalculateEntries(int start)
-	{
-		for (int i = start; i < historyView.Items.Count; i++)
-		{
-			if (historyView.Get(i).Expression != string.Empty)
-			{
-				historyView.Recalculate(i);
-			}
 		}
 	}
 
 	private void SendCursorRight()
 	{
-		if (omnibox.Text.Length > 0)
+		if (OmniText.Length > 0)
 		{
-			omnibox.SelectionStart = omnibox.Text.Length;
+			omnibox.SelectionStart = OmniText.Length;
 			_textIndex = omnibox.SelectionStart;
 		}
 	}
 
-	public string OmniText { get => omnibox.Text; set => omnibox.Text = value; }
+	public string OmniText { get => omnibox.Text; set => omnibox.Text = value.Trim(); }
 
 	private void SendString(string s, bool paren = false)
 	{
@@ -372,8 +358,6 @@ public partial class MainForm : Form
 		omnibox.Select();
 		SendCursorRight();
 	}
-
-	public void RegisterOmniboxChanged(Action action) => omnibox.TextChanged += (_, _) => action();
 
 	internal WindowStyle CurrentStyle => _darkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
 

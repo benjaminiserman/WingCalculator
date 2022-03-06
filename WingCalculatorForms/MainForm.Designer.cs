@@ -56,7 +56,7 @@ partial class MainForm
 			this.mac_button = new System.Windows.Forms.Button();
 			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
-			this.historyView = new WingCalculatorForms.History.HistoryView();
+			this.historyView = new WingCalculatorForms.History.HistoryView(this);
 			this.errorLabel = new System.Windows.Forms.Label();
 			this.darkModeButton = new System.Windows.Forms.Button();
 			this.buttonPanel = new System.Windows.Forms.Panel();

@@ -4,20 +4,20 @@ using System.Windows.Forms;
 
 internal class HistoryView : ListBox
 {
-	private static readonly string _emptyEntry = "\r\n\r\n";
-
 	public bool SelectHandled { get; set; } = false;
 
 	private int _trackedIndex = -1;
-	private MainForm _mainForm;
+	private readonly MainForm _mainForm;
 	private readonly ContextMenuStrip _menuStrip, _copyStrip;
 
 	public readonly List<PopoutEntry> popouts = new();
 
-	public event Action UpdateLast;
+	public event Action<HistoryView> UpdateLast;
 
-	public HistoryView()
+	public HistoryView(MainForm mainForm)
 	{
+		_mainForm = mainForm;
+
 		DrawMode = DrawMode.OwnerDrawVariable;
 		MeasureItem += OnMeasureItem;
 		DrawItem += OnDrawItem;
@@ -45,8 +45,6 @@ internal class HistoryView : ListBox
 
 		OnChange();
 	}
-
-	public void Connect(MainForm mainForm) => _mainForm = mainForm;
 
 	public void RefreshEntries() => RecreateHandle();
 
@@ -141,8 +139,8 @@ internal class HistoryView : ListBox
 	public bool AddEntry(string s, out string error)
 	{
 		SelectedClear();
-		HistoryEntry entry = new() { Expression = s };
-		if (entry.Solve(_mainForm.Solver, _mainForm.Stdout))
+		HistoryEntry entry = new(_mainForm, this) { Expression = s };
+		if (entry.Solve(true))
 		{
 			Items.Insert(Items.Count - 1, entry);
 			OnChange();
@@ -158,8 +156,8 @@ internal class HistoryView : ListBox
 
 	public void InsertEntry(string s, int i)
 	{
-		HistoryEntry entry = new() { Expression = s };
-		entry.Solve(_mainForm.Solver, _mainForm.Stdout);
+		HistoryEntry entry = new(_mainForm, this) { Expression = s };
+		entry.Solve(true);
 		Items.Insert(i, entry);
 		OnChange();
 	}
@@ -171,7 +169,7 @@ internal class HistoryView : ListBox
 		try
 		{
 			Get(i).Expression = s;
-			if (Get(i).Solve(_mainForm.Solver, _mainForm.Stdout))
+			if (Get(i).Solve(true))
 			{
 				error = string.Empty;
 				return true;
@@ -187,8 +185,6 @@ internal class HistoryView : ListBox
 			OnChange();
 		}
 	}
-
-	public void Recalculate(int i) => Get(i).Solve(_mainForm.Solver, _mainForm.Stdout);
 
 	public void Clear()
 	{
@@ -210,7 +206,7 @@ internal class HistoryView : ListBox
 		return null;
 	}
 
-	public string GetLastNonEmptyEntry() => Get(^2).Expression;
+	public string GetLastNonEmptyEntry() => Items.Count == 1 ? Get(^1).Expression : Get(^2).Expression;
 
 	private void OnChange()
 	{
@@ -223,10 +219,10 @@ internal class HistoryView : ListBox
 			}
 		}
 
-		if (Items.Count == 0 || Get(^1).Expression != _emptyEntry) Items.Add(new HistoryEntry() { Expression = _emptyEntry }); // add empty buffer entry
+		if (Items.Count == 0 || !string.IsNullOrWhiteSpace(Get(^1).Expression)) Items.Add(new HistoryEntry(_mainForm, this) { Expression = string.Empty }); // add empty buffer entry
 
 		RefreshEntries();
-		UpdateLast?.Invoke();
+		UpdateLast?.Invoke(this);
 	}
 
 	#region HistoryViewDrawing
@@ -320,5 +316,18 @@ internal class HistoryView : ListBox
 		if (string.IsNullOrEmpty(s)) s = " ";
 
 		Clipboard.SetText(s);
+	}
+
+	public void RecalculateAfter(HistoryEntry start)
+	{
+		int startIndex = Items.IndexOf(start) + 1;
+
+		if (startIndex != 0)
+		{
+			for (int i = startIndex; i < Items.Count; i++)
+			{
+				Get(i).Solve(recalculate: false);
+			}
+		}
 	}
 }

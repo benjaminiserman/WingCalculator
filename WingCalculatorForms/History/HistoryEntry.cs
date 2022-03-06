@@ -12,8 +12,12 @@ internal class HistoryEntry
 		set
 		{
 			_expression = value.Trim();
-			if (string.IsNullOrEmpty(_expression)) _expression = "\r\n\r\n";
 			EntryChanged?.Invoke();
+
+			Output = string.Empty;
+			Solution = string.Empty;
+			Error = string.Empty;
+			StackTrace = string.Empty;
 		}
 	}
 
@@ -25,7 +29,30 @@ internal class HistoryEntry
 	public event Action EntryChanged;
 	public event Action EntryDeleted;
 
-	public bool Solve(Solver solver, StringBuilder stdout)
+	private readonly Solver _solver;
+	private readonly HistoryView _historyView;
+	private readonly StringBuilder _stdout;
+	private readonly MainForm _mainForm;
+
+	private HistoryEntry() => throw new NotImplementedException();
+
+	public HistoryEntry(MainForm mainForm, HistoryView historyView)
+	{
+		_solver = mainForm.Solver;
+		_stdout = mainForm.Stdout;
+		_historyView = historyView;
+		_mainForm = mainForm;
+
+		EntryChanged += () =>
+		{
+			if (historyView.SelectedItem == this)
+			{
+				_mainForm.OmniText = Expression;
+			}
+		};
+	}
+
+	public bool Solve(bool recalculate = true)
 	{
 		ClearAllOutput();
 		bool impliedAns = false;
@@ -34,7 +61,7 @@ internal class HistoryEntry
 
 		try
 		{
-			double solve = solver.Solve(Expression, out impliedAns);
+			double solve = _solver.Solve(Expression, out impliedAns);
 			Solution = solve.ToString();
 		}
 		catch (Exception ex)
@@ -52,26 +79,31 @@ internal class HistoryEntry
 
 		if (impliedAns)
 		{
-			for (int i = 0; i < Expression.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
+			for (int i = 0; i < _expression.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
 			{
-				if ("~!%^&*-+=|<>/;:?".Contains(Expression[i])) continue;
-				else if (Expression[i] == ' ')
+				if ("~!%^&*-+=|<>/;:?".Contains(_expression[i])) continue;
+				else if (_expression[i] == ' ')
 				{
-					Expression = $"$ANS {Expression}";
+					_expression = $"$ANS {_expression}";
 				}
 				else
 				{
-					Expression = $"$ANS{Expression}";
+					_expression = $"$ANS{_expression}";
 				}
 
 				break;
 			}
 		}
 
-		Output = stdout.ToString();
-		stdout.Clear();
+		Output = _stdout.ToString();
+		_stdout.Clear();
 
 		EntryChanged?.Invoke();
+
+		if (recalculate)
+		{
+			_historyView.RecalculateAfter(this);
+		}
 
 		return Error == string.Empty;
 	}
@@ -127,4 +159,14 @@ internal class HistoryEntry
 		Error = string.Empty;
 		StackTrace = string.Empty;
 	}
+
+	public void SetOmniboxIfSelected(string s)
+	{
+		if (_historyView.SelectedItem == this)
+		{
+			_mainForm.OmniText = s;
+		}
+	}
+
+	public void RequestRefresh() => _historyView.RefreshEntries();
 }

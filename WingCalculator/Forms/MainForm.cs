@@ -23,6 +23,17 @@ public partial class MainForm : Form
 
 		InitializeComponent();
 
+		historyView.Clear();
+		if (_config.Entries is not null)
+		{
+			foreach (var expression in _config.Entries)
+			{
+				historyView.AddEntry(expression, out _);
+			}
+		}
+
+		_config.HistoryViewItems = historyView.Items;
+
 		FontSizer.ApplySize(Controls, this, _config.FontSize);
 
 		if (config.IsDarkMode)
@@ -30,8 +41,6 @@ public partial class MainForm : Form
 			WindowStyle.DarkMode.Apply(Controls, this);
 			darkModeButton.BackgroundImage = Resources.light_bulb;
 		}
-
-		historyView.Clear();
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);

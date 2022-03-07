@@ -2,6 +2,7 @@ namespace WingCalculator;
 
 using System.Text.Json;
 using WingCalculator.Forms;
+using WingCalculator.Forms.History;
 
 internal static class Program
 {
@@ -32,5 +33,9 @@ internal static class Program
 		Application.Run(new MainForm(Config));
 	}
 
-	private static void OnExit(object sender, EventArgs e) => File.WriteAllText(ConfigPath, JsonSerializer.Serialize(Config));
+	private static void OnExit(object sender, EventArgs e)
+	{
+		Config.Entries = Config.HistoryViewItems.Cast<HistoryEntry>().Select(x => x.Expression).ToList();
+		File.WriteAllText(ConfigPath, JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
+	}
 }

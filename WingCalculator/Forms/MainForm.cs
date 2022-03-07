@@ -24,12 +24,20 @@ public partial class MainForm : Form
 		InitializeComponent();
 
 		historyView.Clear();
-		if (_config.Entries is not null)
+		try
 		{
-			foreach (var expression in _config.Entries)
+			if (_config.Entries is not null)
 			{
-				historyView.AddEntry(expression, out _);
+				foreach (var expression in _config.Entries)
+				{
+					historyView.AddEntry(expression, out _);
+				}
 			}
+		}
+		catch
+		{
+			errorLabel.Text = "Last state could not be loaded, and was discarded.";
+			historyView.Clear();
 		}
 
 		_config.HistoryViewItems = historyView.Items;

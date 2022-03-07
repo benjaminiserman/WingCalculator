@@ -12,18 +12,24 @@ public partial class MainForm : Form
 	public ViewerForm ViewerForm { get; } = new();
 
 	public StringBuilder Stdout { get; private set; } = new();
-	private bool _darkMode = false;
 	private int _textIndex;
-	private float _currentFontSize = 9;
-	private KeyboardShortcutHandler _shortcutHandler;
+	private Config _config;
 
-	internal MainForm(KeyboardShortcutHandler shortcutHandler)
+	internal MainForm(Config config)
 	{
-		_shortcutHandler = shortcutHandler;
+		_config = config;
 
 		ResetSolver();
 
 		InitializeComponent();
+
+		FontSizer.ApplySize(Controls, this, _config.FontSize);
+
+		if (config.IsDarkMode)
+		{
+			WindowStyle.DarkMode.Apply(Controls, this);
+			darkModeButton.BackgroundImage = Resources.light_bulb;
+		}
 
 		historyView.Clear();
 
@@ -39,13 +45,13 @@ public partial class MainForm : Form
 	{
 		("increase font size", (Action)(() => 
 		{
-			_currentFontSize++;
-			FontSizer.ApplySize(Controls, this, _currentFontSize);
+			_config.FontSize++;
+			FontSizer.ApplySize(Controls, this, _config.FontSize);
 		})),
 		("decrease font size", (Action)(() =>
 		{
-			_currentFontSize--;
-			FontSizer.ApplySize(Controls, this, _currentFontSize);
+			_config.FontSize--;
+			FontSizer.ApplySize(Controls, this, _config.FontSize);
 		})),
 		("page up", (Action)(() =>
 		{
@@ -148,9 +154,9 @@ public partial class MainForm : Form
 
 	private void darkModeButton_Click(object sender, EventArgs e)
 	{
-		_darkMode = !_darkMode;
+		_config.IsDarkMode = !_config.IsDarkMode;
 
-		if (_darkMode)
+		if (_config.IsDarkMode)
 		{
 			WindowStyle.DarkMode.Apply(Controls, this);
 			darkModeButton.BackgroundImage = Resources.light_bulb;
@@ -176,19 +182,19 @@ public partial class MainForm : Form
 
 	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
 	{
-		/*if (ModifierKeys.HasFlag(Keys.Control))
+		if (ModifierKeys.HasFlag(Keys.Control))
 		{
 			if (e.KeyCode == Keys.Oemplus)
 			{
-				_currentFontSize++;
-				FontSizer.ApplySize(Controls, this, _currentFontSize);
+				_config.FontSize++;
+				FontSizer.ApplySize(Controls, this, _config.FontSize);
 				e.Handled = true;
 				return;
 			}
 			else if (e.KeyCode == Keys.OemMinus)
 			{
-				_currentFontSize--;
-				FontSizer.ApplySize(Controls, this, _currentFontSize);
+				_config.FontSize--;
+				FontSizer.ApplySize(Controls, this, _config.FontSize);
 				e.Handled = true;
 				return;
 			}
@@ -227,9 +233,9 @@ public partial class MainForm : Form
 
 				break;
 			}
-		}*/
+		}
 
-		_shortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers);
+		//_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers);
 
 		_textIndex = omnibox.SelectionStart;
 	}
@@ -413,7 +419,7 @@ public partial class MainForm : Form
 		SendCursorRight();
 	}
 
-	internal WindowStyle CurrentStyle => _darkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
+	internal WindowStyle CurrentStyle => _config.IsDarkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
 
 #if DEBUG
 	public void Error(string s) => errorLabel.Text += s;

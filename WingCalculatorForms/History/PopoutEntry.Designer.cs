@@ -112,7 +112,7 @@ partial class PopoutEntry
 			this.cursorLabel.Name = "cursorLabel";
 			this.cursorLabel.Size = new System.Drawing.Size(180, 34);
 			this.cursorLabel.TabIndex = 2;
-			this.cursorLabel.Text = "Line: 0, Col: 0";
+			this.cursorLabel.Text = "Line: 1, Col: 1";
 			this.cursorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// PopoutEntry

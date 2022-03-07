@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorForms.History;
+﻿namespace WingCalculator.Forms.History;
 using System;
 using System.Windows.Forms;
 

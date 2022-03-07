@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WingCalculatorForms.Properties {
+namespace WingCalculator.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WingCalculatorForms.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WingCalculatorForms.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WingCalculator.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -85,7 +85,7 @@ namespace WingCalculatorForms.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap light_bulb {
             get {
-                object obj = ResourceManager.GetObject("light-bulb", resourceCulture);
+                object obj = ResourceManager.GetObject("light_bulb", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,7 +115,7 @@ namespace WingCalculatorForms.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap night_mode {
             get {
-                object obj = ResourceManager.GetObject("night-mode", resourceCulture);
+                object obj = ResourceManager.GetObject("night_mode", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

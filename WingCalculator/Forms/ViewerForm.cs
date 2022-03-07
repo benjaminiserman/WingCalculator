@@ -1,6 +1,6 @@
-﻿namespace WingCalculatorForms;
+﻿namespace WingCalculator.Forms;
 using System.Windows.Forms;
-using WingCalculatorShared;
+using WingCalc;
 
 public partial class ViewerForm : Form
 {

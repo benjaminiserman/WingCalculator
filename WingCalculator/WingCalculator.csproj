@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,12 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="icon.ico" />
+    <Content Include="Assets\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="light-bulb.png" />
-    <EmbeddedResource Include="night-mode.png" />
+    <EmbeddedResource Include="Assets\light_bulb.png" />
+    <EmbeddedResource Include="Assets\night_mode.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="MainForm.cs">
+    <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -45,6 +45,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
   <PropertyGroup>

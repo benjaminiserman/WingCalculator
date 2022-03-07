@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorForms;
+﻿namespace WingCalculator.Forms;
 
 internal class Omnibox : TextBox
 {

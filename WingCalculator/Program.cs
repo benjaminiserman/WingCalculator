@@ -1,4 +1,6 @@
-namespace WingCalculatorForms;
+namespace WingCalculator;
+using WingCalculator.Forms;
+
 internal static class Program
 {
 	/// <summary>

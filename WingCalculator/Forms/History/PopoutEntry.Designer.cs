@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorForms.History;
+﻿namespace WingCalculator.Forms.History;
 
 partial class PopoutEntry
 {

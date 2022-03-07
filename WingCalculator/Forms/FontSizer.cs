@@ -1,6 +1,6 @@
-﻿namespace WingCalculatorForms;
+﻿namespace WingCalculator.Forms;
 using System.Windows.Forms;
-using WingCalculatorForms.History;
+using WingCalculator.Forms.History;
 
 internal static class FontSizer
 {

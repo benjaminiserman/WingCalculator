@@ -1,7 +1,7 @@
-﻿namespace WingCalculatorForms.History;
+﻿namespace WingCalculator.Forms.History;
 using System.Text;
-using WingCalculatorShared;
-using WingCalculatorShared.Exceptions;
+using WingCalc;
+using WingCalc.Exceptions;
 
 internal class HistoryEntry
 {

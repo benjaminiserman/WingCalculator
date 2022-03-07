@@ -1,5 +1,5 @@
-﻿namespace WingCalculatorForms;
-using WingCalculatorForms.History;
+﻿namespace WingCalculator.Forms;
+using WingCalculator.Forms.History;
 
 partial class MainForm
 {
@@ -31,7 +31,7 @@ partial class MainForm
 	{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.omnibox = new WingCalculatorForms.Omnibox();
+			this.omnibox = new WingCalculator.Forms.Omnibox();
 			this.bin_button = new System.Windows.Forms.Button();
 			this.pi_button = new System.Windows.Forms.Button();
 			this.clr_button = new System.Windows.Forms.Button();
@@ -56,7 +56,7 @@ partial class MainForm
 			this.mac_button = new System.Windows.Forms.Button();
 			this.var_button = new System.Windows.Forms.Button();
 			this.arcsin_button = new System.Windows.Forms.Button();
-			this.historyView = new WingCalculatorForms.History.HistoryView(this);
+			this.historyView = new WingCalculator.Forms.History.HistoryView(this);
 			this.errorLabel = new System.Windows.Forms.Label();
 			this.darkModeButton = new System.Windows.Forms.Button();
 			this.buttonPanel = new System.Windows.Forms.Panel();
@@ -382,7 +382,7 @@ partial class MainForm
 			// darkModeButton
 			// 
 			this.darkModeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.darkModeButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.night_mode;
+			this.darkModeButton.BackgroundImage = global::WingCalculator.Properties.Resources.night_mode;
 			this.darkModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.darkModeButton.Location = new System.Drawing.Point(299, 5);
 			this.darkModeButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
@@ -460,7 +460,7 @@ partial class MainForm
 			// settingsButton
 			// 
 			this.settingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.settingsButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.settings_light;
+			this.settingsButton.BackgroundImage = global::WingCalculator.Properties.Resources.settings_light;
 			this.settingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.settingsButton.Location = new System.Drawing.Point(89, 5);
 			this.settingsButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
@@ -473,7 +473,7 @@ partial class MainForm
 			// helpButton
 			// 
 			this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.helpButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.help_light;
+			this.helpButton.BackgroundImage = global::WingCalculator.Properties.Resources.help_light;
 			this.helpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.helpButton.Location = new System.Drawing.Point(159, 5);
 			this.helpButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
@@ -485,7 +485,7 @@ partial class MainForm
 			// viewerButton
 			// 
 			this.viewerButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.viewerButton.BackgroundImage = global::WingCalculatorForms.Properties.Resources.menu_light;
+			this.viewerButton.BackgroundImage = global::WingCalculator.Properties.Resources.menu_light;
 			this.viewerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.viewerButton.Location = new System.Drawing.Point(229, 5);
 			this.viewerButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);

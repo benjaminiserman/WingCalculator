@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorForms.Shortcuts;
+﻿namespace WingCalculator.Shortcuts;
 
 internal class KeyboardShortcutHandler
 {

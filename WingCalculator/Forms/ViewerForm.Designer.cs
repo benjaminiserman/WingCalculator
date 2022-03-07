@@ -1,4 +1,4 @@
-﻿namespace WingCalculatorForms;
+﻿namespace WingCalculator.Forms;
 
 partial class ViewerForm
 {

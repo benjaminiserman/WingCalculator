@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 using WingCalculator.Properties;
+using WingCalculator.Shortcuts;
 using WingCalc;
 
 public partial class MainForm : Form
@@ -14,9 +15,12 @@ public partial class MainForm : Form
 	private bool _darkMode = false;
 	private int _textIndex;
 	private float _currentFontSize = 9;
+	private KeyboardShortcutHandler _shortcutHandler;
 
-	public MainForm()
+	internal MainForm(KeyboardShortcutHandler shortcutHandler)
 	{
+		_shortcutHandler = shortcutHandler;
+
 		ResetSolver();
 
 		InitializeComponent();
@@ -29,6 +33,54 @@ public partial class MainForm : Form
 		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 		ResizeEnd += (_, _) => historyView.RefreshEntries();
 	}
+
+#pragma warning disable IDE0053
+	public void RegisterShortcuts() => ShortcutActionRegistry.AddRange(new List<(string, Action)>()
+	{
+		("increase font size", (Action)(() => 
+		{
+			_currentFontSize++;
+			FontSizer.ApplySize(Controls, this, _currentFontSize);
+		})),
+		("decrease font size", (Action)(() =>
+		{
+			_currentFontSize--;
+			FontSizer.ApplySize(Controls, this, _currentFontSize);
+		})),
+		("page up", (Action)(() =>
+		{
+			OmniText = historyView.SelectedChange(0, OmniText);
+		})),
+		("page down", (Action)(() =>
+		{
+			OmniText = historyView.SelectedChange(historyView.Items.Count - 1, OmniText);
+		})),
+		("entry up", (Action)(() =>
+		{
+			if (omnibox.SelectionStart != _textIndex)
+			{
+				return;
+			}
+			else
+			{
+				OmniText = historyView.SelectedUp(OmniText);
+				SendCursorRight();
+			}
+		})),
+		("entry down", (Action)(() =>
+		{
+			if (omnibox.SelectionStart != _textIndex)
+			{
+				return;
+			}
+			else
+			{
+				OmniText = historyView.SelectedDown(OmniText);
+				SendCursorRight();
+			}
+		})),
+	});
+#pragma warning restore IDE0053
 
 #pragma warning disable IDE1006 // Naming Styles
 	#region CalculatorButtons
@@ -124,7 +176,7 @@ public partial class MainForm : Form
 
 	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
 	{
-		if (ModifierKeys.HasFlag(Keys.Control))
+		/*if (ModifierKeys.HasFlag(Keys.Control))
 		{
 			if (e.KeyCode == Keys.Oemplus)
 			{
@@ -175,7 +227,9 @@ public partial class MainForm : Form
 
 				break;
 			}
-		}
+		}*/
+
+		_shortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers);
 
 		_textIndex = omnibox.SelectionStart;
 	}

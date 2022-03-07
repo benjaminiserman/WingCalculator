@@ -1,5 +1,6 @@
 namespace WingCalculator;
 using WingCalculator.Forms;
+using WingCalculator.Shortcuts;
 
 internal static class Program
 {
@@ -12,6 +13,7 @@ internal static class Program
 		// To customize application configuration such as set high DPI settings or default font,
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
-		Application.Run(new MainForm());
+		KeyboardShortcutHandler shortcutHandler = new();
+		Application.Run(new MainForm(shortcutHandler));
 	}
 }

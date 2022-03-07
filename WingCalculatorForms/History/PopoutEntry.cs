@@ -144,7 +144,7 @@ internal partial class PopoutEntry : Form
 	{
 		int position = omniBox.SelectionStart;
 
-		var matches = Regex.Matches(omniBox.Text, "\n+(?!['\"`]*['\"`])");
+		var matches = Regex.Matches(omniBox.Text, "\n" /*"\n+(?!['\"`]*['\"`])"*/);
 
 		int count = matches.Count(x => x.Index < omniBox.SelectionStart);
 

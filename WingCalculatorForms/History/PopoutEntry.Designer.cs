@@ -33,7 +33,7 @@ partial class PopoutEntry
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.exeButton = new System.Windows.Forms.Button();
 			this.editToggle = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.cursorLabel = new System.Windows.Forms.Label();
 			this.tableLayout.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -72,7 +72,7 @@ partial class PopoutEntry
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
 			this.tableLayoutPanel1.Controls.Add(this.exeButton, 2, 0);
 			this.tableLayoutPanel1.Controls.Add(this.editToggle, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.cursorLabel, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 107);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -104,16 +104,16 @@ partial class PopoutEntry
 			this.editToggle.Text = "Edit";
 			this.editToggle.UseVisualStyleBackColor = true;
 			// 
-			// label1
+			// cursorLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(3, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(166, 34);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Line: 0, Col: 0";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.cursorLabel.AutoSize = true;
+			this.cursorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.cursorLabel.Location = new System.Drawing.Point(3, 0);
+			this.cursorLabel.Name = "cursorLabel";
+			this.cursorLabel.Size = new System.Drawing.Size(166, 34);
+			this.cursorLabel.TabIndex = 2;
+			this.cursorLabel.Text = "Line: 0, Col: 0";
+			this.cursorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// PopoutEntry
 			// 
@@ -140,5 +140,5 @@ partial class PopoutEntry
 	private TableLayoutPanel tableLayoutPanel1;
 	private Button exeButton;
 	private CheckBox editToggle;
-	private Label label1;
+	private Label cursorLabel;
 }

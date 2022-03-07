@@ -34,6 +34,9 @@ internal partial class PopoutEntry : Form
 		editToggle.CheckedChanged += EditToggled;
 		exeButton.Click += Execute;
 		omniBox.TextChanged += OmniboxTextChanged;
+		omniBox.KeyUp += OmniboxCursorChanged;
+		omniBox.Click += OmniboxCursorChanged;
+		omniBox.TextChanged += OmniboxCursorChanged;
 	}
 
 	public PopoutEntry(HistoryEntry entry, WindowStyle style) : this(style)
@@ -135,6 +138,22 @@ internal partial class PopoutEntry : Form
 			DoResize(omniBox.Text);
 			_entry.SetOmniboxIfSelected(omniBox.Text);
 		}
+	}
+
+	private void OmniboxCursorChanged(object sender, EventArgs e)
+	{
+		int position = omniBox.SelectionStart;
+
+		var matches = Regex.Matches(omniBox.Text, "\n+(?!['\"`]*['\"`])");
+
+		int count = matches.Count(x => x.Index < omniBox.SelectionStart);
+
+		int row = count;
+		int column = count == 0
+			? omniBox.SelectionStart
+			: omniBox.SelectionStart - matches.Last(x => x.Index < omniBox.SelectionStart).Index - 1;
+
+		cursorLabel.Text = $"Line: {row}, Col: {column}";
 	}
 
 	private void UpdateLast(HistoryView historyView)

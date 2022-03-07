@@ -153,7 +153,7 @@ internal partial class PopoutEntry : Form
 			? omniBox.SelectionStart
 			: omniBox.SelectionStart - matches.Last(x => x.Index < omniBox.SelectionStart).Index - 1;
 
-		cursorLabel.Text = $"Line: {row}, Col: {column}";
+		cursorLabel.Text = $"Line: {row + 1}, Col: {column + 1}";
 	}
 
 	private void UpdateLast(HistoryView historyView)

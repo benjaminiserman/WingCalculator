@@ -44,7 +44,21 @@ internal class Omnibox : TextBox
 
 	protected override void OnGotFocus(EventArgs e)
 	{
-		Program.LastFocusedTextBox = this;
+		if (!ReadOnly)
+		{
+			Program.LastFocusedTextBox = this;
+		}
+
 		base.OnGotFocus(e);
+	}
+
+	protected override void OnReadOnlyChanged(EventArgs e)
+	{
+		if (!ReadOnly)
+		{
+			Program.LastFocusedTextBox = this;
+		}
+
+		base.OnReadOnlyChanged(e);
 	}
 }

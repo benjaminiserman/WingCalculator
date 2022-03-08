@@ -244,7 +244,7 @@ public partial class MainForm : Form
 		{
 			case Keys.Up:
 			{
-					KeyboardShortcutHandler.ExecuteName("entry up");
+				KeyboardShortcutHandler.ExecuteName("entry up");
 				break;
 			}
 			case Keys.Down:

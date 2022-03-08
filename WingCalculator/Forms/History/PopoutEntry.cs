@@ -60,8 +60,9 @@ internal partial class PopoutEntry : Form
 
 	private void UpdateText()
 	{
-		omniBox.Text = _getText();
-		DoResize(omniBox.Text);
+		string s = _getText();
+		omniBox.Text = s;
+		DoResize(s);
 	}
 
 	private void DoResize(string s)
@@ -80,7 +81,7 @@ internal partial class PopoutEntry : Form
 				if (Width > 1000) Width = 1000;
 
 				size = g.MeasureString(s, Font, Width);
-				int guessHeight = Font.Height * s.Count(c => c == '\n') + (int)Math.Ceiling(size.Height);
+				int guessHeight = Font.Height * 2 + (int)Math.Ceiling(size.Height);
 				Height = guessHeight + RectangleToScreen(ClientRectangle).Top - Top + 45; // add word wrap read, also min word wrap allowed
 
 				if (Height < MinimumSize.Height) Height = MinimumSize.Height;
@@ -135,8 +136,8 @@ internal partial class PopoutEntry : Form
 	{
 		if (_canEdit)
 		{
-			DoResize(omniBox.Text);
 			_entry.SetOmniboxIfSelected(omniBox.Text);
+			DoResize(omniBox.Text);
 		}
 	}
 

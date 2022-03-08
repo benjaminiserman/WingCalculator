@@ -112,12 +112,12 @@ internal class HistoryView : ListBox
 		if (omniText is not null && Get(SelectedIndex).Expression != omniText && !string.IsNullOrWhiteSpace(omniText))
 		{
 			Get(SelectedIndex).Expression = omniText;
+			OnChange();
 		}
 
 		SelectHandled = true;
 		SelectedIndex = i;
 		_trackedIndex = SelectedIndex;
-		OnChange();
 
 		return Get(i).Expression;
 	}
@@ -151,7 +151,7 @@ internal class HistoryView : ListBox
 			_mainForm.OmniText = Get(SelectedIndex).Expression;
 			_mainForm.SelectOmnibox();
 
-			OnChange();
+			//OnChange();
 		}
 	}
 
@@ -162,7 +162,7 @@ internal class HistoryView : ListBox
 		if (entry.Solve(true))
 		{
 			Items.Insert(Items.Count - 1, entry);
-			OnChange();
+			//OnChange();
 			error = string.Empty;
 			return true;
 		}
@@ -178,7 +178,7 @@ internal class HistoryView : ListBox
 		HistoryEntry entry = new(_mainForm, this) { Expression = s };
 		entry.Solve(true);
 		Items.Insert(i, entry);
-		OnChange();
+		//OnChange();
 	}
 
 	public bool EditSelected(string s, out string error) => EditAt(SelectedIndex, s, out error);
@@ -201,7 +201,7 @@ internal class HistoryView : ListBox
 		}
 		finally
 		{
-			OnChange();
+			//OnChange();
 		}
 	}
 
@@ -227,7 +227,7 @@ internal class HistoryView : ListBox
 
 	public string GetLastNonEmptyEntry() => Items.Count == 1 ? Get(^1).Expression : Get(^2).Expression;
 
-	private void OnChange()
+	public void OnChange()
 	{
 		for (int i = 0; i < Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{

@@ -103,6 +103,7 @@ internal class HistoryEntry
 		if (recalculate)
 		{
 			_historyView.RecalculateAfter(this);
+			_historyView.OnChange();
 		}
 
 		return Error == string.Empty;

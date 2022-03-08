@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using WingCalculator.Forms.History;
 using WingCalculator.Properties;
 
-internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont, Bitmap DarkModeButtonImage, Bitmap ViewerButtonImage, Bitmap HelpButtonImage, Bitmap SettingsButtonImage)
+internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonBackgroundColor, Color TextColor, Color ErrorColor, Color InfoColor, FlatStyle ButtonStyle, FlatStyle MenuButtonStyle, FontFamily TextFont, Bitmap DarkModeButtonImage, Bitmap ViewerButtonImage, Bitmap HelpButtonImage, Bitmap LockButtonImage)
 {
 	public static readonly Color DarkBase = Hex("#121212");
 
@@ -22,7 +22,7 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		DarkModeButtonImage: Resources.night_mode,
 		ViewerButtonImage: Resources.menu_dark,
 		HelpButtonImage: Resources.help_dark,
-		SettingsButtonImage: Resources.settings_dark
+		LockButtonImage: Resources.lock_dark
 	);
 
 	public static readonly WindowStyle LightMode = new
@@ -39,7 +39,7 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 		DarkModeButtonImage: Resources.light_bulb,
 		ViewerButtonImage: Resources.menu_light,
 		HelpButtonImage: Resources.help_light,
-		SettingsButtonImage: Resources.settings_light
+		LockButtonImage: Resources.lock_light
 	);
 
 	public static List<string> MenuNames { get; } = new() { "darkModeButton", "viewerButton", "helpButton", "settingsButton", "graphingButton" };
@@ -83,7 +83,7 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			mf.darkModeButton.BackgroundImage = DarkModeButtonImage;
 			mf.viewerButton.BackgroundImage = ViewerButtonImage;
 			mf.helpButton.BackgroundImage = HelpButtonImage;
-			mf.settingsButton.BackgroundImage = SettingsButtonImage;
+			mf.lockButton.BackgroundImage = LockButtonImage;
 
 			foreach (var popout in mf.historyView.popouts)
 			{

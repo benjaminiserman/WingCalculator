@@ -1,5 +1,4 @@
 namespace WingCalculator;
-
 using System.Text.Json;
 using WingCalculator.Forms;
 using WingCalculator.Forms.History;
@@ -45,10 +44,6 @@ internal static class Program
 		Application.ApplicationExit += OnExit;
 
 		_mainForm = new MainForm(Config);
-
-#if DEBUG
-		if (showError) _mainForm.Error("Previous state could not be loaded and was discarded.");
-#endif
 
 		Application.Run(_mainForm);
 	}

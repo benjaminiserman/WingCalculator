@@ -140,9 +140,11 @@ internal class KeyboardShortcutHandler
 		new(Keys.Alt, Keys.P, "input($PI)"),
 		new(Keys.Alt | Keys.Shift, Keys.A, "solve($ANS)"),
 
-		new(Keys.Alt, Keys.C, "copy expression"),
-		new(Keys.Alt, Keys.S, "copy solution"),
+		new(Keys.Alt, Keys.X, "copy expression"),
+		new(Keys.Alt, Keys.C, "copy solution"),
 		new(Keys.Alt, Keys.O, "copy output"),
 		new(Keys.Alt, Keys.N, "copy entire entry"),
+
+		new(Keys.Alt, Keys.T, "anchor to top"),
 	});
 }

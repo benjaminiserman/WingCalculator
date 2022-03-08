@@ -323,6 +323,7 @@ internal class HistoryView : ListBox
 	private void PopOut()
 	{
 		PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle);
+		popout.TopMost = _mainForm.TopMost;
 		popouts.Add(popout);
 		popout.Show();
 	}
@@ -330,6 +331,7 @@ internal class HistoryView : ListBox
 	private void PopOutLast()
 	{
 		PopoutEntry popout = new(this, _mainForm.CurrentStyle);
+		popout.TopMost = _mainForm.TopMost;
 		popouts.Add(popout);
 		popout.Show();
 	}

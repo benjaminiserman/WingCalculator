@@ -62,7 +62,7 @@ partial class MainForm
 			this.buttonPanel = new System.Windows.Forms.Panel();
 			this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
 			this.menuPanel = new System.Windows.Forms.Panel();
-			this.settingsButton = new System.Windows.Forms.Button();
+			this.lockButton = new System.Windows.Forms.Button();
 			this.helpButton = new System.Windows.Forms.Button();
 			this.viewerButton = new System.Windows.Forms.Button();
 			this.calculatorTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -348,30 +348,30 @@ partial class MainForm
 			this.arcsin_button.Text = "asin";
 			this.arcsin_button.UseVisualStyleBackColor = true;
 			this.arcsin_button.Click += new System.EventHandler(this.arcsin_button_Click);
-			// 
-			// historyView
-			// 
-			this.historyView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.historyView.FormattingEnabled = true;
-			this.historyView.ItemHeight = 25;
-			this.historyView.Items.AddRange(new object[] {
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n",
-            "\n\n"});
-			this.historyView.Location = new System.Drawing.Point(3, 3);
-			this.historyView.Name = "historyView";
-			this.historyView.SelectHandled = false;
-			this.historyView.Size = new System.Drawing.Size(332, 451);
-			this.historyView.TabIndex = 25;
-			// 
-			// errorLabel
-			// 
-			this.errorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+		// 
+		// historyView
+		// 
+		this.historyView.Dock = System.Windows.Forms.DockStyle.Fill;
+		this.historyView.FormattingEnabled = true;
+		this.historyView.ItemHeight = 25;
+		this.historyView.Items.AddRange(new object[] {
+			"\n\n",
+			"\n\n",
+			"\n\n",
+			"\n\n",
+			"\n\n",
+			"\n\n",
+			"\n\n",
+			"\n\n"});
+		this.historyView.Location = new System.Drawing.Point(3, 3);
+		this.historyView.Name = "historyView";
+		this.historyView.SelectHandled = false;
+		this.historyView.Size = new System.Drawing.Size(332, 451);
+		this.historyView.TabIndex = 25;
+		// 
+		// errorLabel
+		// 
+		this.errorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.errorLabel.ForeColor = System.Drawing.Color.Red;
 			this.errorLabel.Location = new System.Drawing.Point(3, 457);
 			this.errorLabel.Name = "errorLabel";
@@ -430,8 +430,8 @@ partial class MainForm
 			this.mainTableLayout.ColumnCount = 2;
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.43525F));
 			this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 369F));
-			this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
-			this.mainTableLayout.Controls.Add(this.menuPanel, 1, 1);
+		this.mainTableLayout.Controls.Add(this.historyView, 0, 0);
+		this.mainTableLayout.Controls.Add(this.menuPanel, 1, 1);
 			this.mainTableLayout.Controls.Add(this.calculatorTableLayout, 1, 0);
 			this.mainTableLayout.Controls.Add(this.errorLabel, 0, 1);
 			this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -447,7 +447,7 @@ partial class MainForm
 			// 
 			// menuPanel
 			// 
-			this.menuPanel.Controls.Add(this.settingsButton);
+			this.menuPanel.Controls.Add(this.lockButton);
 			this.menuPanel.Controls.Add(this.helpButton);
 			this.menuPanel.Controls.Add(this.viewerButton);
 			this.menuPanel.Controls.Add(this.darkModeButton);
@@ -457,18 +457,18 @@ partial class MainForm
 			this.menuPanel.Size = new System.Drawing.Size(363, 62);
 			this.menuPanel.TabIndex = 32;
 			// 
-			// settingsButton
+			// lockButton
 			// 
-			this.settingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.settingsButton.BackgroundImage = global::WingCalculator.Properties.Resources.settings_light;
-			this.settingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.settingsButton.Location = new System.Drawing.Point(89, 5);
-			this.settingsButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
-			this.settingsButton.Name = "settingsButton";
-			this.settingsButton.Size = new System.Drawing.Size(50, 47);
-			this.settingsButton.TabIndex = 32;
-			this.settingsButton.UseVisualStyleBackColor = true;
-			this.settingsButton.Visible = false;
+			this.lockButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.lockButton.BackgroundImage = global::WingCalculator.Properties.Resources.lock_light;
+			this.lockButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.lockButton.Location = new System.Drawing.Point(89, 5);
+			this.lockButton.Margin = new System.Windows.Forms.Padding(10, 2, 10, 10);
+			this.lockButton.Name = "lockButton";
+			this.lockButton.Size = new System.Drawing.Size(50, 47);
+			this.lockButton.TabIndex = 32;
+			this.lockButton.UseVisualStyleBackColor = true;
+			this.lockButton.Click += new System.EventHandler(this.lockButton_Click);
 			// 
 			// helpButton
 			// 
@@ -568,5 +568,5 @@ partial class MainForm
 	private Panel menuPanel;
 	public Button helpButton;
 	public Button viewerButton;
-	public Button settingsButton;
+	public Button lockButton;
 }

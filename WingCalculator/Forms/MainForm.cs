@@ -132,6 +132,10 @@ public partial class MainForm : Form
 		{
 			clr_button_Click(this, null);
 		})),
+		("anchor to top", (Action)(() =>
+		{
+			ToggleAnchor();
+		}))
 	});
 #pragma warning restore IDE0053
 
@@ -224,6 +228,8 @@ public partial class MainForm : Form
 
 		ViewerForm.Select();
 	}
+
+	private void lockButton_Click(object sender, EventArgs e) => ToggleAnchor();
 
 	#endregion
 
@@ -402,6 +408,20 @@ public partial class MainForm : Form
 	{
 		omnibox.Select();
 		SendCursorRight();
+	}
+
+	private void ToggleAnchor()
+	{
+		Hide();
+		TopMost = !TopMost;
+
+		ViewerForm.TopMost = TopMost;
+		foreach (var popout in historyView.popouts)
+		{
+			popout.TopMost = TopMost;
+		}
+
+		Show();
 	}
 
 	internal WindowStyle CurrentStyle => _config.IsDarkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;

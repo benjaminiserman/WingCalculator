@@ -64,6 +64,7 @@ internal class HistoryView : ListBox
 		("copy error", (Action)(() => CopyError())),
 		("copy stack trace", (Action)(() => CopyStackTrace())),
 		("copy entire entry", (Action)(() => CopyEntireEntry())),
+		("execute all", (Action)(() => Get(0).Solve(recalculate: true))),
 	});
 
 	public string SelectedUp(string omniText)
@@ -335,18 +336,20 @@ internal class HistoryView : ListBox
 
 	private void DeleteEntry() => _mainForm.OmniText = DeleteSelected();
 
-	private void CopyExpression() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Expression"]));
-	private void CopyOutput() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Output"]));
-	private void CopySolution() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Solution"]));
-	private void CopyError() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Error"]));
-	private void CopyStackTrace() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Stack Trace"]));
-	private void CopyEntireEntry() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Entire Entry"]));
+	private void CopyExpression() => DoCopy("Copy Expression");
+	private void CopyOutput() => DoCopy("Copy Output");
+	private void CopySolution() => DoCopy("Copy Solution");
+	private void CopyError() => DoCopy("Copy Error");
+	private void CopyStackTrace() => DoCopy("Copy Stack Trace");
+	private void CopyEntireEntry() => DoCopy("Copy Entire Entry");
 
-	private void CopyStripItemClicked(object sender, ToolStripItemClickedEventArgs e)
+	private void CopyStripItemClicked(object sender, ToolStripItemClickedEventArgs e) => DoCopy(e.ClickedItem.Text);
+
+	private void DoCopy(string text)
 	{
 		HistoryEntry entry = GetSelected();
 
-		string s = e.ClickedItem.Text switch
+		string s = text switch
 		{
 			"Copy Expression" => entry.Expression,
 			"Copy Output" => entry.Output,

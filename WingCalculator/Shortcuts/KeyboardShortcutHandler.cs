@@ -108,7 +108,7 @@ internal class KeyboardShortcutHandler
 		return this;
 	}
 
-	public void ExecuteName(string name) => ShortcutActionRegistry.Get(_shortcuts.First(x => x.Action == name).Action).Invoke();
+	public void ExecuteName(string name) => ShortcutActionRegistry.Get(name).Invoke();
 
 	internal record struct Shortcut(
 	[property: JsonConverter(typeof(JsonStringEnumConverter))] Keys KeyCode, [property: JsonConverter(typeof(JsonStringEnumConverter))] Keys Modifiers, string Action);
@@ -117,15 +117,24 @@ internal class KeyboardShortcutHandler
 	{
 		new(Keys.Oemplus, Keys.Control, "increase font size"),
 		new(Keys.OemMinus, Keys.Control, "decrease font size"),
+
 		new(Keys.PageUp, Keys.None, "page up"),
 		new(Keys.PageDown, Keys.None, "page down"),
-		new(Keys.None, Keys.None, "entry up"),
-		new(Keys.None, Keys.None, "entry down"),
+
 		new(Keys.Back, Keys.Alt, "delete entry"),
 		new(Keys.Delete, Keys.Alt, "delete all"),
+
 		new(Keys.Enter, Keys.None, "execute"),
 		new(Keys.Enter, Keys.Alt, "execute at end"),
+		new(Keys.Enter, Keys.Alt | Keys.Shift, "execute all"),
 
-		new(Keys.A, Keys.Alt, "input(ඞ)"),
+		new(Keys.I, Keys.Alt, "input(ඞ)"),
+		new(Keys.A, Keys.Alt, "input($ANS)"),
+		new(Keys.A, Keys.Alt | Keys.Shift, "eval($ANS)"),
+
+		new(Keys.C, Keys.Alt, "copy expression"),
+		new(Keys.S, Keys.Alt, "copy solution"),
+		new(Keys.O, Keys.Alt, "copy output"),
+		new(Keys.N, Keys.Alt, "copy entire entry"),
 	});
 }

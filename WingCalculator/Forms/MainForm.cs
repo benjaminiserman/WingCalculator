@@ -231,18 +231,18 @@ public partial class MainForm : Form
 			e.Handled = true;
 		}
 		else switch (e.KeyCode)
+		{
+			case Keys.Up:
 			{
-				case Keys.Up:
-				{
-					_config.ShortcutHandler.ExecuteName("entry up");
-					break;
-				}
-				case Keys.Down:
-				{
-					_config.ShortcutHandler.ExecuteName("entry down");
-					break;
-				}
+				_config.ShortcutHandler.ExecuteName("entry up");
+				break;
 			}
+			case Keys.Down:
+			{
+				_config.ShortcutHandler.ExecuteName("entry down");
+				break;
+			}
+		}
 
 		_textIndex = omnibox.SelectionStart;
 	}

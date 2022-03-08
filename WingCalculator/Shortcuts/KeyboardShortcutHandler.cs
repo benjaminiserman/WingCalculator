@@ -51,9 +51,39 @@ internal class KeyboardShortcutHandler
 			if (shortcut.KeyCode == keyCode && shortcut.Modifiers == modifiers)
 			{
 				executed = true;
-				if (shortcut.Action.StartsWith("input"))
+				if (shortcut.Action.StartsWith("input("))
 				{
+					if (shortcut.Action[^1] != ')') throw new Exception("input call must end with a closing parenthesis!");
 					ShortcutActionRegistry.Input.Invoke(shortcut.Action["input(".Length..^1]);
+				}
+				else if (shortcut.Action.StartsWith("eval("))
+				{
+					if (shortcut.Action[^1] != ')') throw new Exception("eval call must end with a closing parenthesis!");
+					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().Solve(shortcut.Action["eval(".Length..^1], false).ToString());
+				}
+				else if (shortcut.Action.StartsWith("evalstring("))
+				{
+					if (shortcut.Action[^1] != ')') throw new Exception("evalstring call must end with a closing parenthesis!");
+
+					int commaIndex = -1;
+					int open = 0;
+					for (int i = 0; i < shortcut.Action.Length; i++)
+					{
+						if (shortcut.Action[i] == '(') open++;
+						else if (shortcut.Action[i] == ')') open--;
+						else if (shortcut.Action[i] == ',' && open == 1)
+						{
+							commaIndex = i;
+							break;
+						}
+					}
+
+					if (commaIndex == -1) throw new Exception("evalstring call must have two arguments!");
+
+					double pointer = Program.GetSolver().Solve(shortcut.Action["evalstring(".Length..commaIndex], false);
+					Program.GetSolver().Solve(shortcut.Action[(commaIndex + 1)..^1], false);
+
+					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().GetString(pointer));
 				}
 				else
 				{

@@ -26,21 +26,13 @@ internal static class Program
 
 		bool showError = false;
 
-		try
+		if (File.Exists(ConfigPath))
 		{
-			if (File.Exists(ConfigPath))
-			{
-				Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
-			}
-			else
-			{
-				Config = new();
-			}
+			Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
 		}
-		catch
+		else
 		{
 			Config = new();
-			showError = true;
 		}
 
 		KeyboardShortcutHandler = Config.ShortcutHandler;
@@ -61,6 +53,7 @@ internal static class Program
 		Config.ShortcutHandler.FillUnassigned();
 		Config.Entries = Config.HistoryViewItems.Cast<HistoryEntry>().Select(x => x.Expression).ToList();
 		File.WriteAllText(ConfigPath, JsonSerializer.Serialize(Config, new JsonSerializerOptions() { WriteIndented = true }));
-		//File.AppendAllText(ConfigPath, $"\nFor Keys documentation, see: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys?view=windowsdesktop-6.0");
 	}
+
+	public static WingCalc.Solver GetSolver() => _mainForm.Solver;
 }

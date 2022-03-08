@@ -128,6 +128,10 @@ public partial class MainForm : Form
 		{
 			Execute(true);
 		})),
+		("clear", (Action)(() =>
+		{
+			clr_button_Click(this, null);
+		})),
 	});
 #pragma warning restore IDE0053
 

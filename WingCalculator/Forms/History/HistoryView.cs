@@ -213,7 +213,7 @@ internal class HistoryView : ListBox
 
 	public string DeleteSelected()
 	{
-		if (SelectedItem is not null && !string.IsNullOrWhiteSpace(GetSelected().Expression))
+		if (Items.Count > 1 && SelectedItem is not null && !string.IsNullOrWhiteSpace(GetSelected().Expression))
 		{
 			int index = SelectedIndex;
 			GetSelected().Delete();
@@ -222,7 +222,7 @@ internal class HistoryView : ListBox
 			return SelectedChange(index < Items.Count ? index : Items.Count - 1, null);
 		}
 
-		return null;
+		return string.Empty;
 	}
 
 	public string GetLastNonEmptyEntry() => Items.Count == 1 ? Get(^1).Expression : Get(^2).Expression;

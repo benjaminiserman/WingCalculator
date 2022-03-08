@@ -36,7 +36,7 @@ internal class KeyboardShortcutHandler
 
 	private void AddShortcut(Shortcut shortcut) => _shortcuts.Add(shortcut);
 
-	public void AddShortcut(Keys keyCode, Keys modifiers, string action) => AddShortcut(new(keyCode, modifiers, action));
+	public void AddShortcut(Keys keyCode, Keys modifiers, string action) => AddShortcut(new(modifiers, keyCode, action));
 
 	public void AddShortcut(KeyboardShortcutHandler from, string name) => AddShortcut(from._shortcuts.First(x => x.Action == name));
 
@@ -59,11 +59,17 @@ internal class KeyboardShortcutHandler
 				else if (shortcut.Action.StartsWith("eval("))
 				{
 					if (shortcut.Action[^1] != ')') throw new Exception("eval call must end with a closing parenthesis!");
-					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().Solve(shortcut.Action["eval(".Length..^1], false).ToString());
+
+					Program.GetSolver().Solve(shortcut.Action["eval(".Length..^1], false);
 				}
-				else if (shortcut.Action.StartsWith("evalstring("))
+				else if (shortcut.Action.StartsWith("solve("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("evalstring call must end with a closing parenthesis!");
+					if (shortcut.Action[^1] != ')') throw new Exception("solve call must end with a closing parenthesis!");
+					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().Solve(shortcut.Action["solve(".Length..^1], false).ToString());
+				}
+				else if (shortcut.Action.StartsWith("solvestring("))
+				{
+					if (shortcut.Action[^1] != ')') throw new Exception("solvestring call must end with a closing parenthesis!");
 
 					int commaIndex = -1;
 					int open = 0;
@@ -80,7 +86,7 @@ internal class KeyboardShortcutHandler
 
 					if (commaIndex == -1) throw new Exception("evalstring call must have two arguments!");
 
-					double pointer = Program.GetSolver().Solve(shortcut.Action["evalstring(".Length..commaIndex], false);
+					double pointer = Program.GetSolver().Solve(shortcut.Action["solvestring(".Length..commaIndex], false);
 					Program.GetSolver().Solve(shortcut.Action[(commaIndex + 1)..^1], false);
 
 					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().GetString(pointer));
@@ -111,30 +117,32 @@ internal class KeyboardShortcutHandler
 	public void ExecuteName(string name) => ShortcutActionRegistry.Get(name).Invoke();
 
 	internal record struct Shortcut(
-	[property: JsonConverter(typeof(JsonStringEnumConverter))] Keys KeyCode, [property: JsonConverter(typeof(JsonStringEnumConverter))] Keys Modifiers, string Action);
+	[property: JsonConverter(typeof(JsonStringEnumConverter))] Keys Modifiers, [property: JsonConverter(typeof(JsonStringEnumConverter))] Keys KeyCode, string Action);
 
 	public static KeyboardShortcutHandler Default => new(new List<Shortcut>()
 	{
-		new(Keys.Oemplus, Keys.Control, "increase font size"),
-		new(Keys.OemMinus, Keys.Control, "decrease font size"),
+		new(Keys.Control, Keys.Oemplus, "increase font size"),
+		new(Keys.Control, Keys.OemMinus, "decrease font size"),
 
-		new(Keys.PageUp, Keys.None, "page up"),
-		new(Keys.PageDown, Keys.None, "page down"),
+		new(Keys.None, Keys.PageUp, "page up"),
+		new(Keys.None, Keys.PageDown, "page down"),
 
-		new(Keys.Back, Keys.Alt, "delete entry"),
-		new(Keys.Delete, Keys.Alt, "delete all"),
+		new(Keys.Alt, Keys.Back, "delete entry"),
+		new(Keys.Alt, Keys.Delete, "delete all"),
+		new(Keys.Shift, Keys.Back, "clear"),
 
-		new(Keys.Enter, Keys.None, "execute"),
-		new(Keys.Enter, Keys.Alt, "execute at end"),
-		new(Keys.Enter, Keys.Alt | Keys.Shift, "execute all"),
+		new(Keys.None, Keys.Enter, "execute"),
+		new(Keys.Alt, Keys.Enter, "execute at end"),
+		new(Keys.Alt | Keys.Shift, Keys.Enter, "execute all"),
 
-		new(Keys.I, Keys.Alt, "input(ඞ)"),
-		new(Keys.A, Keys.Alt, "input($ANS)"),
-		new(Keys.A, Keys.Alt | Keys.Shift, "eval($ANS)"),
+		new(Keys.Alt, Keys.I, "input(ඞ)"),
+		new(Keys.Alt, Keys.A, "input($ANS)"),
+		new(Keys.Alt, Keys.P, "input($PI)"),
+		new(Keys.Alt | Keys.Shift, Keys.A, "solve($ANS)"),
 
-		new(Keys.C, Keys.Alt, "copy expression"),
-		new(Keys.S, Keys.Alt, "copy solution"),
-		new(Keys.O, Keys.Alt, "copy output"),
-		new(Keys.N, Keys.Alt, "copy entire entry"),
+		new(Keys.Alt, Keys.C, "copy expression"),
+		new(Keys.Alt, Keys.S, "copy solution"),
+		new(Keys.Alt, Keys.O, "copy output"),
+		new(Keys.Alt, Keys.N, "copy entire entry"),
 	});
 }

@@ -24,15 +24,20 @@ internal static class Program
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
 
-		bool showError = false;
-
-		if (File.Exists(ConfigPath))
+		try
 		{
-			Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
+			if (File.Exists(ConfigPath))
+			{
+				Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
+			}
+			else
+			{
+				Config = new();
+			}
 		}
-		else
+		catch (Exception ex)
 		{
-			Config = new();
+			MessageBox.Show(ex.Message, "Error Loading Config", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		KeyboardShortcutHandler = Config.ShortcutHandler;

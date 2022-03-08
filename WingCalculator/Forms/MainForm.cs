@@ -59,6 +59,7 @@ public partial class MainForm : Form
 		}
 
 		RegisterShortcuts();
+		ShortcutActionRegistry.Input = SendString;
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
@@ -163,23 +164,23 @@ public partial class MainForm : Form
 
 	private void e_button_Click(object sender, EventArgs e) => SendString("$E");
 
-	private void sqrt_button_Click(object sender, EventArgs e) => SendString("sqrt", true);
+	private void sqrt_button_Click(object sender, EventArgs e) => SendString("sqrt(");
 
-	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt", true);
+	private void cbrt_button_Click(object sender, EventArgs e) => SendString("cbrt(");
 
 	private void txt_button_Click(object sender, EventArgs e) => SendString("::$TXT");
 
-	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin", true);
+	private void arcsin_button_Click(object sender, EventArgs e) => SendString("asin(");
 
-	private void arccos_button_Click(object sender, EventArgs e) => SendString("acos", true);
+	private void arccos_button_Click(object sender, EventArgs e) => SendString("acos(");
 
-	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan", true);
+	private void arctan_button_Click(object sender, EventArgs e) => SendString("atan(");
 
-	private void sin_button_Click(object sender, EventArgs e) => SendString("sin", true);
+	private void sin_button_Click(object sender, EventArgs e) => SendString("sin(");
 
-	private void cos_button_Click(object sender, EventArgs e) => SendString("cos", true);
+	private void cos_button_Click(object sender, EventArgs e) => SendString("cos(");
 
-	private void tan_button_Click(object sender, EventArgs e) => SendString("tan", true);
+	private void tan_button_Click(object sender, EventArgs e) => SendString("tan(");
 
 	private void pow_button_Click(object sender, EventArgs e) => SendString("**");
 
@@ -187,9 +188,9 @@ public partial class MainForm : Form
 
 	private void mac_button_Click(object sender, EventArgs e) => SendString("@");
 
-	private void ln_button_Click(object sender, EventArgs e) => SendString("ln", true);
+	private void ln_button_Click(object sender, EventArgs e) => SendString("ln(");
 
-	private void log_button_Click(object sender, EventArgs e) => SendString("log", true);
+	private void log_button_Click(object sender, EventArgs e) => SendString("log(");
 
 	#endregion
 
@@ -249,12 +250,6 @@ public partial class MainForm : Form
 				break;
 			}
 		}
-		/*if (_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
-		{
-			e.Handled = true;
-			e.SuppressKeyPress = true;
-		}
-		else base.OnKeyDown(e);*/
 	}
 
 	private void FormControlKeys(object sender, KeyPressEventArgs e) // focus keys to omnibox, capture return
@@ -347,15 +342,11 @@ public partial class MainForm : Form
 
 	public string OmniText { get => omnibox.Text; set => omnibox.Text = value.Trim(); }
 
-	private void SendString(string s, bool paren = false)
+	private void SendString(string s)
 	{
 		omnibox.Select();
 		omnibox.ResetSelection();
-		SendKeys.Send(s);
-		if (paren)
-		{
-			SendKeys.Send("{(}");
-		}
+		SendKeys.Send(s.Replace("(", "{(}").Replace(")", "{)}"));
 	}
 
 	private void ResetSolver()

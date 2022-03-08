@@ -238,12 +238,12 @@ public partial class MainForm : Form
 		{
 			case Keys.Up:
 			{
-				_config.ShortcutHandler.ExecuteName("entry up");
+					KeyboardShortcutHandler.ExecuteName("entry up");
 				break;
 			}
 			case Keys.Down:
 			{
-				_config.ShortcutHandler.ExecuteName("entry down");
+				KeyboardShortcutHandler.ExecuteName("entry down");
 				break;
 			}
 		}

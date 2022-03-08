@@ -114,7 +114,7 @@ internal class KeyboardShortcutHandler
 		return this;
 	}
 
-	public void ExecuteName(string name) => ShortcutActionRegistry.Get(name).Invoke();
+	public static void ExecuteName(string name) => ShortcutActionRegistry.Get(name).Invoke();
 
 	internal record struct Shortcut(
 	[property: JsonConverter(typeof(JsonStringEnumConverter))] Keys Modifiers, [property: JsonConverter(typeof(JsonStringEnumConverter))] Keys KeyCode, string Action);

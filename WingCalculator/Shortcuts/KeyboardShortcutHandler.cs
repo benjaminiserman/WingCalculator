@@ -40,7 +40,14 @@ internal class KeyboardShortcutHandler
 			if (shortcut.KeyCode == keyCode && shortcut.Modifiers == modifiers)
 			{
 				executed = true;
-				ShortcutActionRegistry.Get(shortcut.Action).Invoke();
+				if (shortcut.Action.StartsWith("input"))
+				{
+					ShortcutActionRegistry.Input.Invoke(shortcut.Action["input(".Length..^1]);
+				}
+				else
+				{
+					ShortcutActionRegistry.Get(shortcut.Action).Invoke();
+				}
 			}
 		}
 
@@ -63,5 +70,6 @@ internal class KeyboardShortcutHandler
 		(Keys.Delete, Keys.Alt, "delete all"),
 		(Keys.Enter, Keys.None, "execute"),
 		(Keys.Enter, Keys.Alt, "execute at end"),
+		(Keys.A, Keys.Alt, "input(ඞ)"),
 	});
 }

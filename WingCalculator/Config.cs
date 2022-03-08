@@ -1,12 +1,11 @@
 ﻿namespace WingCalculator;
-using WingCalculator.Forms.History;
 using WingCalculator.Shortcuts;
 using System.Windows.Forms;
 using System.Text.Json.Serialization;
 
 internal class Config
 {
-	public KeyboardShortcutHandler ShortcutHandler { get; set; } = new();
+	public KeyboardShortcutHandler ShortcutHandler { get; set; } = KeyboardShortcutHandler.Default;
 
 	public bool IsDarkMode { get; set; } = false;
 
@@ -15,5 +14,5 @@ internal class Config
 	[JsonIgnore]
 	public ListBox.ObjectCollection HistoryViewItems { get; set; }
 
-	public List<string> Entries { get; set; }
+	public List<string> Entries { get; set; } = new();
 }

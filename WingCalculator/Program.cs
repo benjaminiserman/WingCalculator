@@ -18,12 +18,19 @@ internal static class Program
 		// To customize application configuration such as set high DPI settings or default font,
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
-		
-		if (File.Exists(ConfigPath))
+
+		try
 		{
-			Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
+			if (File.Exists(ConfigPath))
+			{
+				Config = JsonSerializer.Deserialize<Config>(File.ReadAllText(ConfigPath));
+			}
+			else
+			{
+				Config = new();
+			}
 		}
-		else
+		catch
 		{
 			Config = new();
 		}

@@ -13,7 +13,7 @@ public partial class MainForm : Form
 
 	public StringBuilder Stdout { get; private set; } = new();
 	private int _textIndex;
-	private Config _config;
+	private readonly Config _config;
 
 	internal MainForm(Config config)
 	{
@@ -40,6 +40,14 @@ public partial class MainForm : Form
 			historyView.Clear();
 		}
 
+		foreach (var shortcut in KeyboardShortcutHandler.Default.GetBoundNames())
+		{
+			if (!_config.ShortcutHandler.ContainsBoundName(shortcut))
+			{
+				_config.ShortcutHandler.AddShortcut(KeyboardShortcutHandler.Default, shortcut);
+			}
+		}
+
 		_config.HistoryViewItems = historyView.Items;
 
 		FontSizer.ApplySize(Controls, this, _config.FontSize);
@@ -49,6 +57,8 @@ public partial class MainForm : Form
 			WindowStyle.DarkMode.Apply(Controls, this);
 			darkModeButton.BackgroundImage = Resources.light_bulb;
 		}
+
+		RegisterShortcuts();
 
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
@@ -102,6 +112,22 @@ public partial class MainForm : Form
 				SendCursorRight();
 			}
 		})),
+		("delete entry", (Action)(() =>
+		{
+			OmniText = historyView.DeleteSelected();
+		})),
+		("delete all", (Action)(() =>
+		{
+			ac_button_Click(this, null);
+		})),
+		("execute", (Action)(() =>
+		{
+			Execute(false);
+		})),
+		("execute at end", (Action)(() =>
+		{
+			Execute(true);
+		})),
 	});
 #pragma warning restore IDE0053
 
@@ -117,7 +143,7 @@ public partial class MainForm : Form
 		errorLabel.Text = string.Empty;
 	}
 
-	private void exe_button_Click(object sender, EventArgs e) => Execute();
+	private void exe_button_Click(object sender, EventArgs e) => Execute(false);
 
 	private void hex_button_Click(object sender, EventArgs e) => SendString("::$HEX");
 
@@ -199,94 +225,40 @@ public partial class MainForm : Form
 
 	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
 	{
-		if (ModifierKeys.HasFlag(Keys.Control))
+		if (_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
 		{
-			if (e.KeyCode == Keys.Oemplus)
-			{
-				_config.FontSize++;
-				FontSizer.ApplySize(Controls, this, _config.FontSize);
-				e.Handled = true;
-				return;
-			}
-			else if (e.KeyCode == Keys.OemMinus)
-			{
-				_config.FontSize--;
-				FontSizer.ApplySize(Controls, this, _config.FontSize);
-				e.Handled = true;
-				return;
-			}
+			e.SuppressKeyPress = true;
+			e.Handled = true;
 		}
-
-		if (e.KeyCode == Keys.PageUp) OmniText = historyView.SelectedChange(0, OmniText);
-		if (e.KeyCode == Keys.PageDown) OmniText = historyView.SelectedChange(historyView.Items.Count - 1, OmniText);
-
-		switch (e.KeyCode)
-		{
-			case Keys.Up:
-			{
-				if (omnibox.SelectionStart != _textIndex)
-				{
-					break;
-				}
-				else
-				{
-					OmniText = historyView.SelectedUp(OmniText);
-					SendCursorRight();
-				}
-
-				break;
-			}
-			case Keys.Down:
-			{
-				if (omnibox.SelectionStart != _textIndex)
-				{
-					break;
-				}
-				else
-				{
-					OmniText = historyView.SelectedDown(OmniText);
-					SendCursorRight();
-				}
-
-				break;
-			}
-		}
-
-		//_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers);
 
 		_textIndex = omnibox.SelectionStart;
 	}
 
 	protected override void OnKeyDown(KeyEventArgs e)
 	{
-		if (e.KeyCode == Keys.Return && !e.Shift)
+		switch (e.KeyCode)
 		{
-			Execute();
+			case Keys.Up:
+			{
+				_config.ShortcutHandler.ExecuteName("entry up");
+				break;
+			}
+			case Keys.Down:
+			{
+				_config.ShortcutHandler.ExecuteName("entry down");
+				break;
+			}
+		}
+		/*if (_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
+		{
 			e.Handled = true;
 			e.SuppressKeyPress = true;
 		}
-		else if (e.KeyCode == Keys.Back && e.Alt)
-		{
-			OmniText = historyView.DeleteSelected();
-			e.Handled = true;
-			e.SuppressKeyPress = true;
-		}
-		else if (e.KeyCode == Keys.Delete && e.Alt)
-		{
-			ac_button_Click(this, e);
-			e.Handled = true;
-			e.SuppressKeyPress = true;
-		}
-		else base.OnKeyDown(e);
+		else base.OnKeyDown(e);*/
 	}
 
 	private void FormControlKeys(object sender, KeyPressEventArgs e) // focus keys to omnibox, capture return
 	{
-		if (e.KeyChar == (char)Keys.Return && !ModifierKeys.HasFlag(Keys.Shift))
-		{
-			Execute();
-		}
-
 		if (!omnibox.Focused)
 		{
 			omnibox.Select();
@@ -301,8 +273,10 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void Execute()
+	private void Execute(bool alt)
 	{
+		if (ModifierKeys.HasFlag(Keys.Shift)) return;
+
 		bool altMode = false; // if true, *do not* modify current entry, even if selected
 		errorLabel.Text = string.Empty;
 
@@ -315,7 +289,7 @@ public partial class MainForm : Form
 				if (string.IsNullOrWhiteSpace(OmniText)) return;
 			}
 		}
-		else if (ModifierKeys.HasFlag(Keys.Alt) && historyView.SelectedItem != null) altMode = true;
+		else if (alt && historyView.SelectedItem != null) altMode = true;
 
 		string errorText;
 
@@ -358,6 +332,7 @@ public partial class MainForm : Form
 			errorLabel.Text = errorText;
 			omnibox.SelectionStart = OmniText.Length;
 			_textIndex = omnibox.SelectionStart;
+			SendKeys.Send("{BACKSPACE}");
 		}
 	}
 

@@ -29,7 +29,7 @@ partial class PopoutEntry
 	private void InitializeComponent()
 	{
 			this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
-			this.omniBox = new System.Windows.Forms.TextBox();
+			this.omniBox = new WingCalculator.Forms.Omnibox();
 			this.bottomTable = new System.Windows.Forms.TableLayoutPanel();
 			this.exeButton = new System.Windows.Forms.Button();
 			this.editToggle = new System.Windows.Forms.CheckBox();
@@ -136,7 +136,7 @@ partial class PopoutEntry
 	#endregion
 
 	private TableLayoutPanel tableLayout;
-	private TextBox omniBox;
+	private Omnibox omniBox;
 	private TableLayoutPanel bottomTable;
 	private Button exeButton;
 	private CheckBox editToggle;

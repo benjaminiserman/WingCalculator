@@ -344,9 +344,12 @@ public partial class MainForm : Form
 
 	private void SendString(string s)
 	{
-		omnibox.Select();
-		omnibox.ResetSelection();
-		SendKeys.Send(s.Replace("(", "{(}").Replace(")", "{)}"));
+		if (Program.LastFocusedTextBox is null)
+		{
+			Program.LastFocusedTextBox = omnibox;
+		}
+
+		Program.LastFocusedTextBox.SendString(s);
 	}
 
 	private void ResetSolver()

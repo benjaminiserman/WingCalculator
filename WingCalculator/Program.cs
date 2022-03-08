@@ -9,6 +9,9 @@ internal static class Program
 	private static string ConfigPath { get; } = @"config.json";
 	private static Config Config { get; set; }
 
+	internal static Omnibox LastFocusedTextBox { get; set; }
+	private static MainForm _mainForm;
+
 	/// <summary>
 	///  The main entry point for the application.
 	/// </summary>
@@ -37,7 +40,9 @@ internal static class Program
 
 		Application.ApplicationExit += OnExit;
 
-		Application.Run(new MainForm(Config));
+		_mainForm = new MainForm(Config);
+
+		Application.Run(_mainForm);
 	}
 
 	private static void OnExit(object sender, EventArgs e)

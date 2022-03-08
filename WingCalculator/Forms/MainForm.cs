@@ -64,7 +64,6 @@ public partial class MainForm : Form
 		KeyPreview = true;
 		KeyPress += new KeyPressEventHandler(FormControlKeys);
 
-		omnibox.KeyUp += new KeyEventHandler(OmniboxControlKeys);
 		ResizeEnd += (_, _) => historyView.RefreshEntries();
 	}
 
@@ -224,32 +223,28 @@ public partial class MainForm : Form
 
 	#endregion
 
-	private void OmniboxControlKeys(object send, KeyEventArgs e) // capture CTRL +/-, ESC, DEL, arrow keys
+	protected override void OnKeyDown(KeyEventArgs e)
 	{
-		if (_config.ShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
+		if (Program.KeyboardShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
 		{
 			e.SuppressKeyPress = true;
 			e.Handled = true;
 		}
+		else switch (e.KeyCode)
+			{
+				case Keys.Up:
+				{
+					_config.ShortcutHandler.ExecuteName("entry up");
+					break;
+				}
+				case Keys.Down:
+				{
+					_config.ShortcutHandler.ExecuteName("entry down");
+					break;
+				}
+			}
 
 		_textIndex = omnibox.SelectionStart;
-	}
-
-	protected override void OnKeyDown(KeyEventArgs e)
-	{
-		switch (e.KeyCode)
-		{
-			case Keys.Up:
-			{
-				_config.ShortcutHandler.ExecuteName("entry up");
-				break;
-			}
-			case Keys.Down:
-			{
-				_config.ShortcutHandler.ExecuteName("entry down");
-				break;
-			}
-		}
 	}
 
 	private void FormControlKeys(object sender, KeyPressEventArgs e) // focus keys to omnibox, capture return
@@ -327,7 +322,7 @@ public partial class MainForm : Form
 			errorLabel.Text = errorText;
 			omnibox.SelectionStart = OmniText.Length;
 			_textIndex = omnibox.SelectionStart;
-			SendKeys.Send("{BACKSPACE}");
+			//SendKeys.Send("{BACKSPACE}");
 		}
 	}
 

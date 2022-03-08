@@ -121,6 +121,7 @@ partial class PopoutEntry
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(378, 144);
 			this.Controls.Add(this.tableLayout);
+			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(375, 150);
 			this.Name = "PopoutEntry";
 			this.ShowIcon = false;

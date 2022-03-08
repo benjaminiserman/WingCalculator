@@ -16,4 +16,6 @@ internal static class ShortcutActionRegistry
 	}
 
 	public static Action Get(string name) => _actions[name];
+
+	public static IEnumerable<string> GetNames() => _actions.Keys;
 }

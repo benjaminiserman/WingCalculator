@@ -1,6 +1,7 @@
 ﻿namespace WingCalculator.Forms.History;
 using System;
 using System.Windows.Forms;
+using WingCalculator.Shortcuts;
 
 internal class HistoryView : ListBox
 {
@@ -43,10 +44,27 @@ internal class HistoryView : ListBox
 		ContextMenuStrip = _menuStrip;
 		MouseUp += OnClick;
 
+		RegisterShortcuts();
+
 		OnChange();
 	}
 
 	public void RefreshEntries() => RecreateHandle();
+
+	public void RegisterShortcuts() => ShortcutActionRegistry.AddRange(new List<(string, Action)>()
+	{
+		("insert above", (Action)(() => InsertAbove())),
+		("insert below", (Action)(() => InsertBelow())),
+		("pop out", (Action)(() => PopOut())),
+		("pop out last", (Action)(() => PopOutLast())),
+
+		("copy expression", (Action)(() => CopyExpression())),
+		("copy output", (Action)(() => CopyOutput())),
+		("copy solution", (Action)(() => CopySolution())),
+		("copy error", (Action)(() => CopyError())),
+		("copy stack trace", (Action)(() => CopyStackTrace())),
+		("copy entire entry", (Action)(() => CopyEntireEntry())),
+	});
 
 	public string SelectedUp(string omniText)
 	{
@@ -262,27 +280,22 @@ internal class HistoryView : ListBox
 		{
 			case "Insert Above":
 			{
-				InsertEntry("$ANS", SelectedIndex);
-				SelectedChange(SelectedIndex, null);
+				InsertAbove();
 				break;
 			}
 			case "Insert Below":
 			{
-				InsertEntry("$ANS", SelectedIndex + 1);
+				InsertBelow();
 				break;
 			}
 			case "Pop Out":
 			{
-				PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle);
-				popouts.Add(popout);
-				popout.Show();
+				PopOut();	
 				break;
 			}
 			case "Pop Out Last":
 			{
-				PopoutEntry popout = new(this, _mainForm.CurrentStyle);
-				popouts.Add(popout);
-				popout.Show();
+				PopOutLast();
 				break;
 			}
 			case "Copy...":
@@ -292,11 +305,42 @@ internal class HistoryView : ListBox
 			}
 			case "Delete Entry":
 			{
-				_mainForm.OmniText = DeleteSelected();
+				DeleteEntry();
 				break;
 			}
 		}
 	}
+
+	private void InsertAbove()
+	{
+		InsertEntry("$ANS", SelectedIndex);
+		SelectedChange(SelectedIndex, null);
+	}
+
+	private void InsertBelow() => InsertEntry("$ANS", SelectedIndex + 1);
+
+	private void PopOut()
+	{
+		PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle);
+		popouts.Add(popout);
+		popout.Show();
+	}
+
+	private void PopOutLast()
+	{
+		PopoutEntry popout = new(this, _mainForm.CurrentStyle);
+		popouts.Add(popout);
+		popout.Show();
+	}
+
+	private void DeleteEntry() => _mainForm.OmniText = DeleteSelected();
+
+	private void CopyExpression() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Expression"]));
+	private void CopyOutput() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Output"]));
+	private void CopySolution() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Solution"]));
+	private void CopyError() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Error"]));
+	private void CopyStackTrace() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Stack Trace"]));
+	private void CopyEntireEntry() => CopyStripItemClicked(this, new(_copyStrip.Items["Copy Entire Entry"]));
 
 	private void CopyStripItemClicked(object sender, ToolStripItemClickedEventArgs e)
 	{

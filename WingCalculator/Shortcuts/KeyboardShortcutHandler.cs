@@ -1,9 +1,20 @@
 ﻿namespace WingCalculator.Shortcuts;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 internal class KeyboardShortcutHandler
 {
 	private List<Shortcut> _shortcuts = new();
+	public List<Shortcut> Shortcuts => _shortcuts.Select(x => x).ToList();
+
+	[JsonConstructor]
+	public KeyboardShortcutHandler(List<Shortcut> shortcuts)
+	{
+		foreach (var x in shortcuts)
+		{
+			AddShortcut(x);
+		}
+	}
 
 	public KeyboardShortcutHandler(List<(Keys, Keys, string)> shortcuts)
 	{
@@ -54,22 +65,37 @@ internal class KeyboardShortcutHandler
 		return executed;
 	}
 
+	public KeyboardShortcutHandler FillUnassigned()
+	{
+		foreach (string name in ShortcutActionRegistry.GetNames())
+		{
+			if (!_shortcuts.Any(x => x.Action == name))
+			{
+				AddShortcut(Keys.None, Keys.None, name);
+			}
+		}
+
+		return this;
+	}
+
 	public void ExecuteName(string name) => ShortcutActionRegistry.Get(_shortcuts.First(x => x.Action == name).Action).Invoke();
 
-	private record struct Shortcut(Keys KeyCode, Keys Modifiers, string Action);
+	internal record struct Shortcut(
+	[property: JsonConverter(typeof(JsonStringEnumConverter))] Keys KeyCode, [property: JsonConverter(typeof(JsonStringEnumConverter))] Keys Modifiers, string Action);
 
-	public static KeyboardShortcutHandler Default => new(new()
+	public static KeyboardShortcutHandler Default => new(new List<Shortcut>()
 	{
-		(Keys.Oemplus, Keys.Control, "increase font size"),
-		(Keys.OemMinus, Keys.Control, "decrease font size"),
-		(Keys.PageUp, Keys.None, "page up"),
-		(Keys.PageDown, Keys.None, "page down"),
-		(Keys.None, Keys.None, "entry up"),
-		(Keys.None, Keys.None, "entry down"),
-		(Keys.Back, Keys.Alt, "delete entry"),
-		(Keys.Delete, Keys.Alt, "delete all"),
-		(Keys.Enter, Keys.None, "execute"),
-		(Keys.Enter, Keys.Alt, "execute at end"),
-		(Keys.A, Keys.Alt, "input(ඞ)"),
+		new(Keys.Oemplus, Keys.Control, "increase font size"),
+		new(Keys.OemMinus, Keys.Control, "decrease font size"),
+		new(Keys.PageUp, Keys.None, "page up"),
+		new(Keys.PageDown, Keys.None, "page down"),
+		new(Keys.None, Keys.None, "entry up"),
+		new(Keys.None, Keys.None, "entry down"),
+		new(Keys.Back, Keys.Alt, "delete entry"),
+		new(Keys.Delete, Keys.Alt, "delete all"),
+		new(Keys.Enter, Keys.None, "execute"),
+		new(Keys.Enter, Keys.Alt, "execute at end"),
+
+		new(Keys.A, Keys.Alt, "input(ඞ)"),
 	});
 }

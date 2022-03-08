@@ -156,6 +156,15 @@ internal partial class PopoutEntry : Form
 		cursorLabel.Text = $"Line: {row + 1}, Col: {column + 1}";
 	}
 
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (Program.KeyboardShortcutHandler.ExecuteShortcuts(e.KeyCode, e.Modifiers))
+		{
+			e.SuppressKeyPress = true;
+			e.Handled = true;
+		}
+	}
+
 	private void UpdateLast(HistoryView historyView)
 	{
 		_entry = historyView.GetLast();

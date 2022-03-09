@@ -77,8 +77,11 @@ public partial class MainForm : Form
 		})),
 		("decrease font size", (Action)(() =>
 		{
-			_config.FontSize--;
-			FontSizer.ApplySize(Controls, this, _config.FontSize);
+			if (_config.FontSize > 1)
+			{
+				_config.FontSize--;
+				FontSizer.ApplySize(Controls, this, _config.FontSize);
+			}
 		})),
 		("page up", (Action)(() =>
 		{

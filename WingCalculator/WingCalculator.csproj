@@ -104,8 +104,8 @@
   </Choose>
 
   <PropertyGroup>
-	<AssemblyFileVersionAttribute>[assembly:System.Reflection.AssemblyFileVersion("$(MajorVersion).$(MinorVersion).$(Day).$(Num)")]</AssemblyFileVersionAttribute>
-	<AssemblyVersionAttribute>[assembly:System.Reflection.AssemblyVersion("$(MajorVersion).$(MinorVersion).0.0")]</AssemblyVersionAttribute>
+	<AssemblyFileVersionAttribute>[assembly: System.Reflection.AssemblyFileVersion("$(MajorVersion).$(MinorVersion).$(Day).$(Num)")]</AssemblyFileVersionAttribute>
+	<AssemblyVersionAttribute>[assembly: System.Reflection.AssemblyVersion("$(MajorVersion).$(MinorVersion).0.0")]</AssemblyVersionAttribute>
   </PropertyGroup>
 
   <Target Name="Version" BeforeTargets="PreBuildEvent">

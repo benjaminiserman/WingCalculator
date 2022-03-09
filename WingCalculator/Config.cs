@@ -1,7 +1,7 @@
 ﻿namespace WingCalculator;
-using WingCalculator.Shortcuts;
-using System.Windows.Forms;
 using System.Text.Json.Serialization;
+using System.Windows.Forms;
+using WingCalculator.Shortcuts;
 
 internal class Config
 {

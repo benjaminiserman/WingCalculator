@@ -2,9 +2,9 @@ namespace WingCalculator.Forms;
 using System;
 using System.Text;
 using System.Windows.Forms;
+using WingCalc;
 using WingCalculator.Properties;
 using WingCalculator.Shortcuts;
-using WingCalc;
 
 public partial class MainForm : Form
 {
@@ -70,7 +70,7 @@ public partial class MainForm : Form
 #pragma warning disable IDE0053
 	public void RegisterShortcuts() => ShortcutActionRegistry.AddRange(new List<(string, Action)>()
 	{
-		("increase font size", (Action)(() => 
+		("increase font size", (Action)(() =>
 		{
 			_config.FontSize++;
 			FontSizer.ApplySize(Controls, this, _config.FontSize);
@@ -241,18 +241,18 @@ public partial class MainForm : Form
 			e.Handled = true;
 		}
 		else switch (e.KeyCode)
-		{
-			case Keys.Up:
 			{
-				KeyboardShortcutHandler.ExecuteName("entry up");
-				break;
+				case Keys.Up:
+				{
+					KeyboardShortcutHandler.ExecuteName("entry up");
+					break;
+				}
+				case Keys.Down:
+				{
+					KeyboardShortcutHandler.ExecuteName("entry down");
+					break;
+				}
 			}
-			case Keys.Down:
-			{
-				KeyboardShortcutHandler.ExecuteName("entry down");
-				break;
-			}
-		}
 
 		_textIndex = omnibox.SelectionStart;
 	}

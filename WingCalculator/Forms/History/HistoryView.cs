@@ -291,7 +291,7 @@ internal class HistoryView : ListBox
 			}
 			case "Pop Out":
 			{
-				PopOut();	
+				PopOut();
 				break;
 			}
 			case "Pop Out Last":

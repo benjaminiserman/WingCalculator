@@ -240,7 +240,9 @@ public partial class MainForm : Form
 			e.SuppressKeyPress = true;
 			e.Handled = true;
 		}
-		else switch (e.KeyCode)
+		else
+		{
+			switch (e.KeyCode)
 			{
 				case Keys.Up:
 				{
@@ -253,6 +255,7 @@ public partial class MainForm : Form
 					break;
 				}
 			}
+		}
 
 		_textIndex = omnibox.SelectionStart;
 	}
@@ -332,7 +335,6 @@ public partial class MainForm : Form
 			errorLabel.Text = errorText;
 			omnibox.SelectionStart = OmniText.Length;
 			_textIndex = omnibox.SelectionStart;
-			//SendKeys.Send("{BACKSPACE}");
 		}
 	}
 
@@ -355,6 +357,7 @@ public partial class MainForm : Form
 		}
 
 		Program.LastFocusedTextBox.SendString(s);
+		Program.LastFocusedTextBox.Focus();
 	}
 
 	private void ResetSolver()

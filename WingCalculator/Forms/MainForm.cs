@@ -281,21 +281,33 @@ public partial class MainForm : Form
 
 	private void Execute(bool alt)
 	{
-		if (ModifierKeys.HasFlag(Keys.Shift)) return;
+		if (ModifierKeys.HasFlag(Keys.Shift))
+		{
+			return;
+		}
 
-		bool altMode = false; // if true, *do not* modify current entry, even if selected
+		var altMode = false; // if true, *do not* modify current entry, even if selected
 		errorLabel.Text = string.Empty;
 
 		if (string.IsNullOrWhiteSpace(OmniText))
 		{
-			if (historyView.Items.Count <= 1) return;
+			if (historyView.Items.Count <= 1)
+			{
+				return;
+			}
 			else
 			{
 				OmniText = historyView.GetLastNonEmptyEntry();  // for duplicating last entry if omnibox empty
-				if (string.IsNullOrWhiteSpace(OmniText)) return;
+				if (string.IsNullOrWhiteSpace(OmniText))
+				{
+					return;
+				}
 			}
 		}
-		else if (alt && historyView.SelectedItem != null) altMode = true;
+		else if (alt && historyView.SelectedItem != null)
+		{
+			altMode = true;
+		}
 
 		string errorText;
 
@@ -365,14 +377,15 @@ public partial class MainForm : Form
 
 	private void ResetSolver()
 	{
-		Solver = new();
-
-		Solver.WriteLine = WriteLine;
-		Solver.Write = Write;
-		Solver.WriteError = WriteError;
-		Solver.ReadLine = ReadLine;
-		Solver.Flush = Flush;
-		Solver.Clear = Clear;
+		Solver = new()
+		{
+			WriteLine = WriteLine,
+			Write = Write,
+			WriteError = WriteError,
+			ReadLine = ReadLine,
+			Flush = Flush,
+			Clear = Clear
+		};
 
 		ViewerForm.RefreshEntries(Solver);
 	}
@@ -390,23 +403,32 @@ public partial class MainForm : Form
 
 	private void errorLabel_Click(object sender, EventArgs e)
 	{
-		string errorText = errorLabel.Text.Replace("&&", "&");
-		string copyText = "Copied to clipboard.";
+		var errorText = errorLabel.Text.Replace("&&", "&");
+		var copyText = "Copied to clipboard.";
 
-		if (string.IsNullOrWhiteSpace(errorText) || errorLabel.Text == copyText) return;
+		if (string.IsNullOrWhiteSpace(errorText) || errorLabel.Text == copyText)
+		{
+			return;
+		}
 
 		Clipboard.SetText(errorText);
 		errorLabel.Text = copyText;
 
-		Timer t = new();
-		t.Interval = 1000;
+		Timer t = new()
+		{
+			Interval = 1000
+		};
 		t.Tick += (_, _) => RefillErrorLabel(t, errorLabel.Text, errorText);
 		t.Start();
 	}
 
 	private void RefillErrorLabel(Timer t, string compare, string set)
 	{
-		if (errorLabel.Text == compare) errorLabel.Text = set.Replace("&", "&&");
+		if (errorLabel.Text == compare)
+		{
+			errorLabel.Text = set.Replace("&", "&&");
+		}
+
 		t.Enabled = false;
 	}
 

@@ -43,7 +43,7 @@ internal static class Program
 
 		Application.ApplicationExit += OnExit;
 
-		_mainForm = new MainForm(Config);
+		_mainForm = new(Config);
 
 		Application.Run(_mainForm);
 	}

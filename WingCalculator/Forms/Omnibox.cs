@@ -27,7 +27,7 @@ internal class Omnibox : TextBox
 
 	public void SendString(string s)
 	{
-		int selectionStart = SelectionStart;
+		var selectionStart = SelectionStart;
 
 		if (SelectionLength > 0)
 		{

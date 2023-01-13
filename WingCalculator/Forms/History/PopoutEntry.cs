@@ -24,7 +24,7 @@ internal partial class PopoutEntry : Form
 
 		_getText = () =>
 		{
-			string s = _canEdit
+			var s = _canEdit
 				? _entry.Expression
 				: _entry.Entry.Trim();
 
@@ -60,7 +60,7 @@ internal partial class PopoutEntry : Form
 
 	private void UpdateText()
 	{
-		string s = _getText();
+		var s = _getText();
 		omniBox.Text = s;
 		DoResize(s);
 	}
@@ -71,21 +71,35 @@ internal partial class PopoutEntry : Form
 		{
 			try
 			{
-				using Graphics g = CreateGraphics();
-				SizeF size = g.MeasureString(s, Font);
+				using var g = CreateGraphics();
+				var size = g.MeasureString(s, Font);
 
-				int guessWidth = (int)Math.Ceiling(size.Width);
+				var guessWidth = (int)Math.Ceiling(size.Width);
 				Width = guessWidth;
 
-				if (Width < MinimumSize.Width) Width = MinimumSize.Width;
-				if (Width > 1000) Width = 1000;
+				if (Width < MinimumSize.Width)
+				{
+					Width = MinimumSize.Width;
+				}
+
+				if (Width > 1000)
+				{
+					Width = 1000;
+				}
 
 				size = g.MeasureString(s, Font, Width);
-				int guessHeight = Font.Height * 2 + (int)Math.Ceiling(size.Height);
+				var guessHeight = Font.Height * 2 + (int)Math.Ceiling(size.Height);
 				Height = guessHeight + RectangleToScreen(ClientRectangle).Top - Top + 45; // add word wrap read, also min word wrap allowed
 
-				if (Height < MinimumSize.Height) Height = MinimumSize.Height;
-				if (Height > 800) Height = 800;
+				if (Height < MinimumSize.Height)
+				{
+					Height = MinimumSize.Height;
+				}
+
+				if (Height > 800)
+				{
+					Height = 800;
+				}
 
 				_height = Height;
 				_width = Width;
@@ -143,14 +157,14 @@ internal partial class PopoutEntry : Form
 
 	private void OmniboxCursorChanged(object sender, EventArgs e)
 	{
-		int position = omniBox.SelectionStart;
+		var position = omniBox.SelectionStart;
 
 		var matches = Regex.Matches(omniBox.Text, "\n" /*"\n+(?!['\"`]*['\"`])"*/);
 
-		int count = matches.Count(x => x.Index < omniBox.SelectionStart);
+		var count = matches.Count(x => x.Index < omniBox.SelectionStart);
 
-		int row = count;
-		int column = count == 0
+		var row = count;
+		var column = count == 0
 			? omniBox.SelectionStart
 			: omniBox.SelectionStart - matches.Last(x => x.Index < omniBox.SelectionStart).Index - 1;
 

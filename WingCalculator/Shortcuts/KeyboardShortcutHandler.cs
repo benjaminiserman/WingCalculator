@@ -44,7 +44,7 @@ internal class KeyboardShortcutHandler
 
 	public bool ExecuteShortcuts(Keys keyCode, Keys modifiers)
 	{
-		bool executed = false;
+		var executed = false;
 
 		foreach (var shortcut in _shortcuts)
 		{
@@ -53,30 +53,50 @@ internal class KeyboardShortcutHandler
 				executed = true;
 				if (shortcut.Action.StartsWith("input("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("input call must end with a closing parenthesis!");
+					if (shortcut.Action[^1] != ')')
+					{
+						throw new("input call must end with a closing parenthesis!");
+					}
+
 					ShortcutActionRegistry.Input.Invoke(shortcut.Action["input(".Length..^1]);
 				}
 				else if (shortcut.Action.StartsWith("eval("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("eval call must end with a closing parenthesis!");
+					if (shortcut.Action[^1] != ')')
+					{
+						throw new("eval call must end with a closing parenthesis!");
+					}
 
 					Program.GetSolver().Solve(shortcut.Action["eval(".Length..^1], false);
 				}
 				else if (shortcut.Action.StartsWith("solve("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("solve call must end with a closing parenthesis!");
+					if (shortcut.Action[^1] != ')')
+					{
+						throw new Exception("solve call must end with a closing parenthesis!");
+					}
+
 					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().Solve(shortcut.Action["solve(".Length..^1], false).ToString());
 				}
 				else if (shortcut.Action.StartsWith("solvestring("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("solvestring call must end with a closing parenthesis!");
-
-					int commaIndex = -1;
-					int open = 0;
-					for (int i = 0; i < shortcut.Action.Length; i++)
+					if (shortcut.Action[^1] != ')')
 					{
-						if (shortcut.Action[i] == '(') open++;
-						else if (shortcut.Action[i] == ')') open--;
+						throw new Exception("solvestring call must end with a closing parenthesis!");
+					}
+
+					var commaIndex = -1;
+					var open = 0;
+					for (var i = 0; i < shortcut.Action.Length; i++)
+					{
+						if (shortcut.Action[i] == '(')
+						{
+							open++;
+						}
+						else if (shortcut.Action[i] == ')')
+						{
+							open--;
+						}
 						else if (shortcut.Action[i] == ',' && open == 1)
 						{
 							commaIndex = i;
@@ -84,28 +104,44 @@ internal class KeyboardShortcutHandler
 						}
 					}
 
-					if (commaIndex == -1) throw new Exception("solvestring call must have two arguments!");
+					if (commaIndex == -1)
+					{
+						throw new Exception("solvestring call must have two arguments!");
+					}
 
-					double pointer = Program.GetSolver().Solve(shortcut.Action["solvestring(".Length..commaIndex], false);
+					var pointer = Program.GetSolver().Solve(shortcut.Action["solvestring(".Length..commaIndex], false);
 					Program.GetSolver().Solve(shortcut.Action[(commaIndex + 1)..^1], false);
 
 					ShortcutActionRegistry.Input.Invoke(Program.GetSolver().GetString(pointer));
 				}
 				else if (shortcut.Action.StartsWith("copysolve("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("copysolve call must end with a closing parenthesis!");
+					if (shortcut.Action[^1] != ')')
+					{
+						throw new Exception("copysolve call must end with a closing parenthesis!");
+					}
+
 					Clipboard.SetText(Program.GetSolver().Solve(shortcut.Action["copysolve(".Length..^1], false).ToString());
 				}
 				else if (shortcut.Action.StartsWith("copysolvestring("))
 				{
-					if (shortcut.Action[^1] != ')') throw new Exception("copysolvestring call must end with a closing parenthesis!");
-
-					int commaIndex = -1;
-					int open = 0;
-					for (int i = 0; i < shortcut.Action.Length; i++)
+					if (shortcut.Action[^1] != ')')
 					{
-						if (shortcut.Action[i] == '(') open++;
-						else if (shortcut.Action[i] == ')') open--;
+						throw new Exception("copysolvestring call must end with a closing parenthesis!");
+					}
+
+					var commaIndex = -1;
+					var open = 0;
+					for (var i = 0; i < shortcut.Action.Length; i++)
+					{
+						if (shortcut.Action[i] == '(')
+						{
+							open++;
+						}
+						else if (shortcut.Action[i] == ')')
+						{
+							open--;
+						}
 						else if (shortcut.Action[i] == ',' && open == 1)
 						{
 							commaIndex = i;
@@ -113,9 +149,12 @@ internal class KeyboardShortcutHandler
 						}
 					}
 
-					if (commaIndex == -1) throw new Exception("copysolvestring call must have two arguments!");
+					if (commaIndex == -1)
+					{
+						throw new Exception("copysolvestring call must have two arguments!");
+					}
 
-					double pointer = Program.GetSolver().Solve(shortcut.Action["copysolvestring(".Length..commaIndex], false);
+					var pointer = Program.GetSolver().Solve(shortcut.Action["copysolvestring(".Length..commaIndex], false);
 					Program.GetSolver().Solve(shortcut.Action[(commaIndex + 1)..^1], false);
 
 					Clipboard.SetText(Program.GetSolver().GetString(pointer));
@@ -132,7 +171,7 @@ internal class KeyboardShortcutHandler
 
 	public KeyboardShortcutHandler FillUnassigned()
 	{
-		foreach (string name in ShortcutActionRegistry.GetNames())
+		foreach (var name in ShortcutActionRegistry.GetNames())
 		{
 			if (!_shortcuts.Any(x => x.Action == name))
 			{

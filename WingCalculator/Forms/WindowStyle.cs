@@ -54,8 +54,14 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			{
 				c.BackColor = ButtonBackgroundColor;
 
-				if (MenuNames.Contains(b.Name)) b.FlatStyle = MenuButtonStyle;
-				else b.FlatStyle = ButtonStyle;
+				if (MenuNames.Contains(b.Name))
+				{
+					b.FlatStyle = MenuButtonStyle;
+				}
+				else
+				{
+					b.FlatStyle = ButtonStyle;
+				}
 			}
 			else if (c is TextBox)
 			{
@@ -65,15 +71,24 @@ internal record WindowStyle(Color BaseColor, Color InnerBaseColor, Color ButtonB
 			{
 				c.BackColor = InnerBaseColor;
 
-				if (lb is HistoryView hv) hv.RefreshEntries();
+				if (lb is HistoryView hv)
+				{
+					hv.RefreshEntries();
+				}
 			}
 			else if (c is Panel panel)
 			{
 				Apply(panel.Controls, form);
 			}
 
-			if (c.Name == "errorLabel") c.ForeColor = ErrorColor;
-			else c.ForeColor = TextColor;
+			if (c.Name == "errorLabel")
+			{
+				c.ForeColor = ErrorColor;
+			}
+			else
+			{
+				c.ForeColor = TextColor;
+			}
 		}
 
 		form.BackColor = BaseColor;

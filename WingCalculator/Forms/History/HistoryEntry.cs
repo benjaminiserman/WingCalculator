@@ -55,13 +55,16 @@ internal class HistoryEntry
 	public bool Solve(bool recalculate = true)
 	{
 		ClearAllOutput();
-		bool impliedAns = false;
+		var impliedAns = false;
 
-		if (string.IsNullOrWhiteSpace(Expression)) return true;
+		if (string.IsNullOrWhiteSpace(Expression))
+		{
+			return true;
+		}
 
 		try
 		{
-			double solve = _solver.Solve(Expression, out impliedAns);
+			var solve = _solver.Solve(Expression, out impliedAns);
 			Solution = solve.ToString();
 		}
 		catch (Exception ex)
@@ -70,7 +73,10 @@ internal class HistoryEntry
 				? ex.Message
 				: $"{ex.GetType()}: {ex.Message}";
 
-			if (ex is WingCalcException wx && wx.StackTrace != null) StackTrace = wx.StackTrace;
+			if (ex is WingCalcException wx && wx.StackTrace != null)
+			{
+				StackTrace = wx.StackTrace;
+			}
 
 #if DEBUG
 			StackTrace += $"\r\n{ex.StackTrace.Replace("&", "&&")}";
@@ -79,9 +85,12 @@ internal class HistoryEntry
 
 		if (impliedAns)
 		{
-			for (int i = 0; i < _expression.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
+			for (var i = 0; i < _expression.Length; i++) // yes, this is just to match whether or not they put spaces on their operators.
 			{
-				if ("~!%^&*-+=|<>/;:?".Contains(_expression[i])) continue;
+				if ("~!%^&*-+=|<>/;:?".Contains(_expression[i]))
+				{
+					continue;
+				}
 				else if (_expression[i] == ' ')
 				{
 					_expression = $"$ANS {_expression}";
@@ -115,7 +124,10 @@ internal class HistoryEntry
 	{
 		get
 		{
-			if (string.IsNullOrWhiteSpace(Expression)) return "\r\n\r\n";
+			if (string.IsNullOrWhiteSpace(Expression))
+			{
+				return "\r\n\r\n";
+			}
 
 			StringBuilder sb = new();
 
@@ -123,18 +135,41 @@ internal class HistoryEntry
 
 			if (Output != string.Empty)
 			{
-				if (Output.EndsWith("\r\n")) sb.AppendLine($"> Output: {Output[..^2].Replace("\n", "\n> ")}");
-				else if (Output.EndsWith("\n")) sb.AppendLine($"> Output: {Output[..^1].Replace("\n", "\n> ")}");
-				else sb.AppendLine($"> Output: {Output.Replace("\n", "\n> ")}");
+				if (Output.EndsWith("\r\n"))
+				{
+					sb.AppendLine($"> Output: {Output[..^2].Replace("\n", "\n> ")}");
+				}
+				else if (Output.EndsWith("\n"))
+				{
+					sb.AppendLine($"> Output: {Output[..^1].Replace("\n", "\n> ")}");
+				}
+				else
+				{
+					sb.AppendLine($"> Output: {Output.Replace("\n", "\n> ")}");
+				}
 			}
 
-			if (Solution != string.Empty) sb.AppendLine($"> Solution: {Solution}");
-			if (Error != string.Empty) sb.AppendLine($"> Error: {Error.Replace("\n", "\n> ")}");
-			if (StackTrace != string.Empty) sb.AppendLine($"> StackTrace: {StackTrace.Replace("\n", "\n> ")}");
+			if (Solution != string.Empty)
+			{
+				sb.AppendLine($"> Solution: {Solution}");
+			}
 
-			string s = sb.ToString();
+			if (Error != string.Empty)
+			{
+				sb.AppendLine($"> Error: {Error.Replace("\n", "\n> ")}");
+			}
 
-			if (s.Length >= 2 && s[^2..] == "> ") s = s[..^3];
+			if (StackTrace != string.Empty)
+			{
+				sb.AppendLine($"> StackTrace: {StackTrace.Replace("\n", "\n> ")}");
+			}
+
+			var s = sb.ToString();
+
+			if (s.Length >= 2 && s[^2..] == "> ")
+			{
+				s = s[..^3];
+			}
 
 			return s;
 		}
@@ -144,10 +179,16 @@ internal class HistoryEntry
 	{
 		get
 		{
-			if (string.IsNullOrWhiteSpace(Error)) return string.Empty;
+			if (string.IsNullOrWhiteSpace(Error))
+			{
+				return string.Empty;
+			}
 
-			string error = $"Error: {Error}";
-			if (StackTrace != string.Empty) error += $"\r\nStack Trace: {StackTrace}";
+			var error = $"Error: {Error}";
+			if (StackTrace != string.Empty)
+			{
+				error += $"\r\nStack Trace: {StackTrace}";
+			}
 
 			return error;
 		}

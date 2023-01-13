@@ -71,7 +71,11 @@ internal class HistoryView : ListBox
 	{
 		if (SelectedIndex == -1)
 		{
-			if (Items.Count == 1) return SelectedChange(0, omniText);
+			if (Items.Count == 1)
+			{
+				return SelectedChange(0, omniText);
+			}
+
 			return SelectedChange(Items.Count - 2, omniText);
 		}
 		else if (SelectedIndex <= 0)
@@ -134,11 +138,20 @@ internal class HistoryView : ListBox
 
 	protected override void OnSelectedIndexChanged(EventArgs e)
 	{
-		if (SelectHandled) SelectHandled = false;
-		else if (SelectedIndex == -1) return;
+		if (SelectHandled)
+		{
+			SelectHandled = false;
+		}
+		else if (SelectedIndex == -1)
+		{
+			return;
+		}
 		else // mouse click
 		{
-			if (_trackedIndex == -1) _trackedIndex = Items.Count - 1;
+			if (_trackedIndex == -1)
+			{
+				_trackedIndex = Items.Count - 1;
+			}
 
 			if (_trackedIndex < Items.Count && Get(_trackedIndex).Expression != _mainForm.OmniText
 				&& !string.IsNullOrWhiteSpace(_mainForm.OmniText))
@@ -215,7 +228,7 @@ internal class HistoryView : ListBox
 	{
 		if (Items.Count > 1 && SelectedItem is not null && !string.IsNullOrWhiteSpace(GetSelected().Expression))
 		{
-			int index = SelectedIndex;
+			var index = SelectedIndex;
 			GetSelected().Delete();
 			Items.RemoveAt(index);
 
@@ -229,7 +242,7 @@ internal class HistoryView : ListBox
 
 	public void OnChange()
 	{
-		for (int i = 0; i < Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
+		for (var i = 0; i < Items.Count - 1; i++) // remove empty buffer entries that aren't at the end
 		{
 			if (string.IsNullOrWhiteSpace(Get(i).Expression))
 			{
@@ -238,7 +251,10 @@ internal class HistoryView : ListBox
 			}
 		}
 
-		if (Items.Count == 0 || !string.IsNullOrWhiteSpace(Get(^1).Expression)) Items.Add(new HistoryEntry(_mainForm, this) { Expression = string.Empty }); // add empty buffer entry
+		if (Items.Count == 0 || !string.IsNullOrWhiteSpace(Get(^1).Expression))
+		{
+			Items.Add(new HistoryEntry(_mainForm, this) { Expression = string.Empty }); // add empty buffer entry
+		}
 
 		RefreshEntries();
 		UpdateLast?.Invoke(this);
@@ -322,16 +338,20 @@ internal class HistoryView : ListBox
 
 	private void PopOut()
 	{
-		PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle);
-		popout.TopMost = _mainForm.TopMost;
+		PopoutEntry popout = new(GetSelected(), _mainForm.CurrentStyle)
+		{
+			TopMost = _mainForm.TopMost
+		};
 		popouts.Add(popout);
 		popout.Show();
 	}
 
 	private void PopOutLast()
 	{
-		PopoutEntry popout = new(this, _mainForm.CurrentStyle);
-		popout.TopMost = _mainForm.TopMost;
+		PopoutEntry popout = new(this, _mainForm.CurrentStyle)
+		{
+			TopMost = _mainForm.TopMost
+		};
 		popouts.Add(popout);
 		popout.Show();
 	}
@@ -349,9 +369,9 @@ internal class HistoryView : ListBox
 
 	private void DoCopy(string text)
 	{
-		HistoryEntry entry = GetSelected();
+		var entry = GetSelected();
 
-		string s = text switch
+		var s = text switch
 		{
 			"Copy Expression" => entry.Expression,
 			"Copy Output" => entry.Output,
@@ -362,18 +382,21 @@ internal class HistoryView : ListBox
 			_ => throw new NotImplementedException()
 		};
 
-		if (string.IsNullOrEmpty(s)) s = " ";
+		if (string.IsNullOrEmpty(s))
+		{
+			s = " ";
+		}
 
 		Clipboard.SetText(s);
 	}
 
 	public void RecalculateAfter(HistoryEntry start)
 	{
-		int startIndex = Items.IndexOf(start) + 1;
+		var startIndex = Items.IndexOf(start) + 1;
 
 		if (startIndex != 0)
 		{
-			for (int i = startIndex; i < Items.Count; i++)
+			for (var i = startIndex; i < Items.Count; i++)
 			{
 				Get(i).Solve(recalculate: false);
 			}

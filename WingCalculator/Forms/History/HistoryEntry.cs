@@ -15,14 +15,15 @@ internal class HistoryEntry
 			EntryChanged?.Invoke();
 
 			Output = string.Empty;
-			Solution = string.Empty;
+			SolutionString = string.Empty;
 			Error = string.Empty;
 			StackTrace = string.Empty;
 		}
 	}
 
 	public string Output { get; private set; } = string.Empty;
-	public string Solution { get; private set; } = string.Empty;
+	public string SolutionString { get; private set; } = string.Empty;
+	public double Solution { get; private set; }
 	public string Error { get; private set; } = string.Empty;
 	public string StackTrace { get; private set; } = string.Empty;
 
@@ -64,8 +65,10 @@ internal class HistoryEntry
 
 		try
 		{
+			_solver.SetVariable("ANS", _mainForm.historyView.GetPreviousSolution(this));
 			var solve = _solver.Solve(Expression, out impliedAns);
-			Solution = solve.ToString();
+			Solution = solve;
+			SolutionString = solve.ToString();
 		}
 		catch (Exception ex)
 		{
@@ -149,9 +152,9 @@ internal class HistoryEntry
 				}
 			}
 
-			if (Solution != string.Empty)
+			if (SolutionString != string.Empty)
 			{
-				sb.AppendLine($"> Solution: {Solution}");
+				sb.AppendLine($"> Solution: {SolutionString}");
 			}
 
 			if (Error != string.Empty)
@@ -197,7 +200,7 @@ internal class HistoryEntry
 	public void ClearAllOutput()
 	{
 		Output = string.Empty;
-		Solution = string.Empty;
+		SolutionString = string.Empty;
 		Error = string.Empty;
 		StackTrace = string.Empty;
 	}

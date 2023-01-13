@@ -53,18 +53,18 @@ internal class HistoryView : ListBox
 
 	public void RegisterShortcuts() => ShortcutActionRegistry.AddRange(new List<(string, Action)>()
 	{
-		("insert above", (Action)(() => InsertAbove())),
-		("insert below", (Action)(() => InsertBelow())),
-		("pop out", (Action)(() => PopOut())),
-		("pop out last", (Action)(() => PopOutLast())),
+		("insert above", () => InsertAbove()),
+		("insert below", () => InsertBelow()),
+		("pop out", () => PopOut()),
+		("pop out last", () => PopOutLast()),
 
-		("copy expression", (Action)(() => CopyExpression())),
-		("copy output", (Action)(() => CopyOutput())),
-		("copy solution", (Action)(() => CopySolution())),
-		("copy error", (Action)(() => CopyError())),
-		("copy stack trace", (Action)(() => CopyStackTrace())),
-		("copy entire entry", (Action)(() => CopyEntireEntry())),
-		("execute all", (Action)(() => Get(0).Solve(recalculate: true))),
+		("copy expression", () => CopyExpression()),
+		("copy output", () => CopyOutput()),
+		("copy solution", () => CopySolution()),
+		("copy error", () => CopyError()),
+		("copy stack trace", () => CopyStackTrace()),
+		("copy entire entry", () => CopyEntireEntry()),
+		("execute all", () => Get(0).Solve(recalculate: true)),
 	});
 
 	public string SelectedUp(string omniText)
@@ -291,6 +291,31 @@ internal class HistoryView : ListBox
 	public HistoryEntry GetSelected() => Get(SelectedIndex);
 	public HistoryEntry GetLast() => Items.Count > 1 ? Get(^2) : Get(^1);
 
+	public double GetPreviousSolution(HistoryEntry entry)
+	{
+		var lastSolution = 0.0;
+		for (var i = 0; i < Items.Count; i++)
+		{
+			if (Items[i] == entry)
+			{
+				return lastSolution;
+			}
+			else
+			{
+				lastSolution = ((HistoryEntry)Items[i]).Solution;
+			}
+		}
+
+		if (Items.Count >= 2)
+		{
+			return ((HistoryEntry)Items[^2]).Solution;
+		}
+		else
+		{
+			return default;
+		}
+	}
+
 	private void MenuStripItemClicked(object sender, ToolStripItemClickedEventArgs e)
 	{
 		switch (e.ClickedItem.Text)
@@ -375,7 +400,7 @@ internal class HistoryView : ListBox
 		{
 			"Copy Expression" => entry.Expression,
 			"Copy Output" => entry.Output,
-			"Copy Solution" => entry.Solution,
+			"Copy Solution" => entry.SolutionString,
 			"Copy Error" => entry.Error,
 			"Copy Stack Trace" => entry.StackTrace,
 			"Copy Entire Entry" => entry.Entry,

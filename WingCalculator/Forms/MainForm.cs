@@ -70,28 +70,28 @@ public partial class MainForm : Form
 #pragma warning disable IDE0053
 	public void RegisterShortcuts() => ShortcutActionRegistry.AddRange(new List<(string, Action)>()
 	{
-		("increase font size", (Action)(() =>
+		("increase font size", () =>
 		{
 			_config.FontSize++;
 			FontSizer.ApplySize(Controls, this, _config.FontSize);
-		})),
-		("decrease font size", (Action)(() =>
+		}),
+		("decrease font size", () =>
 		{
 			if (_config.FontSize > 1)
 			{
 				_config.FontSize--;
 				FontSizer.ApplySize(Controls, this, _config.FontSize);
 			}
-		})),
-		("page up", (Action)(() =>
+		}),
+		("page up", () =>
 		{
 			OmniText = historyView.SelectedChange(0, OmniText);
-		})),
-		("page down", (Action)(() =>
+		}),
+		("page down", () =>
 		{
 			OmniText = historyView.SelectedChange(historyView.Items.Count - 1, OmniText);
-		})),
-		("entry up", (Action)(() =>
+		}),
+		("entry up", () =>
 		{
 			if (omnibox.SelectionStart != _textIndex)
 			{
@@ -102,8 +102,8 @@ public partial class MainForm : Form
 				OmniText = historyView.SelectedUp(OmniText);
 				SendCursorRight();
 			}
-		})),
-		("entry down", (Action)(() =>
+		}),
+		("entry down", () =>
 		{
 			if (omnibox.SelectionStart != _textIndex)
 			{
@@ -114,31 +114,31 @@ public partial class MainForm : Form
 				OmniText = historyView.SelectedDown(OmniText);
 				SendCursorRight();
 			}
-		})),
-		("delete entry", (Action)(() =>
+		}),
+		("delete entry", () =>
 		{
 			OmniText = historyView.DeleteSelected();
-		})),
-		("delete all", (Action)(() =>
+		}),
+		("delete all", () =>
 		{
 			ac_button_Click(this, null);
-		})),
-		("execute", (Action)(() =>
+		}),
+		("execute", () =>
 		{
 			Execute(false);
-		})),
-		("execute at end", (Action)(() =>
+		}),
+		("execute at end", () =>
 		{
 			Execute(true);
-		})),
-		("clear", (Action)(() =>
+		}),
+		("clear", () =>
 		{
 			clr_button_Click(this, null);
-		})),
-		("anchor to top", (Action)(() =>
+		}),
+		("anchor to top", () =>
 		{
 			ToggleAnchor();
-		}))
+		})
 	});
 #pragma warning restore IDE0053
 
@@ -366,10 +366,7 @@ public partial class MainForm : Form
 
 	private void SendString(string s)
 	{
-		if (Program.LastFocusedTextBox is null)
-		{
-			Program.LastFocusedTextBox = omnibox;
-		}
+		Program.LastFocusedTextBox ??= omnibox;
 
 		Program.LastFocusedTextBox.SendString(s);
 		Program.LastFocusedTextBox.Focus();
@@ -452,7 +449,9 @@ public partial class MainForm : Form
 		Show();
 	}
 
-	internal WindowStyle CurrentStyle => _config.IsDarkMode ? WindowStyle.DarkMode : WindowStyle.LightMode;
+	internal WindowStyle CurrentStyle => _config.IsDarkMode 
+		? WindowStyle.DarkMode 
+		: WindowStyle.LightMode;
 
 #if DEBUG
 	public void Error(string s) => errorLabel.Text += s;
